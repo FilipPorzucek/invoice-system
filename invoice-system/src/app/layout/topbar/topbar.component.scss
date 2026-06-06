@@ -1,0 +1,40 @@
+
+::ng-deep .custom-topbar {
+    border-radius: 0 !important;
+    padding: 1rem 2rem !important;
+    background-color: #f8f9fa !important;
+    border-bottom: 1px solid #dee2e6 !important;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+.topbar-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem; 
+}
+
+.logo-icon {
+    font-size: 1.5rem;
+    color: var(--p-primary-color, #3b82f6); 
+    margin-right: 3rem;
+}
+
+.logo-text {
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin-right: -0.3rem; 
+    margin-left: -1rem; 
+}
+
+
+.user-name {
+    font-weight: 500;
+}
+
+::ng-deep .user-avatar {
+    background-color: #ececec !important;
+    color: #212529 !important;
+}
+
