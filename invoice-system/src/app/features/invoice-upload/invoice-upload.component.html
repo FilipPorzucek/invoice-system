@@ -1,0 +1,138 @@
+<div class="split-screen-container">
+    
+   <div class="left-panel">
+        <p-card header="Dane z dokumentu">
+            <form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()" class="invoice-form">
+                
+                <div class="form-row">
+                    <div class="form-field">
+                        <label>Numer faktury</label>
+                        <input pInputText formControlName="invoiceNumber" />
+                    </div>
+                    <div class="form-field">
+                        <label>Data wyst.</label>
+                        <input pInputText formControlName="issueDate" />
+                    </div>
+                    <div class="form-field" style="flex: 0.5;">
+                        <label>Waluta</label>
+                        <input pInputText formControlName="currency" />
+                    </div>
+                </div>
+
+                <p-divider align="center"><b>Dostawca</b></p-divider>
+
+                <div formGroupName="supplier" class="invoice-form">
+                    <div class="form-field">
+                        <label>Nazwa firmy</label>
+                        <input pInputText formControlName="name" />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>NIP</label>
+                            <input pInputText formControlName="nip" />
+                        </div>
+                        <div class="form-field" style="flex: 2;">
+                            <label>Numer konta (IBAN)</label>
+                            <input pInputText formControlName="bankAccountNumber" />
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label>Adres</label>
+                        <input pInputText formControlName="address" />
+                    </div>
+                </div>
+
+                <p-divider align="center"><b>Pozycje na fakturze</b></p-divider>
+
+                <div formArrayName="items">
+    <div *ngFor="let item of items.controls; let i=index" [formGroupName]="i" class="form-row item-row mb-3">
+        
+        <div class="form-field" style="flex: 2;">
+            <label *ngIf="i===0">Usługa/Towar</label>
+            <input pInputText formControlName="name" />
+        </div>
+
+        <div class="form-field" style="flex: 0.5;">
+            <label *ngIf="i===0">Ilość</label>
+            <input pInputText formControlName="quantity" type="number" />
+        </div>
+
+        <div class="form-field" style="flex: 1;">
+            <label *ngIf="i===0">Cena netto</label>
+            <input pInputText formControlName="netPrice" type="number" step="0.01" />
+        </div>
+
+        <div class="form-field" style="flex: 0.5;">
+            <label *ngIf="i===0">VAT</label>
+            <input pInputText formControlName="taxRate" type="number" step="0.01" />
+        </div>
+                    </div>
+                </div>
+
+                <p-divider></p-divider>
+
+                <div class="form-row mt-2">
+                    <div class="form-field">
+                        <label>Razem Netto</label>
+                        <input pInputText formControlName="netAmount" type="number" step="0.01" />
+                    </div>
+                    <div class="form-field">
+                        <label>Razem Brutto</label>
+                        <input pInputText formControlName="grossAmount" type="number" step="0.01" />
+                    </div>
+                </div>
+
+                <p-button 
+                    label="Zapisz fakturę w systemie" 
+                    icon="pi pi-check" 
+                    type="submit" 
+                    severity="info" 
+                    [rounded]="true"
+                    [disabled]="!isOcrDone || invoiceForm.invalid"
+                    styleClass="w-full mt-4">
+                </p-button>
+            </form>
+        </p-card>
+    </div>
+
+    <div class="right-panel">
+        <p-card styleClass="h-full preview-card">
+            
+            <div *ngIf="!selectedFile" class="upload-area">
+                <p-fileUpload 
+    mode="advanced" 
+    chooseLabel="Wybierz plik PDF" 
+    chooseIcon="pi pi-plus"
+    chooseStyleClass="p-button-info p-button-rounded"
+    accept="application/pdf"
+    maxFileSize="5000000"
+    [customUpload]="true"
+    (onSelect)="onFileSelect($event)"
+    [showUploadButton]="false"
+    [showCancelButton]="false">
+    <ng-template pTemplate="content">
+        <div class="drag-drop-text">Przeciągnij i upuść skan faktury tutaj</div>
+    </ng-template>
+</p-fileUpload>
+            </div>
+
+            <div *ngIf="isProcessing" class="processing-area">
+                <p-progressSpinner></p-progressSpinner>
+                <h3 style="color: #64748b;">Trwa analiza dokumentu (OCR)...</h3>
+                <p>Wyciąganie danych z pliku</p>
+            </div>
+
+            <div *ngIf="pdfPreviewUrl && !isProcessing" class="pdf-viewer-area">
+   <pdf-viewer 
+        [src]="pdfPreviewUrl" 
+        [render-text]="true"
+        [original-size]="false" 
+        [fit-to-page]="true"
+        style="display: block; width: 100%;">
+    </pdf-viewer>
+</div>
+            
+        </p-card>
+    </div>
+
+</div>
