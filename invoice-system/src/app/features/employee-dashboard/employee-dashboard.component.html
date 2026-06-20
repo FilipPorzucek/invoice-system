@@ -1,24 +1,48 @@
 <div style="background: white; padding: 2rem; border-radius: 12px; border: 1px solid #dee2e6;">
     <h2 style="margin-top: 0; margin-bottom: 1.5rem; color: #334155;">Twoje faktury</h2>
+
+    <div #fakeScroll style="overflow-x: auto; height: 16px; margin-bottom: 8px;" (scroll)="onTopScroll()">
+        <div #fakeContent style="height: 1px;"></div>
+    </div>
     
     <p-table 
         [value]="invoices" 
         [paginator]="true" 
         [rows]="50" 
         styleClass="p-datatable-striped"
-        [scrollable]="true" >
+        [scrollable]="true"
+        sortField="issueDate" 
+        [sortOrder]="-1">
         
        <ng-template pTemplate="header">
             <tr>
-                <th style="min-width: 200px">Numer faktury</th>
-                <th style="min-width: 150px">Data wystawienia</th>
-                <th style="min-width: 250px">Firma (Nazwa)</th>
-                <th style="min-width: 150px">NIP</th>
-                <th style="min-width: 250px">Adres firmy</th>
-                <th style="min-width: 300px">Kupione przedmioty</th>
-                <th style="min-width: 150px">Kwota Netto</th>
-                <th style="min-width: 150px">Kwota Brutto</th>
-                <th style="min-width: 180px">Status</th>
+                <th style="min-width: 200px" pSortableColumn="invoiceNumber">
+                    Numer faktury <p-sortIcon field="invoiceNumber"></p-sortIcon>
+                </th>
+                <th style="min-width: 150px" pSortableColumn="issueDate">
+                    Data wystawienia <p-sortIcon field="issueDate"></p-sortIcon>
+                </th>
+                <th style="min-width: 250px" pSortableColumn="supplier.name">
+                    Firma<p-sortIcon field="supplier.name"></p-sortIcon>
+                </th>
+                <th style="min-width: 150px" pSortableColumn="supplier.nip">
+                    NIP <p-sortIcon field="supplier.nip"></p-sortIcon>
+                </th>
+                <th style="min-width: 250px" pSortableColumn="supplier.address">
+                    Adres firmy <p-sortIcon field="supplier.address"></p-sortIcon>
+                </th>
+                <th style="min-width: 300px">
+                    Kupione przedmioty
+                </th>
+                <th style="min-width: 150px" pSortableColumn="netAmount">
+                    Kwota Netto <p-sortIcon field="netAmount"></p-sortIcon>
+                </th>
+                <th style="min-width: 150px" pSortableColumn="grossAmount">
+                    Kwota Brutto <p-sortIcon field="grossAmount"></p-sortIcon>
+                </th>
+                <th style="min-width: 180px" pSortableColumn="status">
+                    Status <p-sortIcon field="status"></p-sortIcon>
+                </th>
             </tr>
         </ng-template>
         
@@ -26,7 +50,7 @@
             <tr>
                 <td style="font-weight: 500;">{{ invoice.invoiceNumber }}</td>
                 <td>{{ invoice.issueDate || 'Brak daty' }}</td>
-                <td style="font-weight: bold;">{{ invoice.supplier?.name || '---' }}</td>
+                <td >{{ invoice.supplier?.name || '---' }}</td>
                 <td>{{ invoice.supplier?.nip || '---' }}</td>
                 <td>{{ invoice.supplier?.address || '---' }}</td>
                 
