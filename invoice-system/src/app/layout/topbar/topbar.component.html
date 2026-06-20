@@ -3,8 +3,15 @@
       <span class="logo-text">SOF</span>
       <i class="pi pi-box logo-icon"></i>
         
-
-        <p-button icon="pi pi-plus" label="Wgraj fakturę" severity="info" size="small" [rounded]="true"></p-button>
+         <p-button 
+          icon="pi pi-home" 
+          label="Panel główny" 
+          severity="success" 
+          size="small" 
+          [rounded]="true" 
+          routerLink="/employee/dashboard">
+      </p-button>
+        <p-button icon="pi pi-plus" label="Wgraj fakturę" severity="info" size="small" [rounded]="true" routerLink="/employee/invoice-upload"></p-button>
           <p-button icon="pi pi-file-excel" label="Wygeneruj raport" severity="info" size="small" [rounded]="true"></p-button>
     </div>
 

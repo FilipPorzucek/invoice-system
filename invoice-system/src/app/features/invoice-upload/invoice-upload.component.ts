@@ -6,9 +6,10 @@ import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DividerModule } from 'primeng/divider';
 import { PdfViewerModule } from 'ng2-pdf-viewer'; 
+import { InvoiceService } from '../../core/invoice.service';
+import { DialogModule } from 'primeng/dialog';
 @Component({
   selector: 'app-invoice-upload',
   imports: [CommonModule,
@@ -18,14 +19,16 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     InputTextModule,
     ButtonModule,
     ProgressSpinnerModule,
-      DividerModule,
-    PdfViewerModule],
+    DividerModule,
+    PdfViewerModule,
+    DialogModule],
   templateUrl: './invoice-upload.component.html',
   styleUrl: './invoice-upload.component.scss'
 })
 export class InvoiceUploadComponent {
   private fb=inject(FormBuilder);
-  private sanitizer=inject(DomSanitizer);
+  private InvoiceService=inject(InvoiceService);
+  
 
   invoiceForm:FormGroup;
 
@@ -33,6 +36,7 @@ export class InvoiceUploadComponent {
   pdfPreviewUrl: string | null = null;
   isProcessing: boolean = false;
   isOcrDone: boolean = false;
+  showSuccessDialog: boolean=false;
 
   constructor(){
     this.invoiceForm = this.fb.group({
@@ -41,6 +45,7 @@ export class InvoiceUploadComponent {
       currency: [{ value: 'PLN', disabled: true }, Validators.required],
       netAmount: [{ value: '', disabled: true }, Validators.required],
       grossAmount: [{ value: '', disabled: true }, Validators.required],
+      minioFilePath:[''],
 
       supplier: this.fb.group({
         nip: [{ value: '', disabled: true }, Validators.required],
@@ -92,6 +97,7 @@ export class InvoiceUploadComponent {
         currency: 'PLN',
         netAmount: 2000.00,
         grossAmount: 2460.00,
+        minioFilePath: 'faktury/2026/06/skan_999.pdf',
         supplier: {
           nip: '9876543210',
           name: 'Artykuły Biurowe Jan Kowalski',
@@ -109,8 +115,28 @@ export class InvoiceUploadComponent {
   onSubmit() {
     if (this.invoiceForm.valid) {
       const invoiceData = this.invoiceForm.getRawValue();
-      console.log('Zapisywanie faktury z danymi:', this.invoiceForm.value);
-      // TODO Strzał do springa
+       this.InvoiceService.saveInvoiceFromOcr(invoiceData).subscribe({
+        next:(response)=>{
+        this.showSuccessDialog=true;
+        },
+        error:(error)=>{
+          console.error('Błąd podczas zapisu faktury do bazy:', error);
+        }
+       });
     }
   }
+
+  closeSuccessDialog(){
+    this.showSuccessDialog=false;
+    this.invoiceForm.reset();
+    this.items.clear();
+    this.items.push(this.createItemFormGroup('',0,0,0));
+    this.invoiceForm.disable();
+
+    this.selectedFile=null;
+    this.pdfPreviewUrl=null;
+    this.isOcrDone=false;
+
+  }
+
 }

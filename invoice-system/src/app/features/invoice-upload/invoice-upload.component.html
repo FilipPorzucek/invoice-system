@@ -83,7 +83,7 @@
                 </div>
 
                 <p-button 
-                    label="Zapisz fakturę w systemie" 
+                    label="Zapisz fakturę" 
                     icon="pi pi-check" 
                     type="submit" 
                     severity="info" 
@@ -136,3 +136,29 @@
     </div>
 
 </div>
+
+<p-dialog 
+    header="Sukces" 
+    [(visible)]="showSuccessDialog" 
+    [modal]="true" 
+    [closable]="false" 
+    [draggable]="false"
+    [style]="{ width: '28rem' }">
+    
+    <div class="flex align-items-center justify-content-center pt-4 pb-4" style="display: flex; align-items: center; gap: 1rem;">
+        <i class="pi pi-check-circle" style="font-size: 2.5rem; color: #10b981;"></i>
+        <span style="font-size: 1.2rem; font-weight: 500; color: #334155;">Poprawnie zapisano fakturę.</span>
+    </div>
+    
+    <ng-template pTemplate="footer">
+        <div style="display: flex; justify-content: flex-end; width: 100%;">
+            <p-button 
+                label="OK" 
+                icon="pi pi-check" 
+                (onClick)="closeSuccessDialog()" 
+                [autofocus]="true"
+                severity="info">
+            </p-button>
+        </div>
+    </ng-template>
+</p-dialog>
