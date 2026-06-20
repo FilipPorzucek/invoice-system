@@ -37,6 +37,8 @@ export class InvoiceUploadComponent {
   isProcessing: boolean = false;
   isOcrDone: boolean = false;
   showSuccessDialog: boolean=false;
+  showErrorDialog: boolean=false;
+  isSubmitting: boolean=false;
 
   constructor(){
     this.invoiceForm = this.fb.group({
@@ -113,17 +115,33 @@ export class InvoiceUploadComponent {
   }
 
   onSubmit() {
-    if (this.invoiceForm.valid) {
+    if (this.invoiceForm.valid && !this.isSubmitting) {
+      this.isSubmitting=true;
       const invoiceData = this.invoiceForm.getRawValue();
        this.InvoiceService.saveInvoiceFromOcr(invoiceData).subscribe({
         next:(response)=>{
+          this.isSubmitting = false;
         this.showSuccessDialog=true;
         },
         error:(error)=>{
+          this.isSubmitting = false;
           console.error('Błąd podczas zapisu faktury do bazy:', error);
-        }
+          this.showErrorDialog = true;
+        },
        });
     }
+  }
+
+  closeErrorDialog() {
+    this.showSuccessDialog=false;
+    this.invoiceForm.reset();
+    this.items.clear();
+    this.items.push(this.createItemFormGroup('',0,0,0));
+    this.invoiceForm.disable();
+    this.showErrorDialog = false;
+    this.selectedFile=null;
+    this.pdfPreviewUrl=null;
+    this.isOcrDone=false;
   }
 
   closeSuccessDialog(){
