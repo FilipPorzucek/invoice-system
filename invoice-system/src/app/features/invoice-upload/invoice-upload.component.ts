@@ -39,7 +39,7 @@ export class InvoiceUploadComponent {
   showSuccessDialog: boolean=false;
   showErrorDialog: boolean=false;
   isSubmitting: boolean=false;
-
+  showOcrTimeoutDialog: boolean=false;
   currentInvoiceId: number | null = null;
   pollingInterval: any;
 
@@ -102,7 +102,18 @@ onFileSelect(event: any) {
   }
 
   startPollingForOcrData(id: number) {
+    const maxPollingTime = 60000; 
+    const startTime = Date.now();
     this.pollingInterval = setInterval(() => {
+
+      if (Date.now() - startTime > maxPollingTime) {
+        clearInterval(this.pollingInterval); 
+        this.isProcessing = false; 
+        this.isOcrDone=true;
+        this.invoiceForm.enable(); 
+        this.showOcrTimeoutDialog = true; 
+        return; 
+      }
       
       this.invoiceService.getInvoiceById(id).subscribe({
         next: (ocrResponse: any) => {

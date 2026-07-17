@@ -154,8 +154,8 @@ public class InvoiceService {
                 invoice.getItems().add(newItem);
             }
         }
-        InvoiceStatus status=invoiceStatusRepository.findByName("U_KSIEGOWEGO")
-                .orElseThrow(() -> new RuntimeException("Brak statusu U_KSIEGOWEGO w bazie!"));
+        InvoiceStatus status = invoiceStatusRepository.findByName("PENDING_ACCOUNTANT")
+                .orElseThrow(() -> new RuntimeException("Brak statusu PENDING_ACCOUNTANT w bazie!"));
         invoice.setStatus(status);
     }
 
