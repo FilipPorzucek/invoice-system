@@ -8,7 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DividerModule } from 'primeng/divider';
 import { PdfViewerModule } from 'ng2-pdf-viewer'; 
-import { InvoiceService } from '../../core/invoice.service';
+import { InvoiceService } from '../../core/services/invoice.service';
 import { DialogModule } from 'primeng/dialog';
 @Component({
   selector: 'app-invoice-upload',
@@ -27,7 +27,7 @@ import { DialogModule } from 'primeng/dialog';
 })
 export class InvoiceUploadComponent {
   private fb=inject(FormBuilder);
-  private InvoiceService=inject(InvoiceService);
+  private invoiceService=inject(InvoiceService);
   
 
   invoiceForm:FormGroup;
@@ -39,6 +39,9 @@ export class InvoiceUploadComponent {
   showSuccessDialog: boolean=false;
   showErrorDialog: boolean=false;
   isSubmitting: boolean=false;
+
+  currentInvoiceId: number | null = null;
+  pollingInterval: any;
 
   constructor(){
     this.invoiceForm = this.fb.group({
@@ -74,74 +77,103 @@ export class InvoiceUploadComponent {
     });
   }
 
-  onFileSelect(event:any){
-    this.selectedFile=event.files[0];
-    if(this.selectedFile){
-      const objectUrl=URL.createObjectURL(this.selectedFile);
+onFileSelect(event: any) {
+    this.selectedFile = event.files[0];
+    if (this.selectedFile) {
       this.pdfPreviewUrl = URL.createObjectURL(this.selectedFile);
-      this.processOcrMock();
+      this.processRealOcr(this.selectedFile);
     }
-
   }
 
-  processOcrMock() {
-    this.isProcessing = true;
+ processRealOcr(file: File) {
+    this.isProcessing = true; 
 
-    setTimeout(() => {
-      this.isProcessing = false;
-      this.isOcrDone = true;
+    this.invoiceService.uploadInvoiceFile(file).subscribe({
+      next: (invoiceId: number) => {
+        this.currentInvoiceId = invoiceId;
+        this.startPollingForOcrData(invoiceId); 
+      },
+      error: (error) => {
+        this.isProcessing = false;
+        console.error('Błąd podczas wgrywania pliku:', error);
+        this.showErrorDialog = true;
+      }
+    });
+  }
 
-      this.invoiceForm.enable();
+  startPollingForOcrData(id: number) {
+    this.pollingInterval = setInterval(() => {
+      
+      this.invoiceService.getInvoiceById(id).subscribe({
+        next: (ocrResponse: any) => {
+          
+          if (ocrResponse.invoiceNumber) { 
+            clearInterval(this.pollingInterval); 
+            
+            this.isProcessing = false;
+            this.isOcrDone = true;
+            this.invoiceForm.enable(); 
 
-      this.invoiceForm.patchValue({
-        invoiceNumber: 'FA/2026/06/999',
-        issueDate: '2026-06-16',
-        currency: 'PLN',
-        netAmount: 2000.00,
-        grossAmount: 2460.00,
-        minioFilePath: 'faktury/2026/06/skan_999.pdf',
-        supplier: {
-          nip: '9876543210',
-          name: 'Artykuły Biurowe Jan Kowalski',
-          address: 'ul. Papierowa 3, Rzeszów',
-          bankAccountNumber: 'PL123456789000000000000007'
+            this.invoiceForm.patchValue({
+              invoiceNumber: ocrResponse.invoiceNumber,
+              issueDate: ocrResponse.issueDate,
+              currency: ocrResponse.currency || 'PLN',
+              netAmount: ocrResponse.netAmount,
+              grossAmount: ocrResponse.grossAmount,
+              minioFilePath: ocrResponse.minioFilePath,
+
+              supplier: {
+                nip: ocrResponse.supplier?.nip,
+                name: ocrResponse.supplier?.name,
+                address: ocrResponse.supplier?.address,
+                bankAccountNumber: ocrResponse.supplier?.bankAccountNumber
+              }
+            });
+
+            this.items.clear();
+            if (ocrResponse.items && ocrResponse.items.length > 0) {
+              ocrResponse.items.forEach((item: any) => {
+                this.items.push(this.createItemFormGroup(
+                  item.name, item.quantity, item.netPrice, item.taxRate
+                ));
+              });
+            } else {
+              this.items.push(this.createItemFormGroup('', 0, 0, 0));
+            }
+          }
+        },
+        error: (error) => {
+          clearInterval(this.pollingInterval);
+          this.isProcessing = false;
+          console.error('Błąd podczas odpytywania o dane OCR:', error);
+          this.showErrorDialog = true;
         }
       });
 
-      this.items.clear();
-      this.items.push(this.createItemFormGroup('Audyt bezpieczeństwa', 1, 2000.00, 0.23));
-
-    }, 3000);
+    }, 3000); 
   }
 
   onSubmit() {
-    if (this.invoiceForm.valid && !this.isSubmitting) {
+    if (this.invoiceForm.valid && !this.isSubmitting && this.currentInvoiceId) {
       this.isSubmitting=true;
       const invoiceData = this.invoiceForm.getRawValue();
-       this.InvoiceService.saveInvoiceFromOcr(invoiceData).subscribe({
-        next:(response)=>{
+
+       this.invoiceService.approveInvoice(this.currentInvoiceId, invoiceData).subscribe({
+        next: (response) => {
           this.isSubmitting = false;
-        this.showSuccessDialog=true;
+          this.showSuccessDialog = true;
         },
         error:(error)=>{
           this.isSubmitting = false;
-          console.error('Błąd podczas zapisu faktury do bazy:', error);
+          console.error('Błąd podczas zatwierdzania faktury:', error);
           this.showErrorDialog = true;
         },
        });
     }
   }
 
-  closeErrorDialog() {
-    this.showSuccessDialog=false;
-    this.invoiceForm.reset();
-    this.items.clear();
-    this.items.push(this.createItemFormGroup('',0,0,0));
-    this.invoiceForm.disable();
+closeErrorDialog() {
     this.showErrorDialog = false;
-    this.selectedFile=null;
-    this.pdfPreviewUrl=null;
-    this.isOcrDone=false;
   }
 
   closeSuccessDialog(){

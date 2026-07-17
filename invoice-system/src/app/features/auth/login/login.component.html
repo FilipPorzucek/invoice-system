@@ -1,0 +1,32 @@
+<div class="container">
+  <h2 class="title">Zaloguj się do systemu SOF</h2>
+
+  <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <input 
+      pInputText 
+      type="email" 
+      name="email" 
+      formControlName="email"
+      placeholder="Email" 
+      class="input-field" 
+      required 
+    />
+    <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+      <small *ngIf="loginForm.get('email')?.errors?.['required']">Email jest wymagany.</small>
+    </div>
+
+    <p-password 
+      name="password"
+      formControlName="password" 
+      placeholder="Hasło" 
+      [feedback]="false" 
+      toggleMask="true"
+      required>
+    </p-password>
+    <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+      <small *ngIf="loginForm.get('password')?.errors?.['required']">Hasło jest wymagane.</small>
+    </div>
+
+    <button type="submit" class="confirm-button">Zaloguj się</button>
+  </form>
+</div>

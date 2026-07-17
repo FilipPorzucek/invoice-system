@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 import { Invoice } from '../../core/model/invoice.model';
 import { InvoiceItem } from '../../core/model/invoice-item.model';
-import { InvoiceService } from '../../core/invoice.service';
+import { InvoiceService } from '../../core/services/invoice.service';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
