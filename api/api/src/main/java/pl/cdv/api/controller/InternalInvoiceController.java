@@ -15,11 +15,15 @@ public class InternalInvoiceController {
 
     private final InvoiceService invoiceService;
 
-    @PostMapping
-    public ResponseEntity<String> receiveInvoiceFromOcr(@RequestBody InvoiceDto dto){
-        System.out.println("Otrzymano zadanie post");
-        invoiceService.processInvoiceFromOcr(dto);
-        return ResponseEntity.ok("Zapisano fakture w bazie danych");
-    }
+    @PostMapping("/{invoiceId}")
+    public ResponseEntity<String> receiveInvoiceFromOcr(
+            @PathVariable Long invoiceId,
+            @RequestBody InvoiceDto dto) {
 
+        System.out.println("Otrzymano zadanie POST z Pythona dla faktury ID: " + invoiceId);
+
+        invoiceService.updateInvoiceFromOcrWebhook(invoiceId, dto);
+
+        return ResponseEntity.ok("Zaktualizowano fakturę w bazie danych o dane z OCR");
+    }
 }
