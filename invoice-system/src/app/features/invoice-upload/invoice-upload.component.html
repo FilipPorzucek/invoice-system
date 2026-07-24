@@ -131,6 +131,12 @@
         [fit-to-page]="true"
         style="display: block; width: 100%;">
     </pdf-viewer>
+
+    <img 
+    *ngIf="selectedFile?.type !== 'application/pdf'"
+    [src]="pdfPreviewUrl"
+    alt="Podgląd faktury"
+    style="max-width: 100%; max-height: 600px; object-fit: contain; margin: 0 auto; display: block;" />
 </div>
             
         </p-card>

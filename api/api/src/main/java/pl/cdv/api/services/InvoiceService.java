@@ -1,6 +1,8 @@
 package pl.cdv.api.services;
 
 
+import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import pl.cdv.api.dto.InvoiceDto;
 import pl.cdv.api.dto.InvoiceItemDto;
+import pl.cdv.api.dto.OcrWebhookResponse;
 import pl.cdv.api.dto.SupplierDto;
 import pl.cdv.api.entity.Invoice;
 import pl.cdv.api.entity.InvoiceItems;
@@ -16,6 +19,7 @@ import pl.cdv.api.entity.InvoiceStatus;
 import pl.cdv.api.entity.Suppliers;
 import pl.cdv.api.repository.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,51 +34,51 @@ public class InvoiceService {
     private final InvoiceItemRepository invoiceItemRepository;
     private final UserRepository userRepository;
     private final InvoiceStatusRepository invoiceStatusRepository;
+    private final MinioClient minioClient;
 
     @Transactional
-    public void updateInvoiceFromOcrWebhook(Long invoiceId,InvoiceDto dto){
+    public void updateInvoiceFromOcrWebhook(Long invoiceId,OcrWebhookResponse payload){
         System.out.println("Otrzymano dane OCR z Pythona dla faktury ID: " + invoiceId);
 
         Invoice invoice=invoiceRepository.findById(invoiceId)
                 .orElseThrow(() -> new RuntimeException("Nie znaleziono faktury o ID: " + invoiceId));
 
+        OcrWebhookResponse.OcrData ocrData=payload.getData();
 
-        if (dto.getSupplier() != null) {
-            Suppliers supplier = supplierRepository.findByNip(dto.getSupplier().getNip())
-                    .orElseGet(() -> {
-                        Suppliers newSupplier = new Suppliers();
-                        newSupplier.setNip(dto.getSupplier().getNip());
-                        newSupplier.setName(dto.getSupplier().getName());
-                        newSupplier.setAddress(dto.getSupplier().getAddress());
-                        newSupplier.setBankAccountNumber(dto.getSupplier().getBankAccountNumber());
-                        return supplierRepository.save(newSupplier);
-                    });
-            invoice.setSuppliers(supplier);
-        }
+        if (ocrData != null) {
+            invoice.setInvoiceNumber(ocrData.getInvoiceNumber());
 
+            if (ocrData.getIssueDate() != null) {
+                try {
+                    invoice.setIssueDate(LocalDate.parse(ocrData.getIssueDate()));
+                } catch (Exception e) {
+                    System.err.println("Nie udało się sparsować daty z OCR: " + ocrData.getIssueDate());
+                }
+            }
 
-        invoice.setInvoiceNumber(dto.getInvoiceNumber());
-        invoice.setGrossAmount(dto.getGrossAmount());
-        invoice.setNetAmount(dto.getNetAmount());
-        invoice.setCurrency(dto.getCurrency() != null ? dto.getCurrency() : "PLN");
-        invoice.setIssueDate(dto.getIssueDate());
+            if (ocrData.getSummary() != null) {
+                invoice.setNetAmount(ocrData.getSummary().getTotalNet());
+                invoice.setGrossAmount(ocrData.getSummary().getTotalDue());
+                invoice.setCurrency(ocrData.getSummary().getCurrency());
+            }
 
+            if (ocrData.getSeller() != null && ocrData.getSeller().getVatId() != null) {
+                String nip = ocrData.getSeller().getVatId();
 
-        if (dto.getItems() != null && !dto.getItems().isEmpty()) {
-            for (InvoiceItemDto invoiceItemDto : dto.getItems()) {
-                InvoiceItems item = new InvoiceItems();
-                item.setName(invoiceItemDto.getName());
-                item.setQuantity(invoiceItemDto.getQuantity());
-                item.setNetPrice(invoiceItemDto.getNetPrice());
-                item.setTaxRate(invoiceItemDto.getTaxRate());
+                Suppliers supplier = supplierRepository.findByNip(nip)
+                        .orElseGet(() -> {
+                            Suppliers newSupplier = new Suppliers();
+                            newSupplier.setNip(nip);
+                            newSupplier.setName(ocrData.getSeller().getName());
+                            newSupplier.setAddress(ocrData.getSeller().getAddress());
+                            return supplierRepository.save(newSupplier);
+                        });
 
-                item.setInvoice(invoice);
-                invoiceItemRepository.save(item);
+                invoice.setSuppliers(supplier);
             }
         }
 
-        System.out.println("Pomyślnie zaktualizowano fakturę ID: " + invoiceId + " o dane z OCR!");
-
+        invoiceRepository.save(invoice);
     }
 
     @Transactional(readOnly = true)
@@ -164,6 +168,20 @@ public class InvoiceService {
     public Long initInvoiceUpload(MultipartFile file) {
         String minioPath = "faktury/2026/" + file.getOriginalFilename();
 
+        try{
+            minioClient.putObject(
+                    PutObjectArgs.builder()
+                            .bucket("invoices")
+                            .object(minioPath)
+                            .stream(file.getInputStream(), file.getSize(), -1)
+                            .contentType(file.getContentType())
+                            .build()
+            );
+            System.out.println("Zapisano plik w MinIO!");
+        }catch(Exception e) {
+        throw new RuntimeException("Błąd zapisu pliku w MinIO", e);
+    }
+
         Invoice invoice = new Invoice();
         invoice.setFilePath(minioPath);
         invoice.setStatus(invoiceStatusRepository.findById(5L)
@@ -178,14 +196,15 @@ public class InvoiceService {
     private void sendToPythonOcrService(Long invoiceId, String minioPath) {
         System.out.println("Wysyłam powiadomienie do OCR Pythona dla faktury ID: " + invoiceId);
 
-        RestTemplate restTemplate=new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();
 
-        Map<String, Object> requestBody=new HashMap<>();
-        requestBody.put("invoiceId",invoiceId);
-        requestBody.put("minioPath",minioPath);
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("task_id", invoiceId.toString());
+        requestBody.put("file_path", minioPath);
+        requestBody.put("webhook_url", "http://host.docker.internal:8081/api/internal/invoices/" + invoiceId);
 
         try {
-            String pythonApiUrl = "ADRES PYTHON";
+            String pythonApiUrl = "http://localhost:8000/api/v1/process_invoice";
 
             ResponseEntity<String> response = restTemplate.postForEntity(pythonApiUrl, requestBody, String.class);
             System.out.println("Python przyjął zadanie. Status: " + response.getStatusCode());

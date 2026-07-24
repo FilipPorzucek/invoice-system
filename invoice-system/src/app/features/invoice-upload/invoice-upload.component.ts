@@ -69,15 +69,21 @@ export class InvoiceUploadComponent {
   }
 
   createItemFormGroup(name: string, quantity: number, netPrice: number, taxRate: number): FormGroup {
+    const isDisabled=!this.isOcrDone;
     return this.fb.group({
-      name: [{ value: name, disabled: true }, Validators.required],
-      quantity: [{ value: quantity, disabled: true }, Validators.required],
-      netPrice: [{ value: netPrice, disabled: true }, Validators.required],
-      taxRate: [{ value: taxRate, disabled: true }, Validators.required]
+      name: [{ value: name, disabled: isDisabled }, Validators.required],
+      quantity: [{ value: quantity, disabled: isDisabled }, Validators.required],
+      netPrice: [{ value: netPrice, disabled: isDisabled }, Validators.required],
+      taxRate: [{ value: taxRate, disabled: isDisabled }, Validators.required]
     });
   }
 
+  addItem(): void {
+    this.items.push(this.createItemFormGroup('', 1, 0, 23));
+  }
+
 onFileSelect(event: any) {
+  this.revokePdfPreview();
     this.selectedFile = event.files[0];
     if (this.selectedFile) {
       this.pdfPreviewUrl = URL.createObjectURL(this.selectedFile);
@@ -104,6 +110,7 @@ onFileSelect(event: any) {
   startPollingForOcrData(id: number) {
     const maxPollingTime = 60000; 
     const startTime = Date.now();
+    this.stopPolling();
     this.pollingInterval = setInterval(() => {
 
       if (Date.now() - startTime > maxPollingTime) {
@@ -151,6 +158,7 @@ onFileSelect(event: any) {
             } else {
               this.items.push(this.createItemFormGroup('', 0, 0, 0));
             }
+            this.invoiceForm.enable();
           }
         },
         error: (error) => {
@@ -187,17 +195,31 @@ closeErrorDialog() {
     this.showErrorDialog = false;
   }
 
-  closeSuccessDialog(){
-    this.showSuccessDialog=false;
-    this.invoiceForm.reset();
+closeSuccessDialog() {
+    this.showSuccessDialog = false;
+    
+    this.invoiceForm.reset({ currency: 'PLN' });
     this.items.clear();
-    this.items.push(this.createItemFormGroup('',0,0,0));
+    this.isOcrDone = false;
+    this.items.push(this.createItemFormGroup('', 0, 0, 0));
     this.invoiceForm.disable();
 
-    this.selectedFile=null;
-    this.pdfPreviewUrl=null;
-    this.isOcrDone=false;
+    this.selectedFile = null;
+    this.revokePdfPreview();
+  }
 
+  private stopPolling(): void {
+    if (this.pollingInterval) {
+      clearInterval(this.pollingInterval);
+      this.pollingInterval = null;
+    }
+  }
+
+  private revokePdfPreview(): void {
+    if (this.pdfPreviewUrl) {
+      URL.revokeObjectURL(this.pdfPreviewUrl);
+      this.pdfPreviewUrl = null;
+    }
   }
 
 }
