@@ -16,7 +16,80 @@
     </div>
 
     <div class="p-toolbar-group-end topbar-section">
-        <span class="user-name">Jan Kowalski (Pracownik)</span>
-        <p-avatar icon="pi pi-user" shape="circle" styleClass="user-avatar"></p-avatar>
+<span class="user-name">{{ getUserDisplayName() }}</span>
+        <p-avatar 
+            icon="pi pi-user" 
+            shape="circle" 
+            styleClass="user-avatar"
+            (click)="openDialog()">
+        </p-avatar>
     </div>
 </p-toolbar>
+
+
+<p-dialog 
+  [(visible)]="dialogVisible" 
+  [modal]="true" 
+  [dismissableMask]="true" 
+  header="Panel Użytkownika"
+  [style]="{ width: '450px' }">
+  
+  <ng-container *ngIf="isLoggedIn(); else notLoggedIn">
+    <div class="user-info-content text-center">
+      <h3 class="user-info-title">Jesteś zalogowany!</h3>
+
+      <div class="user-info-field my-3">
+        <span class="label font-bold">Imię i nazwisko: </span>
+        <span class="value">{{ getUser()?.name }}</span>
+      </div>
+
+      <div class="user-info-field my-3">
+        <span class="label font-bold">Email: </span>
+        <span class="value">{{ getUser()?.email }}</span>
+      </div>
+
+      <div class="user-info-field my-3">
+        <span class="label font-bold">Hasło: </span>
+        <span class="value">••••••••</span>
+      </div>
+
+      <div class="user-info-field my-3" *ngIf="getUser()?.dateOfBirth">
+        <span class="label font-bold">Data urodzenia: </span>
+        <span class="value">{{ getUser()?.dateOfBirth }}</span>
+      </div>
+
+      <div class="mt-4">
+          <p-button 
+            label="Wyloguj się" 
+            icon="pi pi-sign-out"
+            (onClick)="logout()" 
+            severity="danger"
+            styleClass="w-full">
+          </p-button>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #notLoggedIn>
+    <div class="auth-content text-center">
+      <p class="auth-info mb-4">Jesteś obecnie wylogowany. Zaloguj się lub utwórz nowe konto.</p>
+      
+      <div class="auth-buttons flex flex-column gap-3">
+        <p-button 
+           label="Zaloguj się"
+           icon="pi pi-sign-in"
+           (onClick)="navigateToLogin()"
+           styleClass="w-full">
+        </p-button>
+
+        <p-button 
+           label="Zarejestruj się"  
+           icon="pi pi-user-plus" 
+           severity="secondary"
+           (onClick)="navigateToRegister()"
+           styleClass="w-full">
+        </p-button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
