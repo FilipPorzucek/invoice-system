@@ -39,6 +39,10 @@ export class AuthService {
     );
   }
 
+  register(data: any): Observable<any> { // Zmień any na RegisterRequest
+    return this.http.post<any>(`${this.apiUrl}/register`, data);
+  }
+
   logout(): void {
     this.loggedIn = false;
     this.user = null;

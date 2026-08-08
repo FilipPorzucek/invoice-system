@@ -1,1 +1,76 @@
-<p>register works!</p>
+<div class="container">
+  <h2 class="title">Create Your Account</h2>
+
+  <form class="form" [formGroup]="registerForm" (ngSubmit)="onSubmit()" >
+    <input 
+      pInputText 
+      type="text" 
+      name="name" 
+      formControlName="name"
+      placeholder="Name" 
+      class="input-field" 
+      required 
+    />
+    <div *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.invalid">
+    <small>Name is required.</small>
+  </div>
+
+    <input 
+      pInputText 
+      type="email" 
+      name="email" 
+      autocomplete="email"
+      placeholder="Email" 
+      formControlName="email"
+      class="input-field" 
+      required 
+    />
+     <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid">
+    <small *ngIf="registerForm.get('email')?.errors?.['required']">Email is required.</small>
+    <small *ngIf="registerForm.get('email')?.errors?.['email']">Invalid email format.</small>
+  </div>
+
+    <p-password 
+      name="password"
+      formControlName="password" 
+      placeholder="Password" 
+      [feedback]="true" 
+      toggleMask="true"
+      autocomplete="new-password"
+      required
+    >
+    </p-password>
+     <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">
+    <small *ngIf="registerForm.get('password')?.errors?.['required']">Password is required.</small>
+    <small *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 8 characters long, contain a capital letter and a number</small>
+  </div>
+
+    <p-password 
+      name="repeatPassword"
+      formControlName="repeatPassword"
+      placeholder="Repeat Password" 
+      [feedback]="false" 
+      toggleMask="true"
+      autocomplete="new-password"
+      required
+    >
+    </p-password>
+      <div *ngIf="registerForm.errors?.['passwordsMismatch'] && registerForm.get('repeatPassword')?.touched">
+    <small>Passwords do not match.</small>
+  </div>
+
+    <p-datepicker 
+  name="dateOfBirth" 
+  formControlName="dateOfBirth" 
+  placeholder="Date of Birth" 
+  showIcon="true" 
+  dateFormat="dd.mm.yy">
+</p-datepicker>
+ <div *ngIf="registerForm.get('dateOfBirth')?.touched && registerForm.get('dateOfBirth')?.invalid">
+    <small>Date of Birth is required.</small>
+  </div>
+
+    <button type="submit" class="confirm-button">Register</button>
+  </form>
+</div>
+

@@ -4,4 +4,5 @@ export interface User {
   name?: string;
   role?: string; 
   access_token?: string;
+  dateOfBirth?: string;
 }
