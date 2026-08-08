@@ -10,8 +10,8 @@ public class MinioConfig {
     @Bean
     public MinioClient minioClient(){
         return MinioClient.builder()
-                .endpoint("http://localhost:9000") // Adres API Twojego MinIO
-                .credentials("admin_super_user", "TrudneHasloProdukcyjne123!") // Login i hasło (domyślne w Dockerze)
+                .endpoint("http://localhost:9000")
+                .credentials("admin_super_user", "TrudneHasloProdukcyjne123!")
                 .build();
      }
     }
