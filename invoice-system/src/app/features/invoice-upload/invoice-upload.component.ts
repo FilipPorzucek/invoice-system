@@ -10,6 +10,7 @@ import { DividerModule } from 'primeng/divider';
 import { PdfViewerModule } from 'ng2-pdf-viewer'; 
 import { InvoiceService } from '../../core/services/invoice.service';
 import { DialogModule } from 'primeng/dialog';
+import { CalendarModule } from 'primeng/calendar';
 @Component({
   selector: 'app-invoice-upload',
   imports: [CommonModule,
@@ -21,7 +22,8 @@ import { DialogModule } from 'primeng/dialog';
     ProgressSpinnerModule,
     DividerModule,
     PdfViewerModule,
-    DialogModule],
+    DialogModule,
+  CalendarModule],
   templateUrl: './invoice-upload.component.html',
   styleUrl: './invoice-upload.component.scss'
 })

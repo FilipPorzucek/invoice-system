@@ -4,6 +4,7 @@ import { InvoiceUploadComponent } from './features/invoice-upload/invoice-upload
 import { LoginComponent } from './features/auth/login/login.component';
 import { AuthComponent } from './features/auth/auth.component';
 import { RegisterComponent } from './features/auth/register/register.component';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -19,6 +20,7 @@ export const routes: Routes = [
   {
     path: 'employee',
     component: EmployeeLayoutComponent,
+    canActivate: [authGuard],
     children: [
       { path: 'dashboard', loadComponent: () => import('./features/employee-dashboard/employee-dashboard.component').then(c => c.EmployeeDashboardComponent) },
       { path: 'invoice-upload', component: InvoiceUploadComponent }

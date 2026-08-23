@@ -20,6 +20,7 @@ import { PasswordModule } from 'primeng/password';
 })
 export class LoginComponent {
 loginForm!: FormGroup;
+errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder, 
@@ -40,6 +41,7 @@ loginForm!: FormGroup;
       return;
     }
 
+    this.errorMessage = '';
     const loginData: LoginRequest = this.loginForm.value;
     
     this.authService.login(loginData).subscribe({
@@ -49,7 +51,7 @@ loginForm!: FormGroup;
         const role = user.role; 
 
         if (role === 'EMPLOYEE') {
-          this.router.navigate(['/employee/invoice-upload']);
+          this.router.navigate(['/employee/dashboard']);
         } else if (role === 'ACCOUNTANT') {
           this.router.navigate(['/accountant/dashboard']);
         } else if (role === 'MANAGER') {
@@ -58,8 +60,13 @@ loginForm!: FormGroup;
           this.router.navigate(['/']); 
         }
       },
-      error: (err) => {
+error: (err) => {
         console.error('Błąd podczas logowania:', err);
+        if (err.status === 401 || err.status === 403) {
+          this.errorMessage = 'Nieprawidłowy adres email lub hasło.';
+        } else {
+          this.errorMessage = 'Wystąpił błąd serwera. Spróbuj ponownie później.';
+        }
       }
     });
   }

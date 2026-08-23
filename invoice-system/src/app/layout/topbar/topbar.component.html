@@ -34,7 +34,7 @@
   header="Panel Użytkownika"
   [style]="{ width: '450px' }">
   
-  <ng-container *ngIf="isLoggedIn(); else notLoggedIn">
+  <ng-container *ngIf="isLoggedIn()">
     <div class="user-info-content text-center">
       <h3 class="user-info-title">Jesteś zalogowany!</h3>
 
@@ -69,27 +69,4 @@
       </div>
     </div>
   </ng-container>
-
-  <ng-template #notLoggedIn>
-    <div class="auth-content text-center">
-      <p class="auth-info mb-4">Jesteś obecnie wylogowany. Zaloguj się lub utwórz nowe konto.</p>
-      
-      <div class="auth-buttons flex flex-column gap-3">
-        <p-button 
-           label="Zaloguj się"
-           icon="pi pi-sign-in"
-           (onClick)="navigateToLogin()"
-           styleClass="w-full">
-        </p-button>
-
-        <p-button 
-           label="Zarejestruj się"  
-           icon="pi pi-user-plus" 
-           severity="secondary"
-           (onClick)="navigateToRegister()"
-           styleClass="w-full">
-        </p-button>
-      </div>
-    </div>
-  </ng-template>
 </p-dialog>

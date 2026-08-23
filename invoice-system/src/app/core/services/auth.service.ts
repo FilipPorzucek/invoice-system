@@ -14,7 +14,7 @@ export class AuthService {
   private user: User | null = null;
   private storageKey = 'authData';
   
-  private apiUrl = "http://localhost:8080/api/auth";
+  private apiUrl = "http://localhost:8081/api/auth";
 
   constructor() {
     this.loadSessionData();
@@ -39,7 +39,7 @@ export class AuthService {
     );
   }
 
-  register(data: any): Observable<any> { // Zmień any na RegisterRequest
+  register(data: any): Observable<any> { 
     return this.http.post<any>(`${this.apiUrl}/register`, data);
   }
 

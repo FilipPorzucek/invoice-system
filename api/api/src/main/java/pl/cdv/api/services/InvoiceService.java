@@ -136,12 +136,17 @@ public class InvoiceService {
         invoice.setIssueDate(dto.getIssueDate());
         invoice.setCurrency(dto.getCurrency());
 
-        if(dto.getSupplier()!=null && invoice.getSuppliers()!=null){
-            Suppliers supplier=invoice.getSuppliers();
+        if (dto.getSupplier() != null) {
+            String nip = dto.getSupplier().getNip();
+            Suppliers supplier = supplierRepository.findByNip(nip)
+                    .orElseGet(Suppliers::new);
+
+            supplier.setNip(nip);
             supplier.setName(dto.getSupplier().getName());
-            supplier.setNip(dto.getSupplier().getNip());
             supplier.setAddress(dto.getSupplier().getAddress());
             supplier.setBankAccountNumber(dto.getSupplier().getBankAccountNumber());
+            supplierRepository.save(supplier);
+            invoice.setSuppliers(supplier);
         }
 
         if(dto.getItems()!=null){

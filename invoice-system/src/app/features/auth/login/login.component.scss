@@ -75,3 +75,11 @@ small {
   border-color: #1976d2;
   background-color: #e8f0fe;
 }
+
+.error {
+  color: #ef4444;       /* text-red-500 (ładny, wyraźny czerwony) */
+  font-weight: 600;     /* font-semibold */
+  font-size: 0.875rem;  /* text-sm (około 14px) */
+  text-align: center;   /* text-center */
+  margin-bottom: 1rem;  /* mb-3 (odstęp od przycisku poniżej) */
+}

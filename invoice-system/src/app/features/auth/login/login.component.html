@@ -27,6 +27,10 @@
       <small *ngIf="loginForm.get('password')?.errors?.['required']">Hasło jest wymagane.</small>
     </div>
 
+    <div *ngIf="errorMessage" class="error">
+      {{ errorMessage }}
+    </div>
+
     <button type="submit" class="confirm-button">Zaloguj się</button>
   </form>
 </div>

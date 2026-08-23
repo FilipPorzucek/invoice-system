@@ -9,10 +9,12 @@
                         <label>Numer faktury</label>
                         <input pInputText formControlName="invoiceNumber" />
                     </div>
-                    <div class="form-field">
-                        <label>Data wyst.</label>
-                        <input pInputText formControlName="issueDate" />
-                    </div>
+                   <div class="form-field">
+    <label>Data wyst.</label>
+    <p-calendar formControlName="issueDate" dateFormat="yy-mm-dd" dataType="string" [showIcon]="true"
+        placeholder="Wybierz datę">
+    </p-calendar>
+    </div>
                     <div class="form-field" style="flex: 0.5;">
                         <label>Waluta</label>
                         <input pInputText formControlName="currency" />
