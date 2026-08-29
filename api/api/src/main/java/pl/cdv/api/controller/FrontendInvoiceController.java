@@ -41,4 +41,9 @@ public class FrontendInvoiceController {
         InvoiceDto dto = invoiceService.getInvoiceById(id);
         return ResponseEntity.ok(dto);
     }
+
+    @GetMapping("/pending")
+    public List<InvoiceDto> getPendingInvoices() {
+        return invoiceService.getInvoicesByStatus("PENDING_ACCOUNTANT");
+    }
 }

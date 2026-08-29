@@ -30,4 +30,8 @@ export class InvoiceService {
     return this.http.put(`${this.apiUrl}/${id}/approve`, invoiceData, { responseType: 'text' });
   }
 
+  getPendingInvoices(): Observable<Invoice[]> {
+    return this.http.get<Invoice[]>(`${this.apiUrl}/pending`);
+  }
+
 }

@@ -260,5 +260,51 @@ public class InvoiceService {
         return dto;
     }
 
+    @Transactional(readOnly = true)
+    public List<InvoiceDto> getInvoicesByStatus(String statusName) {
+        InvoiceStatus status = invoiceStatusRepository.findByName(statusName)
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono statusu: " + statusName));
+
+        List<Invoice> invoices = invoiceRepository.findByStatus(status);
+
+        return invoices.stream().map(invoice -> {
+            InvoiceDto dto = new InvoiceDto();
+            dto.setInvoiceNumber(invoice.getInvoiceNumber());
+            dto.setGrossAmount(invoice.getGrossAmount());
+            dto.setNetAmount(invoice.getNetAmount());
+            dto.setMinioFilePath(invoice.getFilePath());
+            dto.setIssueDate(invoice.getIssueDate());
+            dto.setCurrency(invoice.getCurrency());
+
+            if (invoice.getStatus() != null) {
+                dto.setStatus(invoice.getStatus().getName());
+            }
+
+            if (invoice.getSuppliers() != null) {
+                SupplierDto supplierDto = new SupplierDto();
+                supplierDto.setNip(invoice.getSuppliers().getNip());
+                supplierDto.setName(invoice.getSuppliers().getName());
+                supplierDto.setAddress(invoice.getSuppliers().getAddress());
+                supplierDto.setBankAccountNumber(invoice.getSuppliers().getBankAccountNumber());
+                dto.setSupplier(supplierDto);
+            }
+
+            if (invoice.getItems() != null && !invoice.getItems().isEmpty()) {
+                List<InvoiceItemDto> itemDtos = new ArrayList<>();
+                for (InvoiceItems item : invoice.getItems()) {
+                    InvoiceItemDto itemDto = new InvoiceItemDto();
+                    itemDto.setName(item.getName());
+                    itemDto.setQuantity(item.getQuantity());
+                    itemDto.setNetPrice(item.getNetPrice());
+                    itemDto.setTaxRate(item.getTaxRate());
+                    itemDtos.add(itemDto);
+                }
+                dto.setItems(itemDtos);
+            }
+
+            return dto;
+        }).toList();
+    }
+
 
 }

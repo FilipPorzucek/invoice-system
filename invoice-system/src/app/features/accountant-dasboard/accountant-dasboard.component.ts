@@ -39,9 +39,9 @@ private invoiceService = inject(InvoiceService);
   }
 
   loadInvoices() {
-    this.invoiceService.getEmployeeInvoices().subscribe({
+    this.invoiceService.getPendingInvoices().subscribe({
       next:(data)=>{
-        console.log('2. Mamy to! Backend zwrócił:', data);
+        console.log('Mamy to! Backend zwrócił:', data);
         this.invoices = data;
       },
       error:(err)=>{
