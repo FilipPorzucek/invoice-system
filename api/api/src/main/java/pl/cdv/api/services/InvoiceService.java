@@ -13,10 +13,7 @@ import pl.cdv.api.dto.InvoiceDto;
 import pl.cdv.api.dto.InvoiceItemDto;
 import pl.cdv.api.dto.OcrWebhookResponse;
 import pl.cdv.api.dto.SupplierDto;
-import pl.cdv.api.entity.Invoice;
-import pl.cdv.api.entity.InvoiceItems;
-import pl.cdv.api.entity.InvoiceStatus;
-import pl.cdv.api.entity.Suppliers;
+import pl.cdv.api.entity.*;
 import pl.cdv.api.repository.*;
 
 import java.time.LocalDate;
@@ -82,8 +79,12 @@ public class InvoiceService {
     }
 
     @Transactional(readOnly = true)
-    public List<InvoiceDto> getAllNewInvoices(){
-        List<Invoice> invoices =invoiceRepository.findAll();
+    public List<InvoiceDto> getAllNewInvoices(String email){
+
+        User user=userRepository.findByEmail(email)
+                .orElseThrow(()->new RuntimeException("Nie znaleziono uzytkownika"));
+
+        List<Invoice> invoices =invoiceRepository.findByUploadedBy(user);
         return invoices.stream().map(invoice -> {
             InvoiceDto dto=new InvoiceDto();
             dto.setInvoiceNumber(invoice.getInvoiceNumber());
@@ -170,7 +171,7 @@ public class InvoiceService {
 
 
     @Transactional
-    public Long initInvoiceUpload(MultipartFile file) {
+    public Long initInvoiceUpload(MultipartFile file,String email) {
         String minioPath = "faktury/2026/" + file.getOriginalFilename();
 
         try{
@@ -187,12 +188,13 @@ public class InvoiceService {
         throw new RuntimeException("Błąd zapisu pliku w MinIO", e);
     }
 
+        User user=userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Brak usera w bazie"));
         Invoice invoice = new Invoice();
         invoice.setFilePath(minioPath);
         invoice.setStatus(invoiceStatusRepository.findById(5L)
                 .orElseThrow(() -> new RuntimeException("Brak statusu NEW w bazie!")));
-        invoice.setUploadedBy(userRepository.findById(1L)
-                .orElseThrow(() -> new RuntimeException("Brak usera w bazie!")));
+        invoice.setUploadedBy(user);
         Invoice savedInvoice = invoiceRepository.save(invoice);
         sendToPythonOcrService(savedInvoice.getInvoiceId(), minioPath);
         return savedInvoice.getInvoiceId();

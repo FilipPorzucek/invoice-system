@@ -103,14 +103,16 @@ onFileSelect(event: any) {
       },
       error: (error) => {
         this.isProcessing = false;
-        console.error('Błąd podczas wgrywania pliku:', error);
-        this.showErrorDialog = true;
+        this.isOcrDone = true;           
+        this.invoiceForm.enable();       
+        console.error('Błąd podczas wgrywania pliku (np. MinIO nie odpowiada):', error);
+        this.showOcrTimeoutDialog = true; 
       }
     });
   }
 
   startPollingForOcrData(id: number) {
-    const maxPollingTime = 60000; 
+    const maxPollingTime = 10000; 
     const startTime = Date.now();
     this.stopPolling();
     this.pollingInterval = setInterval(() => {
@@ -166,8 +168,10 @@ onFileSelect(event: any) {
         error: (error) => {
           clearInterval(this.pollingInterval);
           this.isProcessing = false;
+          this.invoiceForm.enable();
           console.error('Błąd podczas odpytywania o dane OCR:', error);
-          this.showErrorDialog = true;
+          this.isOcrDone = true;
+          this.showOcrTimeoutDialog = true;
         }
       });
 

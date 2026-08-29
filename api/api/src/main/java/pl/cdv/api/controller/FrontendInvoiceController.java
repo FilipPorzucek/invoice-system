@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.cdv.api.dto.InvoiceDto;
 import pl.cdv.api.services.InvoiceService;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -17,9 +18,9 @@ public class FrontendInvoiceController {
     private final InvoiceService invoiceService;
 
     @GetMapping("/new")
-    public List<InvoiceDto> getNewInvoices(){
+    public List<InvoiceDto> getNewInvoices(Principal principal){
         System.out.println("Pobieram nowe faktury");
-        return invoiceService.getAllNewInvoices();
+        return invoiceService.getAllNewInvoices(principal.getName());
     }
 
     @PutMapping("/{id}/approve")
@@ -29,9 +30,9 @@ public class FrontendInvoiceController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<Long> uploadInvoiceFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Long> uploadInvoiceFile(@RequestParam("file") MultipartFile file,Principal principal) {
         System.out.println("Odebrano plik faktury do analizy OCR: " + file.getOriginalFilename());
-        Long newInvoiceId = invoiceService.initInvoiceUpload(file);
+        Long newInvoiceId = invoiceService.initInvoiceUpload(file, principal.getName());
         return ResponseEntity.ok(newInvoiceId);
     }
 

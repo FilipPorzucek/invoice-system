@@ -32,7 +32,6 @@ export const routes: Routes = [
   {
     path: 'accountant',
     component: AccountantLayoutComponent,
-    canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, 
       { path: 'dashboard', loadComponent: () => import('./features/accountant-dasboard/accountant-dasboard.component').then(c => c.AccountantDasboardComponent) }
