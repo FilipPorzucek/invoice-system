@@ -56,13 +56,17 @@ public class OcrWebhookResponse {
     @Data
     public static class OcrLineItem {
         private String description;
+
         private Double quantity;
 
-        @JsonProperty("net_value")
-        private Double netValue;
+        @JsonProperty("net_price")
+        private BigDecimal netPrice;
 
-        @JsonProperty("var_rate")
-        private Double varRate;
+        @JsonProperty("net_value")
+        private BigDecimal netValue;
+
+        @JsonProperty("VAT_rate")
+        private BigDecimal vatRate;
     }
 
 }

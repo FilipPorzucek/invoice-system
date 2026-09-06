@@ -29,11 +29,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(Customizer.withDefaults()) // <--- DODALIŚMY TĘ LINIJKĘ DLA CORS!
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/internal/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -42,19 +43,13 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-    // --- NOWY BEAN: GLOBALNA KONFIGURACJA CORS ---
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Zezwalamy na strzały z Twojego Angulara
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-
-        // Zezwalamy na podstawowe metody HTTP (w tym OPTIONS, które jest wysyłane przy CORS)
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
-        // Zezwalamy na przesyłanie nagłówków z tokenem i typem danych
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

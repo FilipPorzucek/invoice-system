@@ -16,6 +16,7 @@ import pl.cdv.api.dto.SupplierDto;
 import pl.cdv.api.entity.*;
 import pl.cdv.api.repository.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,6 +73,45 @@ public class InvoiceService {
                         });
 
                 invoice.setSuppliers(supplier);
+            }
+
+            if (ocrData.getLineItems() != null && !ocrData.getLineItems().isEmpty()) {
+
+                if (invoice.getItems() != null) {
+                    invoice.getItems().clear();
+                }
+
+                for (OcrWebhookResponse.OcrLineItem ocrItem : ocrData.getLineItems()) {
+                    InvoiceItems newItem = new InvoiceItems();
+                    newItem.setInvoice(invoice);
+                    newItem.setName(ocrItem.getDescription());
+
+                    int quantity = (ocrItem.getQuantity() != null && ocrItem.getQuantity() > 0)
+                            ? ocrItem.getQuantity().intValue() : 1;
+                    newItem.setQuantity(quantity);
+
+                    BigDecimal finalNetPrice = ocrItem.getNetPrice();
+
+                    if (finalNetPrice == null) {
+                        if (ocrItem.getNetValue() != null) {
+                            finalNetPrice = ocrItem.getNetValue().divide(BigDecimal.valueOf(quantity), 2, java.math.RoundingMode.HALF_UP);
+                        } else if (ocrData.getSummary() != null && ocrData.getSummary().getTotalNet() != null) {
+                            finalNetPrice = ocrData.getSummary().getTotalNet().divide(BigDecimal.valueOf(quantity), 2, java.math.RoundingMode.HALF_UP);
+                        } else {
+                            finalNetPrice = BigDecimal.ZERO;
+                        }
+                    }
+
+                    newItem.setNetPrice(finalNetPrice);
+
+                    BigDecimal finalTaxRate = ocrItem.getVatRate();
+                    if (finalTaxRate == null) {
+                        finalTaxRate = BigDecimal.ZERO;
+                    }
+                    newItem.setTaxRate(finalTaxRate);
+
+                    invoice.getItems().add(newItem);
+                }
             }
         }
 
