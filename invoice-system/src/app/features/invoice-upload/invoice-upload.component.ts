@@ -112,7 +112,7 @@ onFileSelect(event: any) {
   }
 
   startPollingForOcrData(id: number) {
-    const maxPollingTime = 10000; 
+    const maxPollingTime = 60000; 
     const startTime = Date.now();
     this.stopPolling();
     this.pollingInterval = setInterval(() => {

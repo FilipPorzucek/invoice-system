@@ -1,6 +1,7 @@
 package pl.cdv.api.services;
 
 
+import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import pl.cdv.api.dto.SupplierDto;
 import pl.cdv.api.entity.*;
 import pl.cdv.api.repository.*;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -241,7 +243,6 @@ public class InvoiceService {
     }
 
     private void sendToPythonOcrService(Long invoiceId, String minioPath) {
-        System.out.println("Wysyłam powiadomienie do OCR Pythona dla faktury ID: " + invoiceId);
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -266,6 +267,7 @@ public class InvoiceService {
                 .orElseThrow(() -> new RuntimeException("Nie znaleziono faktury o ID: " + id));
 
         InvoiceDto dto = new InvoiceDto();
+        dto.setId(invoice.getInvoiceId());
         dto.setInvoiceNumber(invoice.getInvoiceNumber());
         dto.setGrossAmount(invoice.getGrossAmount());
         dto.setNetAmount(invoice.getNetAmount());
@@ -309,6 +311,7 @@ public class InvoiceService {
 
         return invoices.stream().map(invoice -> {
             InvoiceDto dto = new InvoiceDto();
+            dto.setId(invoice.getInvoiceId());
             dto.setInvoiceNumber(invoice.getInvoiceNumber());
             dto.setGrossAmount(invoice.getGrossAmount());
             dto.setNetAmount(invoice.getNetAmount());
@@ -346,5 +349,28 @@ public class InvoiceService {
         }).toList();
     }
 
+    @Transactional(readOnly = true)
+    public byte[] getInvoiceFile(Long invoiceId) {
+        Invoice invoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono faktury o ID: " + invoiceId));
+
+        String filePath = invoice.getFilePath();
+        if (filePath == null || filePath.isEmpty()) {
+            throw new RuntimeException("Faktura nie ma przypisanego pliku.");
+        }
+
+        try {
+            InputStream stream = minioClient.getObject(
+                    GetObjectArgs.builder()
+                            .bucket("invoices")
+                            .object(filePath)
+                            .build()
+            );
+            return stream.readAllBytes();
+        } catch (Exception e) {
+            throw new RuntimeException("Błąd podczas pobierania pliku z MinIO", e);
+        }
+
+    }
 
 }

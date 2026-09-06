@@ -1,6 +1,8 @@
 package pl.cdv.api.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,5 +47,17 @@ public class FrontendInvoiceController {
     @GetMapping("/pending")
     public List<InvoiceDto> getPendingInvoices() {
         return invoiceService.getInvoicesByStatus("PENDING_ACCOUNTANT");
+    }
+
+    @GetMapping("/{id}/file")
+    public ResponseEntity<byte[]> getInvoiceFile(@PathVariable Long id) {
+        byte[] fileBytes = invoiceService.getInvoiceFile(id);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(fileBytes);
     }
 }

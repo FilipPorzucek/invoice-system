@@ -34,4 +34,11 @@ export class InvoiceService {
     return this.http.get<Invoice[]>(`${this.apiUrl}/pending`);
   }
 
+  downloadInvoiceFile(invoiceId: number) {
+  return this.http.get(`http://localhost:8081/api/invoices/${invoiceId}/file`, {
+    responseType: 'blob'
+  });
+}
+  
+
 }

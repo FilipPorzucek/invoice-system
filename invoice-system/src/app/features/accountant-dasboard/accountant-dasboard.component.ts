@@ -1,10 +1,10 @@
 import { Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 import { Invoice } from '../../core/model/invoice.model';
-import { InvoiceItem } from '../../core/model/invoice-item.model';
 import { InvoiceService } from '../../core/services/invoice.service';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employee-dashboard',
@@ -15,6 +15,7 @@ import { TagModule } from 'primeng/tag';
 export class AccountantDasboardComponent {
 invoices:Invoice[]=[];
 private invoiceService = inject(InvoiceService);
+private router = inject(Router);
 
 @ViewChild('fakeScroll') fakeScroll!: ElementRef;
   @ViewChild('fakeContent') fakeContent!: ElementRef;
@@ -82,5 +83,19 @@ private invoiceService = inject(InvoiceService);
     if (this.realWrapper && this.fakeScroll) {
       this.realWrapper.scrollLeft = this.fakeScroll.nativeElement.scrollLeft;
     }
+  }
+
+onRowSelect(event: any) {
+    console.log("Kliknięto wiersz, pełne dane:", event.data);
+    
+  
+    const targetId = event.data.id || event.data.invoiceId;
+    
+    if (!targetId) {
+      console.error("Błąd: Ten wiersz nie posiada żadnego przypisanego ID!");
+      return;
+    }
+
+    this.router.navigate(['/accountant/invoice', targetId]);
   }
 }

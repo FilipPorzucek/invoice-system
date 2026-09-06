@@ -12,7 +12,10 @@
         styleClass="p-datatable-striped"
         [scrollable]="true"
         sortField="issueDate" 
-        [sortOrder]="-1">
+        [sortOrder]="-1"
+        selectionMode="single" 
+        dataKey="invoiceId"
+        (onRowSelect)="onRowSelect($event)">
         
        <ng-template pTemplate="header">
             <tr>
@@ -47,7 +50,7 @@
         </ng-template>
         
         <ng-template pTemplate="body" let-invoice>
-            <tr>
+            <tr [pSelectableRow]="invoice" style="cursor: pointer;">
                 <td style="font-weight: 500;">{{ invoice.invoiceNumber }}</td>
                 <td>{{ invoice.issueDate || 'Brak daty' }}</td>
                 <td >{{ invoice.supplier?.name || '---' }}</td>

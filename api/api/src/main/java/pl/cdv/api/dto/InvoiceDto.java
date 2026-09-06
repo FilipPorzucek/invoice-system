@@ -9,6 +9,7 @@ import java.util.List;
 
 @Data
 public class InvoiceDto {
+    private Long id;
     private String invoiceNumber;
     private BigDecimal grossAmount;
     private BigDecimal netAmount;
