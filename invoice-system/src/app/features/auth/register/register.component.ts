@@ -10,7 +10,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-register',
-standalone: true,
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -35,7 +35,8 @@ export class RegisterComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       repeatPassword: ['', Validators.required],
-      dateOfBirth: ['', Validators.required]
+      // Dodany nowy walidator do sprawdzania daty z przyszłości:
+      dateOfBirth: ['', [Validators.required, this.futureDateValidator]]
     }, { validators: this.passwordsMatchValidator });
   }
 
@@ -43,6 +44,16 @@ export class RegisterComponent {
     const password = group.get('password')?.value;
     const repeatPassword = group.get('repeatPassword')?.value;
     return password === repeatPassword ? null : { passwordsMismatch: true };
+  }
+
+  // Nasza nowa logika blokująca daty z przyszłości
+  futureDateValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+    const selectedDate = new Date(control.value);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Zerujemy czas, żeby porównać same dni
+    
+    return selectedDate > today ? { futureDate: true } : null;
   }
 
   formatDate(date: Date): string {
@@ -77,5 +88,4 @@ export class RegisterComponent {
       error: (err) => console.error('Błąd rejestracji:', err)
     });
   }
-
 }

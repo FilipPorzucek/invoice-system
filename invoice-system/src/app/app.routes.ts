@@ -7,6 +7,7 @@ import { RegisterComponent } from './features/auth/register/register.component';
 import { authGuard } from './core/guards/auth.guard';
 import { AccountantLayoutComponent } from './layout/accountant-layout/accountant-layout.component';
 import { AccountantInvoiceViewComponent } from './features/accountant-invoice-view/accountant-invoice-view.component';
+import { InvoiceDetailsComponent } from './features/invoice-details/invoice-details.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -26,7 +27,8 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', loadComponent: () => import('./features/employee-dashboard/employee-dashboard.component').then(c => c.EmployeeDashboardComponent) },
-      { path: 'invoice-upload', component: InvoiceUploadComponent }
+      { path: 'invoice-upload', component: InvoiceUploadComponent },
+      { path: 'invoice/:id', component: InvoiceDetailsComponent }
     ]
   },
 
