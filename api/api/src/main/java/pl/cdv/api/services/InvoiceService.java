@@ -306,6 +306,7 @@ public class InvoiceService {
         dto.setMinioFilePath(invoice.getFilePath());
         dto.setIssueDate(invoice.getIssueDate());
         dto.setCurrency(invoice.getCurrency());
+        dto.setRejectionReason(invoice.getRejectionReason());
 
         if(invoice.getStatus() != null){
             dto.setStatus(invoice.getStatus().getName());
