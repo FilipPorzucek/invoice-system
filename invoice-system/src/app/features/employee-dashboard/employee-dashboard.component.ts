@@ -1,4 +1,5 @@
 import { Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { Invoice } from '../../core/model/invoice.model';
 import { InvoiceItem } from '../../core/model/invoice-item.model';
 import { InvoiceService } from '../../core/services/invoice.service';
@@ -13,10 +14,11 @@ import { TagModule } from 'primeng/tag';
   styleUrl: './employee-dashboard.component.scss'
 })
 export class EmployeeDashboardComponent implements OnInit{
-invoices:Invoice[]=[];
-private invoiceService = inject(InvoiceService);
+  invoices: Invoice[] = [];
+  private invoiceService = inject(InvoiceService);
+  private router = inject(Router);
 
-@ViewChild('fakeScroll') fakeScroll!: ElementRef;
+  @ViewChild('fakeScroll') fakeScroll!: ElementRef;
   @ViewChild('fakeContent') fakeContent!: ElementRef;
   private realWrapper!: HTMLElement | null;
 
@@ -40,32 +42,35 @@ private invoiceService = inject(InvoiceService);
 
   loadInvoices() {
     this.invoiceService.getEmployeeInvoices().subscribe({
-      next:(data)=>{
+      next: (data) => {
         console.log('2. Mamy to! Backend zwrócił:', data);
         this.invoices = data;
       },
-      error:(err)=>{
-        console.error("Bład z pobranie faktur",err)
+      error: (err) => {
+        console.error("Błąd z pobraniem faktur", err);
       }
-    })
-    
+    });
   }
 
+  getStatusName(status?: string): string {
+    if (!status) {
+      return "Brak statusu";
+    }
 
-  getStatusName(status?:string):string{
-    if(!status){
-      return "Brak statusu"
-    };
-
-    const transaltions: Record<string,string>={
+    const translations: Record<string, string> = {
       'PENDING_ACCOUNTANT': 'Oczekuje na księgową',
       'PENDING_MANAGER': 'Oczekuje na menadżera',
       'REJECTED': 'Odrzucona',
       'BOOKED': 'Zaksięgowana'
     }
 
-    return transaltions[status] || status
+    return translations[status] || status;
+  }
 
+  viewInvoice(id: number | string) {
+    if (id) {
+      this.router.navigate(['/employee/invoice', id]);
+    }
   }
 
   @HostListener('window:resize')
@@ -83,5 +88,4 @@ private invoiceService = inject(InvoiceService);
       this.realWrapper.scrollLeft = this.fakeScroll.nativeElement.scrollLeft;
     }
   }
-
 }
