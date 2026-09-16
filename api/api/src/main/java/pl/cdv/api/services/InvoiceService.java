@@ -206,9 +206,27 @@ public class InvoiceService {
                 invoice.getItems().add(newItem);
             }
         }
-        InvoiceStatus status = invoiceStatusRepository.findByName("PENDING_ACCOUNTANT")
-                .orElseThrow(() -> new RuntimeException("Brak statusu PENDING_ACCOUNTANT w bazie!"));
+        BigDecimal limit;
+        String currency = invoice.getCurrency() != null ? invoice.getCurrency().toUpperCase() : "PLN";
+
+        if ("EUR".equals(currency)) {
+            limit = new BigDecimal("2000.00");
+        } else {
+            limit = new BigDecimal("10000.00");
+        }
+
+        String targetStatusName;
+        if (invoice.getGrossAmount() != null && invoice.getGrossAmount().compareTo(limit) > 0) {
+            targetStatusName = "PENDING_MANAGER";
+        } else {
+            targetStatusName = "BOOKED";
+        }
+
+        InvoiceStatus status = invoiceStatusRepository.findByName(targetStatusName)
+                .orElseThrow(() -> new RuntimeException("Brak statusu " + targetStatusName + " w bazie!"));
+
         invoice.setStatus(status);
+        invoiceRepository.save(invoice);
     }
 
 
