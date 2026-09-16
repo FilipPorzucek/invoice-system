@@ -1,0 +1,117 @@
+<div class="split-screen-container">
+    
+    <div class="left-panel">
+        <p-card>
+            <ng-template pTemplate="header">
+                <div class="flex justify-content-between align-items-center p-3 pb-0">
+                    <h2 class="m-0 text-xl text-800">Podgląd dokumentu</h2>
+                    <p-button icon="pi pi-arrow-left" label="Wróć" styleClass="p-button-text p-button-secondary" (onClick)="goBack()"></p-button>
+                </div>
+            </ng-template>
+
+            <div *ngIf="invoiceStatus === 'REJECTED'" style="background-color: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                <i class="pi pi-exclamation-triangle" style="font-size: 2rem;"></i>
+                <div>
+                    <h3 style="margin: 0 0 0.5rem 0;">Faktura została odrzucona przez księgowość</h3>
+                    <p style="margin: 0;"><strong>Powód:</strong> {{ rejectionReason || 'Nie podano powodu.' }}</p>
+                </div>
+            </div>
+
+            <form [formGroup]="invoiceForm" class="invoice-form">
+                
+                <div class="form-row">
+                    <div class="form-field">
+                        <label>Numer faktury</label>
+                        <input pInputText formControlName="invoiceNumber" />
+                    </div>
+                    <div class="form-field">
+                        <label>Data wyst.</label>
+                        <p-calendar formControlName="issueDate" dateFormat="yy-mm-dd" dataType="string" [showIcon]="true"></p-calendar>
+                    </div>
+                    <div class="form-field" style="flex: 0.5;">
+                        <label>Waluta</label>
+                        <input pInputText formControlName="currency" />
+                    </div>
+                </div>
+
+                <p-divider align="center"><b>Dostawca</b></p-divider>
+
+                <div formGroupName="supplier" class="invoice-form">
+                    <div class="form-field">
+                        <label>Nazwa firmy</label>
+                        <input pInputText formControlName="name" />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>NIP</label>
+                            <input pInputText formControlName="nip" />
+                        </div>
+                        <div class="form-field" style="flex: 2;">
+                            <label>Numer konta (IBAN)</label>
+                            <input pInputText formControlName="bankAccountNumber" />
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label>Adres</label>
+                        <input pInputText formControlName="address" />
+                    </div>
+                </div>
+
+                <p-divider align="center"><b>Pozycje na fakturze</b></p-divider>
+
+                <div formArrayName="items">
+                    <div *ngFor="let item of items.controls; let i=index" [formGroupName]="i" class="form-row item-row mb-3">
+                        <div class="form-field" style="flex: 2;">
+                            <label *ngIf="i===0">Usługa/Towar</label>
+                            <input pInputText formControlName="name" />
+                        </div>
+                        <div class="form-field" style="flex: 0.5;">
+                            <label *ngIf="i===0">Ilość</label>
+                            <input pInputText formControlName="quantity" type="number" />
+                        </div>
+                        <div class="form-field" style="flex: 1;">
+                            <label *ngIf="i===0">Cena netto</label>
+                            <input pInputText formControlName="netPrice" type="number" step="0.01" />
+                        </div>
+                        <div class="form-field" style="flex: 0.5;">
+                            <label *ngIf="i===0">VAT</label>
+                            <input pInputText formControlName="taxRate" type="number" step="0.01" />
+                        </div>
+                    </div>
+                </div>
+
+                <p-divider></p-divider>
+
+                <div class="form-row mt-2">
+                    <div class="form-field">
+                        <label>Razem Netto</label>
+                        <input pInputText formControlName="netAmount" type="number" step="0.01" />
+                    </div>
+                    <div class="form-field">
+                        <label>Razem Brutto</label>
+                        <input pInputText formControlName="grossAmount" type="number" step="0.01" />
+                    </div>
+                </div>
+                <!-- Brak przycisków akcji -->
+            </form>
+        </p-card>
+    </div>
+
+    <!-- Prawy panel bez zmian -->
+    <div class="right-panel">
+        <p-card styleClass="h-full preview-card">
+            <div *ngIf="pdfPreviewUrl" class="pdf-viewer-area">
+                <pdf-viewer 
+                    [src]="pdfPreviewUrl" 
+                    [render-text]="true"
+                    [original-size]="false" 
+                    [fit-to-page]="true"
+                    style="display: block; width: 100%;">
+                </pdf-viewer>
+            </div>
+            <div *ngIf="!pdfPreviewUrl" class="flex align-items-center justify-content-center h-full text-500">
+                Ładowanie podglądu dokumentu...
+            </div>
+        </p-card>
+    </div>
+</div>

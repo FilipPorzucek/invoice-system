@@ -20,8 +20,8 @@ public class OcrWebhookResponse {
         @JsonProperty("invoice_number")
         private String invoiceNumber;
 
-        @JsonProperty("issue_date")
-        private String issueDate;
+        @JsonProperty("dates")
+        private OcrDates dates;
 
         private OcrCompany seller;
         private OcrCompany buyer;
@@ -67,6 +67,18 @@ public class OcrWebhookResponse {
 
         @JsonProperty("VAT_rate")
         private BigDecimal vatRate;
+    }
+
+    @Data
+    public static class OcrDates {
+        @JsonProperty("issue_date")
+        private String issueDate;
+
+        @JsonProperty("sale_date")
+        private String saleDate;
+
+        @JsonProperty("due_date")
+        private String dueDate;
     }
 
 }

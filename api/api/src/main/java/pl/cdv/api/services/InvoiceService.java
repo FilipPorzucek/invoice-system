@@ -48,11 +48,11 @@ public class InvoiceService {
         if (ocrData != null) {
             invoice.setInvoiceNumber(ocrData.getInvoiceNumber());
 
-            if (ocrData.getIssueDate() != null) {
+            if (ocrData.getDates() != null && ocrData.getDates().getIssueDate() != null) {
                 try {
-                    invoice.setIssueDate(LocalDate.parse(ocrData.getIssueDate()));
+                    invoice.setIssueDate(LocalDate.parse(ocrData.getDates().getIssueDate()));
                 } catch (Exception e) {
-                    System.err.println("Nie udało się sparsować daty z OCR: " + ocrData.getIssueDate());
+                    System.err.println("Nie udało się sparsować daty z OCR: " + ocrData.getDates().getIssueDate());
                 }
             }
 
@@ -129,6 +129,7 @@ public class InvoiceService {
         List<Invoice> invoices =invoiceRepository.findByUploadedBy(user);
         return invoices.stream().map(invoice -> {
             InvoiceDto dto=new InvoiceDto();
+            dto.setId(invoice.getInvoiceId());
             dto.setInvoiceNumber(invoice.getInvoiceNumber());
             dto.setGrossAmount(invoice.getGrossAmount());
             dto.setNetAmount(invoice.getNetAmount());

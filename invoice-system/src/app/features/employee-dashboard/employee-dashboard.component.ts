@@ -1,11 +1,11 @@
 import { Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { Invoice } from '../../core/model/invoice.model';
 import { InvoiceItem } from '../../core/model/invoice-item.model';
 import { InvoiceService } from '../../core/services/invoice.service';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employee-dashboard',
@@ -14,13 +14,14 @@ import { TagModule } from 'primeng/tag';
   styleUrl: './employee-dashboard.component.scss'
 })
 export class EmployeeDashboardComponent implements OnInit{
-  invoices: Invoice[] = [];
-  private invoiceService = inject(InvoiceService);
+invoices:Invoice[]=[];
+private invoiceService = inject(InvoiceService);
   private router = inject(Router);
 
   @ViewChild('fakeScroll') fakeScroll!: ElementRef;
   @ViewChild('fakeContent') fakeContent!: ElementRef;
   private realWrapper!: HTMLElement | null;
+ 
 
   ngOnInit(): void {
     this.loadInvoices();
@@ -88,4 +89,19 @@ export class EmployeeDashboardComponent implements OnInit{
       this.realWrapper.scrollLeft = this.fakeScroll.nativeElement.scrollLeft;
     }
   }
+
+onRowSelect(event: any) {
+    console.log("Kliknięto wiersz, pełne dane:", event.data);
+    
+  
+    const targetId = event.data.id || event.data.invoiceId;
+    
+    if (!targetId) {
+      console.error("Błąd: Ten wiersz nie posiada żadnego przypisanego ID!");
+      return;
+    }
+
+  this.router.navigate(['/employee/invoice', targetId]);
+}
+
 }
