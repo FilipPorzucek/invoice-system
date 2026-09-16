@@ -178,24 +178,24 @@ onFileSelect(event: any) {
     }, 3000); 
   }
 
-  onSubmit() {
-    if (this.invoiceForm.valid && !this.isSubmitting && this.currentInvoiceId) {
-      this.isSubmitting=true;
-      const invoiceData = this.invoiceForm.getRawValue();
+onSubmit() {
+  if (this.invoiceForm.valid && !this.isSubmitting && this.currentInvoiceId) {
+    this.isSubmitting = true;
+    const invoiceData = this.invoiceForm.getRawValue();
 
-       this.invoiceService.approveInvoice(this.currentInvoiceId, invoiceData).subscribe({
-        next: (response) => {
-          this.isSubmitting = false;
-          this.showSuccessDialog = true;
-        },
-        error:(error)=>{
-          this.isSubmitting = false;
-          console.error('Błąd podczas zatwierdzania faktury:', error);
-          this.showErrorDialog = true;
-        },
-       });
-    }
+    this.invoiceService.submitInvoiceByEmployee(this.currentInvoiceId, invoiceData).subscribe({
+      next: () => {
+        this.isSubmitting = false;
+        this.showSuccessDialog = true;
+      },
+      error: (error) => {
+        this.isSubmitting = false;
+        console.error('Błąd podczas przesyłania faktury do księgowości:', error);
+        this.showErrorDialog = true;
+      }
+    });
   }
+}
 
 closeErrorDialog() {
     this.showErrorDialog = false;

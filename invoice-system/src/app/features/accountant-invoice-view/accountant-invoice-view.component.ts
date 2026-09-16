@@ -139,11 +139,22 @@ export class AccountantInvoiceViewComponent implements OnInit {
   }
 
   onReject() {
-    if (!this.rejectReason.trim()) return;
+    if (!this.rejectReason.trim() || this.isSubmitting) {
+    return;
+  }
+  this.isSubmitting = true;
 
-    console.log('Faktura odrzucona. Powód:', this.rejectReason);
-    this.showRejectDialog = false;
-    this.router.navigate(['/accountant/dashboard']);
+  this.invoiceService.rejectInvoice(this.invoiceId, this.rejectReason).subscribe({
+    next: () => {
+      this.isSubmitting = false;
+      this.showRejectDialog = false;
+      this.router.navigate(['/accountant/dashboard']);
+    },
+    error: (err) => {
+      console.error('Błąd odrzucania faktury:', err);
+      this.isSubmitting = false;
+    }
+  })
   }
 
   goBack() {

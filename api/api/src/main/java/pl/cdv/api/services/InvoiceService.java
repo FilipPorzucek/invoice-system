@@ -135,6 +135,7 @@ public class InvoiceService {
             dto.setMinioFilePath(invoice.getFilePath());
             dto.setIssueDate(invoice.getIssueDate());
             dto.setCurrency(invoice.getCurrency());
+            dto.setRejectionReason(invoice.getRejectionReason());
             if(invoice.getStatus()!=null){
                 dto.setStatus(invoice.getStatus().getName());
             }
@@ -169,10 +170,47 @@ public class InvoiceService {
     }
 
     @Transactional
-    public void updateAndApproceInvoice(Long invoiceId,InvoiceDto dto){
-        Invoice invoice=invoiceRepository.findById(invoiceId)
-                .orElseThrow(()->new RuntimeException("Nie znaleziono faktury o ID: " + invoiceId));
+    public void updateAndApproceInvoice(Long invoiceId, InvoiceDto dto) {
+        Invoice invoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono faktury o ID: " + invoiceId));
 
+        updateInvoiceData(invoice, dto);
+
+        BigDecimal limit;
+        String currency = invoice.getCurrency() != null ? invoice.getCurrency().toUpperCase() : "PLN";
+        if ("EUR".equals(currency)) {
+            limit = new BigDecimal("2000.00");
+        } else {
+            limit = new BigDecimal("10000.00");
+        }
+
+        String targetStatusName = (invoice.getGrossAmount() != null && invoice.getGrossAmount().compareTo(limit) > 0)
+                ? "PENDING_MANAGER"
+                : "BOOKED";
+
+        InvoiceStatus status = invoiceStatusRepository.findByName(targetStatusName)
+                .orElseThrow(() -> new RuntimeException("Brak statusu " + targetStatusName + " w bazie!"));
+
+        invoice.setStatus(status);
+        invoiceRepository.save(invoice);
+    }
+
+    @Transactional
+    public void submitInvoiceByEmployee(Long invoiceId, InvoiceDto dto) {
+        Invoice invoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono faktury o ID: " + invoiceId));
+
+        updateInvoiceData(invoice, dto);
+
+        InvoiceStatus status = invoiceStatusRepository.findByName("PENDING_ACCOUNTANT")
+                .orElseThrow(() -> new RuntimeException("Brak statusu PENDING_ACCOUNTANT w bazie!"));
+
+        invoice.setStatus(status);
+        invoiceRepository.save(invoice);
+    }
+
+
+    private void updateInvoiceData(Invoice invoice, InvoiceDto dto) {
         invoice.setInvoiceNumber(dto.getInvoiceNumber());
         invoice.setGrossAmount(dto.getGrossAmount());
         invoice.setNetAmount(dto.getNetAmount());
@@ -181,9 +219,7 @@ public class InvoiceService {
 
         if (dto.getSupplier() != null) {
             String nip = dto.getSupplier().getNip();
-            Suppliers supplier = supplierRepository.findByNip(nip)
-                    .orElseGet(Suppliers::new);
-
+            Suppliers supplier = supplierRepository.findByNip(nip).orElseGet(Suppliers::new);
             supplier.setNip(nip);
             supplier.setName(dto.getSupplier().getName());
             supplier.setAddress(dto.getSupplier().getAddress());
@@ -192,41 +228,18 @@ public class InvoiceService {
             invoice.setSuppliers(supplier);
         }
 
-        if(dto.getItems()!=null){
+        if (dto.getItems() != null) {
             invoice.getItems().clear();
-
             for (InvoiceItemDto itemDto : dto.getItems()) {
                 InvoiceItems newItem = new InvoiceItems();
                 newItem.setName(itemDto.getName());
                 newItem.setQuantity(itemDto.getQuantity());
                 newItem.setNetPrice(itemDto.getNetPrice());
                 newItem.setTaxRate(itemDto.getTaxRate());
-
                 newItem.setInvoice(invoice);
                 invoice.getItems().add(newItem);
             }
         }
-        BigDecimal limit;
-        String currency = invoice.getCurrency() != null ? invoice.getCurrency().toUpperCase() : "PLN";
-
-        if ("EUR".equals(currency)) {
-            limit = new BigDecimal("2000.00");
-        } else {
-            limit = new BigDecimal("10000.00");
-        }
-
-        String targetStatusName;
-        if (invoice.getGrossAmount() != null && invoice.getGrossAmount().compareTo(limit) > 0) {
-            targetStatusName = "PENDING_MANAGER";
-        } else {
-            targetStatusName = "BOOKED";
-        }
-
-        InvoiceStatus status = invoiceStatusRepository.findByName(targetStatusName)
-                .orElseThrow(() -> new RuntimeException("Brak statusu " + targetStatusName + " w bazie!"));
-
-        invoice.setStatus(status);
-        invoiceRepository.save(invoice);
     }
 
 
@@ -336,6 +349,7 @@ public class InvoiceService {
             dto.setMinioFilePath(invoice.getFilePath());
             dto.setIssueDate(invoice.getIssueDate());
             dto.setCurrency(invoice.getCurrency());
+            dto.setRejectionReason(invoice.getRejectionReason());
 
             if (invoice.getStatus() != null) {
                 dto.setStatus(invoice.getStatus().getName());
@@ -390,5 +404,21 @@ public class InvoiceService {
         }
 
     }
+
+    @Transactional
+    public void rejectInvoice(Long invoiceId,String reason){
+        Invoice invoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono faktury o ID: " + invoiceId));
+
+        InvoiceStatus rejectedStatus = invoiceStatusRepository.findByName("REJECTED")
+                .orElseThrow(() -> new RuntimeException("Brak statusu REJECTED w bazie!"));
+
+        invoice.setStatus(rejectedStatus);
+        invoice.setRejectionReason(reason);
+
+        invoiceRepository.save(invoice);
+    }
+
+
 
 }

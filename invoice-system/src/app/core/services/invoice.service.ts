@@ -39,6 +39,13 @@ export class InvoiceService {
     responseType: 'blob'
   });
 }
-  
 
+rejectInvoice(id: number, reason: string): Observable<string> {
+  return this.http.put(`http://localhost:8081/api/invoices/${id}/reject`, { reason }, { responseType: 'text' });
+}
+
+submitInvoiceByEmployee(id: number, invoiceData: any): Observable<string> {
+  return this.http.put(`${this.apiUrl}/${id}/submit`, invoiceData, { responseType: 'text' });
+}
+  
 }

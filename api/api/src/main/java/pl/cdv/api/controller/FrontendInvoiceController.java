@@ -11,6 +11,7 @@ import pl.cdv.api.services.InvoiceService;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/invoices")
@@ -29,6 +30,12 @@ public class FrontendInvoiceController {
     public ResponseEntity<String> approveInvoice(@PathVariable Long id,@RequestBody InvoiceDto dto){
         invoiceService.updateAndApproceInvoice(id,dto);
         return ResponseEntity.ok("Faktura została poprawiona");
+    }
+
+    @PutMapping("/{id}/submit")
+    public ResponseEntity<String> submitByEmployee(@PathVariable Long id, @RequestBody InvoiceDto dto) {
+        invoiceService.submitInvoiceByEmployee(id, dto);
+        return ResponseEntity.ok("Faktura przesłana do księgowości");
     }
 
     @PostMapping("/upload")
@@ -59,5 +66,11 @@ public class FrontendInvoiceController {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(fileBytes);
+    }
+    @PutMapping("/{id}/reject")
+    public ResponseEntity<String> rejectInvoice(@PathVariable Long id, @RequestBody Map<String, String> payload) {
+        String reason = payload.getOrDefault("reason", "");
+        invoiceService.rejectInvoice(id, reason);
+        return ResponseEntity.ok("Faktura została odrzucona");
     }
 }

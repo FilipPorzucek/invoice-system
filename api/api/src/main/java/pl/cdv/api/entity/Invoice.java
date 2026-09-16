@@ -60,4 +60,8 @@ public class Invoice {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "rejection_reason")
+    private String rejectionReason;
+
+
 }

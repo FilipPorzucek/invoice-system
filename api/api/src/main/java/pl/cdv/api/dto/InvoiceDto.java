@@ -18,6 +18,6 @@ public class InvoiceDto {
     private LocalDate issueDate;
     private String status;
     private SupplierDto supplier;
-
     private List<InvoiceItemDto> items;
+    private String rejectionReason;
 }
