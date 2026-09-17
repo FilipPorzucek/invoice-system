@@ -32,9 +32,9 @@ private fb = inject(FormBuilder);
   pdfPreviewUrl: string | null = null;
   rejectionReason: string | null = null;
   invoiceStatus: string = '';
+  isSubmitting: boolean=false;
 
   constructor() {
-    // Od razu blokujemy wszystkie pola, bo pracownik tylko podgląda
     this.invoiceForm = this.fb.group({
       invoiceNumber: [{value: '', disabled: true}],
       issueDate: [{value: '', disabled: true}],
@@ -102,6 +102,12 @@ private fb = inject(FormBuilder);
           });
         }
 
+        if (this.invoiceStatus === 'REJECTED') {
+        this.invoiceForm.enable();
+      } else {
+        this.invoiceForm.disable();
+      }
+
         this.invoiceService.downloadInvoiceFile(this.invoiceId).subscribe({
         next: (blob: Blob) => {
           this.pdfPreviewUrl = URL.createObjectURL(blob);
@@ -114,6 +120,24 @@ private fb = inject(FormBuilder);
   }
 
   goBack() {
-    this.router.navigate(['/employee/dashboard']); // Ścieżka powrotna dla pracownika
+    this.router.navigate(['/employee/dashboard']); 
   }
+
+  onResubmit() {
+  if (this.invoiceForm.valid && !this.isSubmitting) {
+    this.isSubmitting = true;
+    const invoiceData = this.invoiceForm.getRawValue();
+
+    this.invoiceService.submitInvoiceByEmployee(this.invoiceId, invoiceData).subscribe({
+      next: () => {
+        this.isSubmitting = false;
+        this.router.navigate(['/employee/dashboard']);
+      },
+      error: (err) => {
+        console.error('Błąd ponownego wysyłania:', err);
+        this.isSubmitting = false;
+      }
+    });
+  }
+}
 }
