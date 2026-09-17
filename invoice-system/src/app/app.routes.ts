@@ -8,6 +8,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { AccountantLayoutComponent } from './layout/accountant-layout/accountant-layout.component';
 import { AccountantInvoiceViewComponent } from './features/accountant-invoice-view/accountant-invoice-view.component';
 import { EmployeeInvoiceViewComponent } from './features/employee-invoice-view/employee-invoice-view.component';
+import { ManagerLayoutComponent } from './layout/manager-layout/manager-layout.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -35,12 +36,24 @@ export const routes: Routes = [
   {
     path: 'accountant',
     component: AccountantLayoutComponent,
+    canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, 
       { path: 'dashboard', loadComponent: () => import('./features/accountant-dasboard/accountant-dasboard.component').then(c => c.AccountantDasboardComponent) },
       { path: 'invoice/:id', component: AccountantInvoiceViewComponent }
     ]
   },
+
+  {
+    path: 'manager',
+    canActivate: [authGuard],
+    component: ManagerLayoutComponent,
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', loadComponent: () => import('./features/manager-dashboard/manager-dashboard.component').then(c => c.ManagerDashboardComponent) },
+    ]
+  },
+  
 
   { path: '**', redirectTo: 'login' }
 ];

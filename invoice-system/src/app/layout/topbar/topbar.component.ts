@@ -63,4 +63,11 @@ export class TopbarComponent {
     this.dialogVisible = false;
     this.router.navigate(['/register']);
   }
+
+  getDashboardRoute(): string {
+  const role = this.getUser()?.role;
+  if (role === 'ACCOUNTANT') return '/accountant/dashboard';
+  if (role === 'MANAGER') return '/manager/dashboard';
+  return '/employee/dashboard';
+}
 }

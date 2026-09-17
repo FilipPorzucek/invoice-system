@@ -73,4 +73,9 @@ public class FrontendInvoiceController {
         invoiceService.rejectInvoice(id, reason);
         return ResponseEntity.ok("Faktura została odrzucona");
     }
+
+    @GetMapping("/manager/pending")
+    public ResponseEntity<List<InvoiceDto>> getPendingManagerInvoices(){
+        return ResponseEntity.ok(invoiceService.getInvoicesByStatus("PENDING_MANAGER"));
+    }
 }

@@ -46,12 +46,11 @@ export class RegisterComponent {
     return password === repeatPassword ? null : { passwordsMismatch: true };
   }
 
-  // Nasza nowa logika blokująca daty z przyszłości
   futureDateValidator(control: AbstractControl): ValidationErrors | null {
     if (!control.value) return null;
     const selectedDate = new Date(control.value);
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Zerujemy czas, żeby porównać same dni
+    today.setHours(0, 0, 0, 0); 
     
     return selectedDate > today ? { futureDate: true } : null;
   }

@@ -47,5 +47,9 @@ rejectInvoice(id: number, reason: string): Observable<string> {
 submitInvoiceByEmployee(id: number, invoiceData: any): Observable<string> {
   return this.http.put(`${this.apiUrl}/${id}/submit`, invoiceData, { responseType: 'text' });
 }
+
+getManagerInvoices(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/manager/pending`);
+}
   
 }
