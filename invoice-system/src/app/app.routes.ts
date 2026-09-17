@@ -9,6 +9,7 @@ import { AccountantLayoutComponent } from './layout/accountant-layout/accountant
 import { AccountantInvoiceViewComponent } from './features/accountant-invoice-view/accountant-invoice-view.component';
 import { EmployeeInvoiceViewComponent } from './features/employee-invoice-view/employee-invoice-view.component';
 import { ManagerLayoutComponent } from './layout/manager-layout/manager-layout.component';
+import { ManagerInvoiceViewComponent } from './features/manager-invoice-view/manager-invoice-view.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -51,6 +52,7 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', loadComponent: () => import('./features/manager-dashboard/manager-dashboard.component').then(c => c.ManagerDashboardComponent) },
+      { path: 'invoice/:id', component: ManagerInvoiceViewComponent }
     ]
   },
   
