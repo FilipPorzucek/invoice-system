@@ -32,6 +32,9 @@ public class InvoiceItems {
     @Column(name = "net_price")
     private BigDecimal netPrice;
 
+    @Column(name = "net_value")
+    private BigDecimal netValue;
+
     @Column(name = "tax_rate")
     private BigDecimal taxRate;
 

@@ -64,11 +64,12 @@ private fb = inject(FormBuilder);
     return this.invoiceForm.get('items') as FormArray;
   }
 
-  createItemFormGroup(name: string, quantity: number, netPrice: number, taxRate: number): FormGroup {
+  createItemFormGroup(name: string, quantity: number, netPrice: number, taxRate: number,netValue:number): FormGroup {
     return this.fb.group({
       name: [{value: name, disabled: true}],
       quantity: [{value: quantity, disabled: true}],
       netPrice: [{value: netPrice, disabled: true}],
+      netValue:[{value: netValue, disabled: true}],
       taxRate: [{value: taxRate, disabled: true}]
     });
   }
@@ -97,7 +98,7 @@ private fb = inject(FormBuilder);
         if (data.items && data.items.length > 0) {
           data.items.forEach((item: any) => {
             this.items.push(this.createItemFormGroup(
-              item.name, item.quantity, item.netPrice, item.taxRate
+              item.name, item.quantity, item.netPrice,item.netValue, item.taxRate
             ));
           });
         }

@@ -69,11 +69,12 @@ export class AccountantInvoiceViewComponent implements OnInit {
     return this.invoiceForm.get('items') as FormArray;
   }
 
-  createItemFormGroup(name: string, quantity: number, netPrice: number, taxRate: number): FormGroup {
+  createItemFormGroup(name: string, quantity: number, netPrice: number, taxRate: number,netValue: number): FormGroup {
     return this.fb.group({
       name: [name, Validators.required],
       quantity: [quantity, Validators.required],
       netPrice: [netPrice, Validators.required],
+      netValue:[netValue,Validators.required],
       taxRate: [taxRate, Validators.required]
     });
   }
@@ -100,7 +101,7 @@ export class AccountantInvoiceViewComponent implements OnInit {
         if (data.items && data.items.length > 0) {
           data.items.forEach((item: any) => {
             this.items.push(this.createItemFormGroup(
-              item.name, item.quantity, item.netPrice, item.taxRate
+              item.name, item.quantity, item.netPrice,item.netValue, item.taxRate
             ));
           });
         }

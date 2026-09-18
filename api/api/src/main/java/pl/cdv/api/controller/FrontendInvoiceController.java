@@ -78,4 +78,10 @@ public class FrontendInvoiceController {
     public ResponseEntity<List<InvoiceDto>> getPendingManagerInvoices(){
         return ResponseEntity.ok(invoiceService.getInvoicesByStatus("PENDING_MANAGER"));
     }
+
+    @PutMapping("/{id}/manager-approve")
+    public ResponseEntity<String> approveInvoiceByManager(@PathVariable Long id) {
+        invoiceService.approveByManager(id);
+        return ResponseEntity.ok("Faktura została zaksiegowana przez menadżera");
+    }
 }

@@ -83,8 +83,6 @@
                         <input pInputText formControlName="grossAmount" type="number" step="0.01" />
                     </div>
                 </div>
-
-                <!-- Przyciski akcji dla menadżera -->
                 <div class="flex gap-3 mt-4">
                     <p-button 
                         label="Odrzuć" 
@@ -108,7 +106,6 @@
         </p-card>
     </div>
 
-    <!-- Prawy panel: Podgląd PDF -->
     <div class="right-panel">
         <p-card styleClass="h-full preview-card">
             <div *ngIf="pdfPreviewUrl" class="pdf-viewer-area">

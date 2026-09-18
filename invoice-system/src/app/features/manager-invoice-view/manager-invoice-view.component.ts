@@ -69,11 +69,12 @@ export class ManagerInvoiceViewComponent implements OnInit {
     return this.invoiceForm.get('items') as FormArray;
   }
 
-  createItemFormGroup(name: string, quantity: number, netPrice: number, taxRate: number): FormGroup {
+  createItemFormGroup(name: string, quantity: number, netPrice: number, taxRate: number,netValue:number): FormGroup {
     return this.fb.group({
       name: [name, Validators.required],
       quantity: [quantity, Validators.required],
       netPrice: [netPrice, Validators.required],
+      netValue: [netValue,Validators.required],
       taxRate: [taxRate, Validators.required]
     });
   }
@@ -100,12 +101,11 @@ export class ManagerInvoiceViewComponent implements OnInit {
         if (data.items && data.items.length > 0) {
           data.items.forEach((item: any) => {
             this.items.push(this.createItemFormGroup(
-              item.name, item.quantity, item.netPrice, item.taxRate
+              item.name, item.quantity, item.netPrice,item.netValue,item.taxRate
             ));
           });
         }
 
-        // MENADŻER TYLKO PRZEGLĄDA - blokujemy formularz
         this.invoiceForm.disable();
 
         this.invoiceService.downloadInvoiceFile(this.invoiceId).subscribe({
@@ -122,12 +122,12 @@ export class ManagerInvoiceViewComponent implements OnInit {
   onApprove() {
     if (!this.isSubmitting) {
       this.isSubmitting = true;
-      const invoiceData = this.invoiceForm.getRawValue(); // getRawValue pobiera dane nawet z zablokowanego formularza
+      const invoiceData = this.invoiceForm.getRawValue();
 
-      this.invoiceService.approveInvoice(this.invoiceId, invoiceData).subscribe({
+      this.invoiceService.approveInvoiceByManager(this.invoiceId).subscribe({
         next: () => {
           this.isSubmitting = false;
-          this.router.navigate(['/manager/dashboard']); // Powrót na tablicę menadżera
+          this.router.navigate(['/manager/dashboard']); 
         },
         error: (err) => {
           console.error('Błąd zatwierdzania:', err);
@@ -151,7 +151,7 @@ export class ManagerInvoiceViewComponent implements OnInit {
       next: () => {
         this.isSubmitting = false;
         this.showRejectDialog = false;
-        this.router.navigate(['/manager/dashboard']); // Powrót na tablicę menadżera
+        this.router.navigate(['/manager/dashboard']);
       },
       error: (err) => {
         console.error('Błąd odrzucania faktury:', err);
@@ -161,6 +161,6 @@ export class ManagerInvoiceViewComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/manager/dashboard']); // Powrót na tablicę menadżera
+    this.router.navigate(['/manager/dashboard']); 
   }
 }

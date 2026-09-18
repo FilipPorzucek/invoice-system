@@ -9,5 +9,6 @@ public class InvoiceItemDto {
     private String name;
     private Integer quantity;
     private BigDecimal netPrice;
+    private BigDecimal netValue;
     private BigDecimal taxRate;
 }

@@ -51,5 +51,9 @@ submitInvoiceByEmployee(id: number, invoiceData: any): Observable<string> {
 getManagerInvoices(): Observable<any[]> {
   return this.http.get<any[]>(`${this.apiUrl}/manager/pending`);
 }
+
+approveInvoiceByManager(id: number): Observable<any> {
+  return this.http.put(`${this.apiUrl}/${id}/manager-approve`, {}, {responseType:'text'});
+}
   
 }

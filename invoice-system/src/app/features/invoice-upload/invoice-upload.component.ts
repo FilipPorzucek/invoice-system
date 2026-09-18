@@ -63,25 +63,26 @@ export class InvoiceUploadComponent {
 
       items: this.fb.array([])
     });
-    this.items.push(this.createItemFormGroup('',0,0,0))
+    this.items.push(this.createItemFormGroup('',0,0,0,0))
   }
 
   get items(){
     return this.invoiceForm.get('items') as FormArray;
   }
 
-  createItemFormGroup(name: string, quantity: number, netPrice: number, taxRate: number): FormGroup {
+  createItemFormGroup(name: string, quantity: number, netPrice: number,netValue:number, taxRate: number): FormGroup {
     const isDisabled=!this.isOcrDone;
     return this.fb.group({
       name: [{ value: name, disabled: isDisabled }, Validators.required],
       quantity: [{ value: quantity, disabled: isDisabled }, Validators.required],
       netPrice: [{ value: netPrice, disabled: isDisabled }, Validators.required],
+      netValue: [{ value: netValue, disabled: isDisabled }, Validators.required],
       taxRate: [{ value: taxRate, disabled: isDisabled }, Validators.required]
     });
   }
 
   addItem(): void {
-    this.items.push(this.createItemFormGroup('', 1, 0, 23));
+    this.items.push(this.createItemFormGroup('', 1, 0, 23,0));
   }
 
 onFileSelect(event: any) {
@@ -156,11 +157,11 @@ onFileSelect(event: any) {
             if (ocrResponse.items && ocrResponse.items.length > 0) {
               ocrResponse.items.forEach((item: any) => {
                 this.items.push(this.createItemFormGroup(
-                  item.name, item.quantity, item.netPrice, item.taxRate
+                  item.name, item.quantity, item.netPrice,item.netValue, item.taxRate
                 ));
               });
             } else {
-              this.items.push(this.createItemFormGroup('', 0, 0, 0));
+              this.items.push(this.createItemFormGroup('', 0, 0, 0,0));
             }
             this.invoiceForm.enable();
           }
@@ -207,7 +208,7 @@ closeSuccessDialog() {
     this.invoiceForm.reset({ currency: 'PLN' });
     this.items.clear();
     this.isOcrDone = false;
-    this.items.push(this.createItemFormGroup('', 0, 0, 0));
+    this.items.push(this.createItemFormGroup('', 0, 0, 0,0));
     this.invoiceForm.disable();
 
     this.selectedFile = null;

@@ -105,6 +105,7 @@ public class InvoiceService {
                     }
 
                     newItem.setNetPrice(finalNetPrice);
+                    newItem.setNetValue(ocrItem.getNetValue());
 
                     BigDecimal finalTaxRate = ocrItem.getVatRate();
                     if (finalTaxRate == null) {
@@ -159,6 +160,7 @@ public class InvoiceService {
                     itemDto.setName(item.getName());
                     itemDto.setQuantity(item.getQuantity());
                     itemDto.setNetPrice(item.getNetPrice());
+                    itemDto.setNetValue(item.getNetValue());
                     itemDto.setTaxRate(item.getTaxRate());
 
                     itemDtos.add(itemDto);
@@ -236,6 +238,7 @@ public class InvoiceService {
                 newItem.setName(itemDto.getName());
                 newItem.setQuantity(itemDto.getQuantity());
                 newItem.setNetPrice(itemDto.getNetPrice());
+                newItem.setNetValue(itemDto.getNetValue());
                 newItem.setTaxRate(itemDto.getTaxRate());
                 newItem.setInvoice(invoice);
                 invoice.getItems().add(newItem);
@@ -327,6 +330,7 @@ public class InvoiceService {
                 itemDto.setName(item.getName());
                 itemDto.setQuantity(item.getQuantity());
                 itemDto.setNetPrice(item.getNetPrice());
+                itemDto.setNetValue(item.getNetValue());
                 itemDto.setTaxRate(item.getTaxRate());
                 itemDtos.add(itemDto);
             }
@@ -373,6 +377,7 @@ public class InvoiceService {
                     itemDto.setName(item.getName());
                     itemDto.setQuantity(item.getQuantity());
                     itemDto.setNetPrice(item.getNetPrice());
+                    itemDto.setNetValue(item.getNetValue());
                     itemDto.setTaxRate(item.getTaxRate());
                     itemDtos.add(itemDto);
                 }
@@ -421,6 +426,17 @@ public class InvoiceService {
         invoiceRepository.save(invoice);
     }
 
+    @Transactional
+    public void approveByManager(Long invoiceId) {
+        Invoice invoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono faktury o ID: " + invoiceId));
 
+        InvoiceStatus bookedStatus = invoiceStatusRepository.findByName("BOOKED")
+                .orElseThrow(() -> new RuntimeException("Brak statusu BOOKED w bazie!"));
 
+        invoice.setStatus(bookedStatus);
+        invoice.setRejectionReason(null);
+
+        invoiceRepository.save(invoice);
+    }
 }
