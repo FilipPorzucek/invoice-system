@@ -10,6 +10,7 @@ import { AccountantInvoiceViewComponent } from './features/accountant-invoice-vi
 import { EmployeeInvoiceViewComponent } from './features/employee-invoice-view/employee-invoice-view.component';
 import { ManagerLayoutComponent } from './layout/manager-layout/manager-layout.component';
 import { ManagerInvoiceViewComponent } from './features/manager-invoice-view/manager-invoice-view.component';
+import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -53,6 +54,15 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', loadComponent: () => import('./features/manager-dashboard/manager-dashboard.component').then(c => c.ManagerDashboardComponent) },
       { path: 'invoice/:id', component: ManagerInvoiceViewComponent }
+    ]
+  },
+  {
+    path: 'admin',
+    canActivate: [authGuard],
+    component: AdminLayoutComponent,
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', loadComponent: () => import('./features/admin-dashboard/admin-dashboard.component').then(c => c.AdminDashboardComponent) }
     ]
   },
   

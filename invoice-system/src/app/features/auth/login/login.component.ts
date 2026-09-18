@@ -56,7 +56,9 @@ errorMessage: string = '';
           this.router.navigate(['/accountant/dashboard']);
         } else if (role === 'MANAGER') {
           this.router.navigate(['/manager/dashboard']);
-        } else {
+        } else if(role ==="ADMIN"){
+          this.router.navigate(['/admin/dashboard'])
+        }else {
           this.router.navigate(['/']); 
         }
       },

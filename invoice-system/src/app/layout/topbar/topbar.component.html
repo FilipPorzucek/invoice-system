@@ -15,7 +15,8 @@
           [rounded]="true" 
           routerLink="/employee/invoice-upload">
       </p-button>
-          <p-button icon="pi pi-file-excel" label="Wygeneruj raport" severity="info" size="small" [rounded]="true"></p-button>
+          <p-button *ngIf="getUser()?.role !== 'ADMIN'"  icon="pi pi-file-excel" label="Wygeneruj raport" severity="info" size="small" [rounded]="true"></p-button>
+           <p-button *ngIf="getUser()?.role === 'ADMIN'"   icon="pi pi-cog" label="Ustawienia OCR" severity="info" size="small" [rounded]="true"></p-button>
     </div>
 
     <div class="p-toolbar-group-end topbar-section">

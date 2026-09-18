@@ -68,6 +68,7 @@ export class TopbarComponent {
   const role = this.getUser()?.role;
   if (role === 'ACCOUNTANT') return '/accountant/dashboard';
   if (role === 'MANAGER') return '/manager/dashboard';
+  if (role === 'ADMIN') return '/admin/dashboard'
   return '/employee/dashboard';
 }
 }

@@ -1,0 +1,52 @@
+<p-card header="Zarządzanie Użytkownikami">
+    <div class="flex justify-content-between mb-4 mt-2">
+        <p-button label="Dodaj użytkownika" icon="pi pi-user-plus" severity="info"></p-button>
+    </div>
+
+    <p-table 
+        [value]="users" 
+        [loading]="isLoading"
+        [tableStyle]="{ 'min-width': '50rem' }" 
+        styleClass="p-datatable-sm p-datatable-striped">
+        
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID</th>
+                <th>Imię i nazwisko</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Rola</th>
+                <th class="text-center">Akcje</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user>
+            <tr>
+                <td>{{ user.id }}</td>
+                <td class="font-medium">{{ user.firstName }} {{ user.lastName }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    <p-tag 
+                        [value]="user.isActive ? 'Aktywny' : 'Nieaktywny'" 
+                        [severity]="user.isActive ? 'success' : 'danger'">
+                    </p-tag>
+                </td>
+                <td>
+                    <p-tag 
+                        [value]="user.role" 
+                        [severity]="user.role === 'ADMIN' ? 'danger' : (user.role === 'MANAGER' ? 'warning' : (user.role === 'ACCOUNTANT' ? 'info' : 'success'))">
+                    </p-tag>
+                </td>
+                <td class="text-center flex justify-content-center gap-2">
+                    <p-button icon="pi pi-pencil" styleClass="p-button-rounded p-button-text p-button-info" pTooltip="Edytuj dane" tooltipPosition="bottom"></p-button>
+                    <p-button icon="pi pi-key" styleClass="p-button-rounded p-button-text p-button-warning" pTooltip="Zmień hasło" tooltipPosition="bottom"></p-button>
+                    <p-button icon="pi pi-trash" styleClass="p-button-rounded p-button-text p-button-danger" pTooltip="Usuń konto" tooltipPosition="bottom"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="6" class="text-center p-4">Brak użytkowników do wyświetlenia.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
