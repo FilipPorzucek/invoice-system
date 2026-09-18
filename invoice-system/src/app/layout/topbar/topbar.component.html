@@ -17,7 +17,9 @@
       </p-button>
           <p-button *ngIf="getUser()?.role !== 'ADMIN'"  icon="pi pi-file-excel" label="Wygeneruj raport" severity="info" size="small" [rounded]="true"></p-button>
            <p-button *ngIf="getUser()?.role === 'ADMIN'"   icon="pi pi-cog" label="Ustawienia OCR" severity="info" size="small" [rounded]="true"></p-button>
+            <p-button *ngIf="getUser()?.role === 'ADMIN'"   icon="pi pi-user-plus" label="Dodaj użytkownika" severity="info" size="small" [rounded]="true" (onClick)="goToCreateUser()"></p-button>
     </div>
+
 
     <div class="p-toolbar-group-end topbar-section">
       <span class="user-name">{{ getUserDisplayName() }}</span>

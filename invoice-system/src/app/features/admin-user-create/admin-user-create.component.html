@@ -1,0 +1,82 @@
+<div class="user-create-container">
+  <p-card header="Dodaj nowego użytkownika" styleClass="shadow-2 border-round-xl">
+    
+    <div *ngIf="errorMessage" class="p-3 mb-3 border-round bg-red-100 text-red-700 font-medium">
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-3">
+      <div class="grid">
+        <div class="col-12 md:col-6 flex flex-column gap-1">
+          <label class="font-medium text-700">Imię</label>
+          <input pInputText formControlName="firstName" placeholder="np. Jan" />
+        </div>
+
+        <div class="col-12 md:col-6 flex flex-column gap-1">
+          <label class="font-medium text-700">Nazwisko</label>
+          <input pInputText formControlName="lastName" placeholder="np. Kowalski" />
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="col-12 md:col-6 flex flex-column gap-1">
+          <label class="font-medium text-700">Adres Email</label>
+          <input pInputText type="email" formControlName="email" placeholder="jan.kowalski@firma.pl" />
+        </div>
+
+        <div class="col-12 md:col-6 flex flex-column gap-1">
+          <label class="font-medium text-700">Hasło</label>
+          <p-password 
+            formControlName="password" 
+            [feedback]="false" 
+            [toggleMask]="true" 
+            placeholder="Wpisz hasło" 
+            styleClass="w-full" 
+            inputStyleClass="w-full">
+          </p-password>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="col-12 md:col-6 flex flex-column gap-1">
+          <label class="font-medium text-700">Rola</label>
+          <p-dropdown 
+            [options]="roles" 
+            formControlName="role" 
+            optionLabel="label" 
+            optionValue="value" 
+            styleClass="w-full">
+          </p-dropdown>
+        </div>
+
+        <div class="col-12 md:col-6 flex flex-column gap-1">
+          <label class="font-medium text-700">Data urodzenia</label>
+    <p-datepicker 
+      name="dateOfBirth" 
+      formControlName="dateOfBirth" 
+      placeholder="Data urodzenia" 
+      showIcon="true" 
+      dateFormat="dd.mm.yy">
+    </p-datepicker>
+        </div>
+      </div>
+
+      <div class="flex justify-content-end gap-2 mt-4">
+        <p-button 
+          label="Anuluj" 
+          icon="pi pi-times" 
+          severity="secondary" 
+          [outlined]="true" 
+          routerLink="/admin/dashboard">
+        </p-button>
+        <p-button 
+          label="Utwórz konto" 
+          icon="pi pi-check" 
+          type="submit" 
+          severity="info" 
+          [loading]="isSubmitting">
+        </p-button>
+      </div>
+    </form>
+  </p-card>
+</div>

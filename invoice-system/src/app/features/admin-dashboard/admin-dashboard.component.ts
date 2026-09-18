@@ -6,6 +6,7 @@ import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { UserService } from '../../core/services/user.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -17,6 +18,7 @@ import { UserService } from '../../core/services/user.service';
 })
 export class AdminDashboardComponent implements OnInit {
   private userService = inject(UserService);
+  private router = inject(Router);
   
   users: any[] = [];
   isLoading: boolean = true;
@@ -38,4 +40,5 @@ export class AdminDashboardComponent implements OnInit {
       }
     });
   }
+
 }

@@ -71,4 +71,8 @@ export class TopbarComponent {
   if (role === 'ADMIN') return '/admin/dashboard'
   return '/employee/dashboard';
 }
+
+  goToCreateUser() {
+    this.router.navigate(['/admin/users/create']);
+  }
 }

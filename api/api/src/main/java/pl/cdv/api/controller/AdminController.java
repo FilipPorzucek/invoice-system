@@ -2,9 +2,8 @@ package pl.cdv.api.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.cdv.api.dto.CreateUserRequest;
 import pl.cdv.api.dto.UserDto;
 import pl.cdv.api.services.UserService;
 
@@ -20,5 +19,11 @@ public class AdminController {
     @GetMapping("/users")
     public ResponseEntity<List<UserDto>> getAllUsers(){
         return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @PostMapping("/users")
+    public ResponseEntity<Void> createUser(@RequestBody CreateUserRequest request) {
+        userService.createUser(request);
+        return ResponseEntity.ok().build();
     }
 }

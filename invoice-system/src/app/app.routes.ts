@@ -62,7 +62,8 @@ export const routes: Routes = [
     component: AdminLayoutComponent,
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', loadComponent: () => import('./features/admin-dashboard/admin-dashboard.component').then(c => c.AdminDashboardComponent) }
+      { path: 'dashboard', loadComponent: () => import('./features/admin-dashboard/admin-dashboard.component').then(c => c.AdminDashboardComponent) },
+      { path: 'users/create', loadComponent: () => import('./features/admin-user-create/admin-user-create.component').then(c => c.AdminUserCreateComponent) }
     ]
   },
   

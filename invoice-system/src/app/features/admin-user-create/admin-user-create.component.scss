@@ -1,0 +1,145 @@
+.user-create-container {
+  max-width: 850px;
+  margin: 1.5rem auto;
+
+  ::ng-deep {
+    /* 1. Karta formularza */
+    .p-card {
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+
+      .p-card-body {
+        padding: 2.5rem;
+      }
+
+      .p-card-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #f1f5f9;
+      }
+    }
+
+    /* 2. Nowoczesna, dwukolumnowa siatka pól */
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .col-12.md\:col-6 {
+      flex: 1 1 calc(50% - 0.75rem);
+      min-width: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    /* 3. Etykiety pól */
+    label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #475569;
+      letter-spacing: 0.2px;
+    }
+    .p-inputtext,
+    .p-dropdown,
+    .p-password,
+    .p-password input {
+      width: 100% !important;
+      border-radius: 8px;
+    }
+
+    .p-inputtext {
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+      border: 1px solid #cbd5e1;
+      transition: all 0.2s ease;
+
+      &:hover {
+        border-color: #94a3b8;
+      }
+
+      &:focus {
+        border-color: #0284c7;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+      }
+    }
+
+    .p-dropdown,
+    .p-calendar {
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+
+      .p-inputtext {
+        border: none;
+      }
+
+      &:hover {
+        border-color: #94a3b8;
+      }
+
+      &.p-focus {
+        border-color: #0284c7;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+      }
+    }
+
+    .flex.justify-content-end {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #f1f5f9;
+
+      .p-button {
+        padding: 0.7rem 1.5rem;
+        font-weight: 600;
+        border-radius: 8px;
+      }
+    }
+  }
+
+   .p-datepicker,
+  .p-calendar {
+    width: 100%;
+    display: flex;
+
+    .p-inputtext,
+    .p-datepicker-input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ccc;
+      border-right: none;
+      border-radius: 8px 0 0 8px;
+      font-size: 1rem;
+      background-color: #f0f0f0;
+      transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
+      box-sizing: border-box;
+
+      &:focus {
+        border-color: #3b82f6 !important;
+        background-color: #e8f0fe !important;
+        outline: none !important;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+      }
+    }
+
+    .p-datepicker-dropdown,
+    .p-button {
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      border-left: none;
+      border-radius: 0 8px 8px 0;
+      color: #666;
+      padding: 0 0.8rem;
+    }
+  }
+}
