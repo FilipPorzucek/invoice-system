@@ -65,6 +65,10 @@
                             <label *ngIf="i===0">Cena netto</label>
                             <input pInputText formControlName="netPrice" type="number" step="0.01" />
                         </div>
+                                <div class="form-field" style="flex: 1;">
+                            <label *ngIf="i===0">Wartość netto</label>
+                            <input pInputText formControlName="netValue" type="number" step="0.01" />
+                        </div>
                         <div class="form-field" style="flex: 0.5;">
                             <label *ngIf="i===0">VAT</label>
                             <input pInputText formControlName="taxRate" type="number" step="0.01" />

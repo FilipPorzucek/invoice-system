@@ -69,7 +69,7 @@ export class ManagerInvoiceViewComponent implements OnInit {
     return this.invoiceForm.get('items') as FormArray;
   }
 
-  createItemFormGroup(name: string, quantity: number, netPrice: number, taxRate: number,netValue:number): FormGroup {
+  createItemFormGroup(name: string, quantity: number, netPrice: number,netValue:number, taxRate: number): FormGroup {
     return this.fb.group({
       name: [name, Validators.required],
       quantity: [quantity, Validators.required],

@@ -64,7 +64,7 @@ private fb = inject(FormBuilder);
     return this.invoiceForm.get('items') as FormArray;
   }
 
-  createItemFormGroup(name: string, quantity: number, netPrice: number, taxRate: number,netValue:number): FormGroup {
+  createItemFormGroup(name: string, quantity: number, netPrice: number,netValue:number, taxRate: number): FormGroup {
     return this.fb.group({
       name: [{value: name, disabled: true}],
       quantity: [{value: quantity, disabled: true}],
