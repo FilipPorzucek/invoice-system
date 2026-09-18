@@ -1,0 +1,69 @@
+<p-dialog 
+  header="Edycja użytkownika" 
+  [(visible)]="visible" 
+  (onHide)="close()"
+  [modal]="true" 
+  [style]="{ width: '480px', maxWidth: '95vw' }"
+  [contentStyle]="{ 'overflow': 'visible' }"
+  [draggable]="false" 
+  [resizable]="false">
+
+  <div *ngIf="errorMessage" class="error-banner">
+    {{ errorMessage }}
+  </div>
+
+  <form [formGroup]="editForm" (ngSubmit)="save()" class="edit-form">
+    <div class="form-group">
+      <label>Imię</label>
+      <input pInputText formControlName="firstName" />
+    </div>
+
+    <div class="form-group">
+      <label>Nazwisko</label>
+      <input pInputText formControlName="lastName" />
+    </div>
+
+    <div class="form-group">
+      <label>Adres Email</label>
+      <input pInputText type="email" formControlName="email" />
+    </div>
+
+    <div class="form-group">
+      <label>Rola w systemie</label>
+      <p-dropdown 
+        [options]="roles" 
+        formControlName="role" 
+        optionLabel="label" 
+        optionValue="value" 
+        appendTo="body">
+      </p-dropdown>
+    </div>
+
+    <div class="form-group">
+      <label>Data urodzenia</label>
+      <p-calendar 
+        formControlName="dateOfBirth" 
+        dateFormat="yy-mm-dd" 
+        [showIcon]="true" 
+        appendTo="body">
+      </p-calendar>
+    </div>
+
+    <div class="dialog-actions">
+      <p-button 
+        label="Anuluj" 
+        icon="pi pi-times" 
+        severity="secondary" 
+        [outlined]="true" 
+        (onClick)="close()">
+      </p-button>
+      <p-button 
+        label="Zapisz zmiany" 
+        icon="pi pi-check" 
+        type="submit" 
+        severity="info" 
+        [loading]="isSubmitting">
+      </p-button>
+    </div>
+  </form>
+</p-dialog>

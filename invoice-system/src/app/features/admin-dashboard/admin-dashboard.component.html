@@ -33,7 +33,7 @@
                     </p-tag>
                 </td>
                 <td class="text-center flex justify-content-center gap-2">
-                    <p-button icon="pi pi-pencil" styleClass="p-button-rounded p-button-text p-button-info" pTooltip="Edytuj dane" tooltipPosition="bottom"></p-button>
+                    <p-button icon="pi pi-pencil" styleClass="p-button-rounded p-button-text p-button-info" pTooltip="Edytuj dane" tooltipPosition="bottom" (onClick)="openEditDialog(user)"></p-button>
                     <p-button icon="pi pi-key" styleClass="p-button-rounded p-button-text p-button-warning" pTooltip="Zmień hasło" tooltipPosition="bottom"></p-button>
                     <p-button icon="pi pi-trash" styleClass="p-button-rounded p-button-text p-button-danger" pTooltip="Usuń konto" tooltipPosition="bottom"></p-button>
                 </td>
@@ -46,3 +46,9 @@
         </ng-template>
     </p-table>
 </p-card>
+
+<app-admin-user-edit-dialog 
+    [(visible)]="editDialogVisible" 
+    [user]="selectedUser" 
+    (userSaved)="loadUsers()">
+</app-admin-user-edit-dialog>

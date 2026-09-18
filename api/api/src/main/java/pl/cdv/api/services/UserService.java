@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.cdv.api.dto.CreateUserRequest;
+import pl.cdv.api.dto.UpdateUserRequest;
 import pl.cdv.api.dto.UserDto;
 import pl.cdv.api.entity.Role;
 import pl.cdv.api.entity.User;
@@ -29,7 +30,8 @@ public class UserService {
                         user.getFirstName(),
                         user.getEmail(),
                         user.getRole().getName(),
-                        user.getIsActive()
+                        user.getIsActive(),
+                        user.getDateOfBirth()
                 ))
                 .collect(Collectors.toList());
     }
@@ -57,6 +59,27 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public void updateUser(Long id, UpdateUserRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono użytkownika o ID: " + id));
+
+        if (!user.getEmail().equalsIgnoreCase(request.getEmail()) &&
+                userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new RuntimeException("Adres email jest już zajęty przez innego użytkownika!");
+        }
+
+        Role role = roleRepository.findByName(request.getRole())
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono roli: " + request.getRole()));
+
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setRole(role);
+        user.setDateOfBirth(request.getDateOfBirth());
+
+        userRepository.save(user);
+    }
 
 
 

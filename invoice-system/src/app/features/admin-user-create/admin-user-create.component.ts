@@ -64,9 +64,7 @@ export class AdminUserCreateComponent {
 
     const payload = {
       ...this.userForm.value,
-      dateOfBirth: this.userForm.value.dateOfBirth
-        ? new Date(this.userForm.value.dateOfBirth).toISOString().split('T')[0]
-        : null
+      dateOfBirth: this.formatDate(this.userForm.value.dateOfBirth)
     };
 
     this.userService.createUser(payload).subscribe({
@@ -79,4 +77,13 @@ export class AdminUserCreateComponent {
       }
     });
   }
+
+    formatDate(date: Date | null | undefined): string | null {
+  if (!date) return null;
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0'); 
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`; 
+}
 }
