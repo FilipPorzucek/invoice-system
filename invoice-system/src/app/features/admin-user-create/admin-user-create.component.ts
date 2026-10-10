@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
@@ -36,6 +36,7 @@ export class AdminUserCreateComponent {
 
   isSubmitting = false;
   errorMessage = '';
+  today = new Date();
 
   roles = [
     { label: 'Pracownik (EMPLOYEE)', value: 'EMPLOYEE' },
@@ -47,11 +48,31 @@ export class AdminUserCreateComponent {
   userForm: FormGroup = this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    email: ['', [Validators.required, Validators.email, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/)]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
+    repeatPassword: ['', Validators.required],
     role: ['EMPLOYEE', Validators.required],
-    dateOfBirth: [null]
-  });
+    dateOfBirth: [null, this.futureDateValidator]
+  }, { validators: this.passwordsMatchValidator });
+
+  isInvalid(controlName: string): boolean {
+    const control = this.userForm.get(controlName);
+    return !!control && control.invalid && (control.touched || control.dirty);
+  }
+
+  passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
+    const password = group.get('password')?.value;
+    const repeatPassword = group.get('repeatPassword')?.value;
+    return password === repeatPassword ? null : { passwordsMismatch: true };
+  }
+
+  futureDateValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+    const selectedDate = new Date(control.value);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return selectedDate > today ? { futureDate: true } : null;
+  }
 
   onSubmit() {
     if (this.userForm.invalid) {
@@ -62,9 +83,10 @@ export class AdminUserCreateComponent {
     this.isSubmitting = true;
     this.errorMessage = '';
 
+    const { repeatPassword, ...formValue } = this.userForm.value;
     const payload = {
-      ...this.userForm.value,
-      dateOfBirth: this.formatDate(this.userForm.value.dateOfBirth)
+      ...formValue,
+      dateOfBirth: this.formatDate(formValue.dateOfBirth)
     };
 
     this.userService.createUser(payload).subscribe({
