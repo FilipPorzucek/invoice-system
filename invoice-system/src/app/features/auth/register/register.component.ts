@@ -31,7 +31,8 @@ export class RegisterComponent {
 
   ngOnInit() {
     this.registerForm = this.fb.group({
-      name: ['', Validators.required],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       repeatPassword: ['', Validators.required],
@@ -73,7 +74,8 @@ export class RegisterComponent {
     const formValue = this.registerForm.value;
 
     const registerData = {
-      name: formValue.name,
+      firstName: formValue.firstName,
+      lastName: formValue.lastName,
       email: formValue.email,
       password: formValue.password,
       dateOfBirth: this.formatDate(formValue.dateOfBirth)
