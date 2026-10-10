@@ -10,6 +10,21 @@
     width: 50%; 
 }
 
+.invoice-view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 1.5rem 0.5rem;
+}
+
+.invoice-view-title {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
 .invoice-form {
     display: flex;
     flex-direction: column;
