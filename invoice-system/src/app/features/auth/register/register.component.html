@@ -3,14 +3,27 @@
     <input 
       pInputText 
       type="text" 
-      name="name" 
-      formControlName="name"
+      name="firstName" 
+      formControlName="firstName"
       placeholder="Imię" 
       class="input-field" 
       required 
     />
-    <div *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.invalid">
+    <div *ngIf="registerForm.get('firstName')?.touched && registerForm.get('firstName')?.invalid">
       <small>Imię jest wymagane.</small>
+    </div>
+
+    <input 
+      pInputText 
+      type="text" 
+      name="lastName" 
+      formControlName="lastName"
+      placeholder="Nazwisko" 
+      class="input-field" 
+      required 
+    />
+    <div *ngIf="registerForm.get('lastName')?.touched && registerForm.get('lastName')?.invalid">
+      <small>Nazwisko jest wymagane.</small>
     </div>
 
     <input 

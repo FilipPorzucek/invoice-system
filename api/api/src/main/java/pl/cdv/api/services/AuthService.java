@@ -26,16 +26,12 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse register(RegisterRequest request) {
-        String[] nameParts = request.getName().split(" ", 2);
-        String firstName = nameParts[0];
-        String lastName = nameParts.length > 1 ? nameParts[1] : "";
-
         Role userRole = roleRepository.findByName("EMPLOYEE")
                 .orElseThrow(() -> new RuntimeException("Błąd: Nie znaleziono domyślnej roli w bazie."));
 
         User user = new User();
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword())); // Hasło ZASZYFROWANE!
         user.setDateOfBirth(request.getDateOfBirth());
@@ -49,7 +45,9 @@ public class AuthService {
 
         return new AuthResponse(
                 jwtToken,
-                request.getName(),
+                user.getFirstName() + " " + user.getLastName(),
+                user.getFirstName(),
+                user.getLastName(),
                 user.getEmail(),
                 user.getRole().getName(),
                 user.getDateOfBirth() != null ? user.getDateOfBirth().toString() : ""
@@ -72,6 +70,8 @@ public class AuthService {
         return new AuthResponse(
                 jwtToken,
                 user.getFirstName() + " " + user.getLastName(),
+                user.getFirstName(),
+                user.getLastName(),
                 user.getEmail(),
                 user.getRole().getName(),
                 user.getDateOfBirth() != null ? user.getDateOfBirth().toString() : ""
