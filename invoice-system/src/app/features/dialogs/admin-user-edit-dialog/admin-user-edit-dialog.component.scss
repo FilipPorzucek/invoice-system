@@ -181,3 +181,23 @@
     }
   }
 }
+
+:host ::ng-deep .p-select.p-focus,
+:host ::ng-deep .p-select:not(.p-disabled).p-focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+}
+
+::ng-deep .role-select-panel {
+  .p-select-option.p-select-option-selected,
+  .p-select-option.p-select-option-selected.p-focus {
+    background: rgba(59, 130, 246, 0.15) !important;
+    color: #3b82f6 !important;
+  }
+
+  .p-select-option:not(.p-select-option-selected).p-focus,
+  .p-select-option:not(.p-select-option-selected):hover {
+    background: rgba(59, 130, 246, 0.08) !important;
+    color: #3b82f6 !important;
+  }
+}
