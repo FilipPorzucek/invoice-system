@@ -3,8 +3,8 @@
     <div class="left-panel">
         <p-card>
             <ng-template pTemplate="header">
-                <div class="flex justify-content-between align-items-center p-3 pb-0">
-                    <h2 class="m-0 text-xl text-800">Weryfikacja dokumentu</h2>
+                <div class="invoice-view-header">
+                    <h2 class="invoice-view-title">Weryfikacja dokumentu</h2>
                     <p-button icon="pi pi-arrow-left" label="Wróć" styleClass="p-button-text p-button-secondary" (onClick)="goBack()"></p-button>
                 </div>
             </ng-template>
@@ -89,20 +89,18 @@
                     </div>
                 </div>
 
-                <div class="flex gap-3 mt-4">
+                <div class="invoice-actions">
                     <p-button 
                         label="Odrzuć" 
                         icon="pi pi-times" 
                         severity="danger" 
                         [outlined]="true"
-                        styleClass="w-full"
                         (onClick)="openRejectDialog()">
                     </p-button>
                     <p-button 
                         label="Zatwierdź i prześlij dalej" 
                         icon="pi pi-check" 
                         severity="success" 
-                        styleClass="w-full"
                         [disabled]="invoiceForm.invalid"
                         [loading]="isSubmitting"
                         (onClick)="onApprove()">
@@ -130,13 +128,27 @@
     </div>
 </div>
 
-<p-dialog header="Odrzucenie dokumentu" [(visible)]="showRejectDialog" [modal]="true" [style]="{ width: '400px' }">
-    <div class="flex flex-column gap-2 mb-4 mt-2">
-        <label for="reason" class="font-medium">Podaj powód odrzucenia (wymagany):</label>
-        <textarea id="reason" pInputTextarea [(ngModel)]="rejectReason" rows="4" placeholder="Np. Niezgodność kwot, brakujący NIP..."></textarea>
+<p-dialog
+    header="Odrzucenie dokumentu"
+    [(visible)]="showRejectDialog"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{ width: '560px' }"
+    [breakpoints]="{ '640px': '92vw' }"
+    styleClass="reject-dialog">
+    <div class="reject-dialog-content">
+        <label for="reason" class="reject-dialog-label">Podaj powód odrzucenia (wymagany):</label>
+        <textarea
+            id="reason"
+            pInputTextarea
+            [(ngModel)]="rejectReason"
+            rows="6"
+            class="reject-dialog-textarea"
+            placeholder="Np. Niezgodność kwot, brakujący NIP..."></textarea>
     </div>
-    <div class="flex justify-content-end gap-2">
+    <div class="reject-dialog-actions">
         <p-button label="Anuluj" severity="secondary" [text]="true" (onClick)="showRejectDialog = false"></p-button>
-        <p-button label="Potwierdź odrzucenie" severity="danger" [disabled]="!rejectReason.trim()" (onClick)="onReject()"></p-button>
+        <p-button label="Potwierdź odrzucenie" icon="pi pi-times" severity="danger" [disabled]="!rejectReason.trim()" (onClick)="onReject()"></p-button>
     </div>
 </p-dialog>

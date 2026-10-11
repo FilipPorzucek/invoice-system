@@ -28,6 +28,7 @@ public class UserService {
                 .map(user -> new UserDto(
                         user.getUserId(),
                         user.getFirstName(),
+                        user.getLastName(),
                         user.getEmail(),
                         user.getRole().getName(),
                         user.getIsActive(),

@@ -10,11 +10,13 @@
         <div class="col-12 md:col-6 flex flex-column gap-1">
           <label class="font-medium text-700">Imię</label>
           <input pInputText formControlName="firstName" placeholder="np. Jan" />
+          <small class="field-error" *ngIf="isInvalid('firstName')">Imię jest wymagane.</small>
         </div>
 
         <div class="col-12 md:col-6 flex flex-column gap-1">
           <label class="font-medium text-700">Nazwisko</label>
           <input pInputText formControlName="lastName" placeholder="np. Kowalski" />
+          <small class="field-error" *ngIf="isInvalid('lastName')">Nazwisko jest wymagane.</small>
         </div>
       </div>
 
@@ -23,22 +25,12 @@
           <label class="font-medium text-700">Adres Email</label>
           <input pInputText type="email" formControlName="email" placeholder="jan.kowalski@firma.pl" />
           <small class="email-taken-error" *ngIf="userForm.get('email')?.errors?.['emailTaken']">Konto z tym adresem email już istnieje.</small>
+          <ng-container *ngIf="isInvalid('email')">
+            <small class="field-error" *ngIf="userForm.get('email')?.errors?.['required']">Email jest wymagany.</small>
+            <small class="field-error" *ngIf="userForm.get('email')?.errors?.['email'] || userForm.get('email')?.errors?.['pattern']">Nieprawidłowy format adresu email.</small>
+          </ng-container>
         </div>
 
-        <div class="col-12 md:col-6 flex flex-column gap-1">
-          <label class="font-medium text-700">Hasło</label>
-          <p-password 
-            formControlName="password" 
-            [feedback]="false" 
-            [toggleMask]="true" 
-            placeholder="Wpisz hasło" 
-            styleClass="w-full" 
-            inputStyleClass="w-full">
-          </p-password>
-        </div>
-      </div>
-
-      <div class="grid">
         <div class="col-12 md:col-6 flex flex-column gap-1">
           <label class="font-medium text-700">Rola</label>
           <p-dropdown 
@@ -48,7 +40,49 @@
             optionValue="value" 
             styleClass="w-full">
           </p-dropdown>
+          <small class="field-error" *ngIf="isInvalid('role')">Rola jest wymagana.</small>
         </div>
+      </div>
+
+      <div class="grid">
+        <div class="col-12 md:col-6 flex flex-column gap-1">
+          <label class="font-medium text-700">Hasło</label>
+          <p-password 
+            formControlName="password" 
+            [feedback]="true" 
+            [toggleMask]="true" 
+            autocomplete="new-password"
+            placeholder="Wpisz hasło" 
+            promptLabel="Wpisz hasło"
+            weakLabel="Słabe"
+            mediumLabel="Średnie"
+            strongLabel="Silne"
+            styleClass="w-full" 
+            inputStyleClass="w-full">
+          </p-password>
+          <ng-container *ngIf="isInvalid('password')">
+            <small class="field-error" *ngIf="userForm.get('password')?.errors?.['required']">Hasło jest wymagane.</small>
+            <small class="field-error" *ngIf="userForm.get('password')?.errors?.['minlength']">Hasło musi mieć co najmniej 8 znaków, zawierać wielką literę i cyfrę.</small>
+          </ng-container>
+        </div>
+
+        <div class="col-12 md:col-6 flex flex-column gap-1">
+          <label class="font-medium text-700">Powtórz hasło</label>
+          <p-password 
+            formControlName="repeatPassword" 
+            [feedback]="false" 
+            [toggleMask]="true" 
+            autocomplete="new-password"
+            placeholder="Powtórz hasło" 
+            styleClass="w-full" 
+            inputStyleClass="w-full">
+          </p-password>
+          <small class="field-error" *ngIf="isInvalid('repeatPassword') && userForm.get('repeatPassword')?.errors?.['required']">Powtórzenie hasła jest wymagane.</small>
+          <small class="field-error" *ngIf="userForm.errors?.['passwordsMismatch'] && userForm.get('repeatPassword')?.touched && userForm.get('repeatPassword')?.value">Hasła nie są identyczne.</small>
+        </div>
+      </div>
+
+      <div class="grid">
 
         <div class="col-12 md:col-6 flex flex-column gap-1">
           <label class="font-medium text-700">Data urodzenia</label>
@@ -57,8 +91,10 @@
       formControlName="dateOfBirth" 
       placeholder="Data urodzenia" 
       showIcon="true" 
+      [maxDate]="today"
       dateFormat="dd.mm.yy">
     </p-datepicker>
+          <small class="field-error" *ngIf="isInvalid('dateOfBirth') && userForm.get('dateOfBirth')?.errors?.['futureDate']">Data urodzenia nie może być z przyszłości.</small>
         </div>
       </div>
 
@@ -75,6 +111,7 @@
           icon="pi pi-check" 
           type="submit" 
           severity="info" 
+          [disabled]="userForm.invalid"
           [loading]="isSubmitting">
         </p-button>
       </div>

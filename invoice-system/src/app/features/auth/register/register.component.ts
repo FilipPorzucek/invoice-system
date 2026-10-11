@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
@@ -17,7 +17,8 @@ import { DatePickerModule } from 'primeng/datepicker';
     InputTextModule,
     PasswordModule,
     ButtonModule,
-    DatePickerModule
+    DatePickerModule,
+    RouterLink
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
@@ -31,7 +32,8 @@ export class RegisterComponent {
 
   ngOnInit() {
     this.registerForm = this.fb.group({
-      name: ['', Validators.required],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       repeatPassword: ['', Validators.required],
@@ -73,7 +75,8 @@ export class RegisterComponent {
     const formValue = this.registerForm.value;
 
     const registerData = {
-      name: formValue.name,
+      firstName: formValue.firstName,
+      lastName: formValue.lastName,
       email: formValue.email,
       password: formValue.password,
       dateOfBirth: this.formatDate(formValue.dateOfBirth)
