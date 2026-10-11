@@ -95,6 +95,14 @@ export class AdminUserCreateComponent {
       },
       error: (err) => {
         this.isSubmitting = false;
+        if (err.status === 409) {
+          const emailControl = this.userForm.get('email');
+          if (emailControl) {
+            emailControl.setErrors({ ...emailControl.errors, emailTaken: true });
+            emailControl.markAsTouched();
+          }
+          return;
+        }
         this.errorMessage = err.error?.message || 'Wystąpił błąd podczas tworzenia użytkownika.';
       }
     });

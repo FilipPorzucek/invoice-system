@@ -24,6 +24,7 @@
         <div class="col-12 md:col-6 flex flex-column gap-1">
           <label class="font-medium text-700">Adres Email</label>
           <input pInputText type="email" formControlName="email" placeholder="jan.kowalski@firma.pl" />
+          <small class="email-taken-error" *ngIf="userForm.get('email')?.errors?.['emailTaken']">Konto z tym adresem email już istnieje.</small>
           <ng-container *ngIf="isInvalid('email')">
             <small class="field-error" *ngIf="userForm.get('email')?.errors?.['required']">Email jest wymagany.</small>
             <small class="field-error" *ngIf="userForm.get('email')?.errors?.['email'] || userForm.get('email')?.errors?.['pattern']">Nieprawidłowy format adresu email.</small>
