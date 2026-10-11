@@ -41,6 +41,28 @@
     }
 }
 
+:host ::ng-deep .invoice-form {
+    .p-inputtext:enabled:focus {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+        outline: none !important;
+    }
+
+    .p-datepicker:focus-within .p-datepicker-dropdown {
+        border-color: #3b82f6 !important;
+    }
+
+    .p-datepicker-day-selected {
+        background: #3b82f6 !important;
+        color: #ffffff !important;
+    }
+
+    .p-datepicker-prev-button,
+    .p-datepicker-next-button {
+        color: #3b82f6 !important;
+    }
+}
+
 ::ng-deep .preview-card, 
 ::ng-deep .preview-card .p-card {
     flex: 1;
