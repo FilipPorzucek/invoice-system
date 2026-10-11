@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { LoginRequest } from '../../../core/model/login-request.model';
 import { CommonModule } from '@angular/common';
@@ -14,7 +14,8 @@ import { PasswordModule } from 'primeng/password';
     CommonModule,           
     ReactiveFormsModule,    
     InputTextModule,       
-    PasswordModule],
+    PasswordModule,
+    RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
