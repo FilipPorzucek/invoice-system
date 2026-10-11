@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
@@ -35,6 +35,7 @@ export class AdminUserEditDialogComponent implements OnChanges {
 
   isSubmitting = false;
   errorMessage = '';
+  today = new Date();
 
   roles = [
     { label: 'Pracownik (EMPLOYEE)', value: 'EMPLOYEE' },
@@ -46,10 +47,23 @@ export class AdminUserEditDialogComponent implements OnChanges {
   editForm: FormGroup = this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.email, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/)]],
     role: ['', Validators.required],
-    dateOfBirth: [null]
+    dateOfBirth: [null, this.futureDateValidator]
   });
+
+  isInvalid(controlName: string): boolean {
+    const control = this.editForm.get(controlName);
+    return !!control && control.invalid && (control.touched || control.dirty);
+  }
+
+  futureDateValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+    const selectedDate = new Date(control.value);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return selectedDate > today ? { futureDate: true } : null;
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['user'] && this.user) {
@@ -61,6 +75,8 @@ export class AdminUserEditDialogComponent implements OnChanges {
         role: this.user.role,
         dateOfBirth: this.user.dateOfBirth ? new Date(this.user.dateOfBirth) : null
       });
+      this.editForm.markAsPristine();
+      this.editForm.markAsUntouched();
     }
   }
 

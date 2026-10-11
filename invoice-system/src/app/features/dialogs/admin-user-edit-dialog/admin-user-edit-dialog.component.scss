@@ -24,6 +24,31 @@
   }
 }
 
+.field-error {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 0.15rem;
+  display: block;
+}
+
+:host ::ng-deep .edit-form {
+  .p-inputtext:enabled:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+    outline: none !important;
+  }
+
+  .p-inputtext.ng-invalid.ng-touched,
+  p-calendar.ng-invalid.ng-touched .p-inputtext {
+    border-color: #e74c3c !important;
+  }
+
+  .p-datepicker:focus-within .p-datepicker-dropdown,
+  .p-calendar:focus-within .p-datepicker-trigger {
+    border-color: #3b82f6 !important;
+  }
+}
+
 .error-banner {
   padding: 0.65rem 1rem;
   margin-bottom: 0.75rem;
