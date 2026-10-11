@@ -19,6 +19,9 @@
         
        <ng-template pTemplate="header">
             <tr>
+                <th style="min-width: 180px" pSortableColumn="status">
+                    Status <p-sortIcon field="status"></p-sortIcon>
+                </th>
                 <th style="min-width: 200px" pSortableColumn="invoiceNumber">
                     Numer faktury <p-sortIcon field="invoiceNumber"></p-sortIcon>
                 </th>
@@ -43,14 +46,20 @@
                 <th style="min-width: 150px" pSortableColumn="grossAmount">
                     Kwota Brutto <p-sortIcon field="grossAmount"></p-sortIcon>
                 </th>
-                <th style="min-width: 180px" pSortableColumn="status">
-                    Status <p-sortIcon field="status"></p-sortIcon>
-                </th>
             </tr>
         </ng-template>
         
         <ng-template pTemplate="body" let-invoice>
             <tr [pSelectableRow]="invoice" style="cursor: pointer;">
+                
+                <td>
+                    <p-tag 
+                        [value]="getStatusName(invoice.status)" 
+                        [severity]="invoice.status === 'BOOKED' ? 'success' : 
+                                    invoice.status === 'REJECTED' ? 'danger' : 
+                                    invoice.status === 'PENDING_MANAGER' ? 'warning' : 'info'">
+                    </p-tag>
+                </td>
                 <td style="font-weight: 500;">{{ invoice.invoiceNumber }}</td>
                 <td>{{ invoice.issueDate || 'Brak daty' }}</td>
                 <td >{{ invoice.supplier?.name || '---' }}</td>
@@ -72,15 +81,6 @@
                 
                 <td>{{ invoice.netAmount }} {{ invoice.currency || 'PLN' }}</td>
                 <td>{{ invoice.grossAmount }} {{ invoice.currency || 'PLN' }}</td>
-                
-                <td>
-                    <p-tag 
-                        [value]="getStatusName(invoice.status)" 
-                        [severity]="invoice.status === 'BOOKED' ? 'success' : 
-                                    invoice.status === 'REJECTED' ? 'danger' : 
-                                    invoice.status === 'PENDING_MANAGER' ? 'warning' : 'info'">
-                    </p-tag>
-                </td>
             </tr>
         </ng-template>
         
