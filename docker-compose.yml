@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+ db:
+  image: postgres:17-alpine
+  container_name: invoice_db
+  environment:
+   POSTGRES_DB: invoice-system
+   POSTGRES_USER: postgres
+   POSTGRES_PASSWORD: 1234
+  ports:
+   - "5432:5432"
+  volumes:
+   - pgdata:/var/lib/postgresql/data
+   - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+  networks:
+   - invoice_network
+
+ backend:
+  build: ./api/api
+  container_name: invoice_backend
+  ports:
+   - "8081:8081"
+  environment:
+   - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/invoice-system
+   - SPRING_DATASOURCE_USERNAME=postgres
+   - SPRING_DATASOURCE_PASSWORD=1234
+  depends_on:
+   - db
+  networks:
+   - invoice_network
+
+ frontend:
+  build: ./invoice-system
+  container_name: invoice_frontend
+  ports:
+   - "4200:80"
+  depends_on:
+   - backend
+  networks:
+   - invoice_network
+
+volumes:
+ pgdata:
+
+networks:
+ invoice_network:
+  driver: bridge
