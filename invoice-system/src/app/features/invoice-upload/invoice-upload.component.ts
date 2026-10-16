@@ -11,6 +11,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { InvoiceService } from '../../core/services/invoice.service';
 import { DialogModule } from 'primeng/dialog';
 import { CalendarModule } from 'primeng/calendar';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-invoice-upload',
   imports: [CommonModule,
@@ -30,6 +31,7 @@ import { CalendarModule } from 'primeng/calendar';
 export class InvoiceUploadComponent {
   private fb=inject(FormBuilder);
   private invoiceService=inject(InvoiceService);
+  private router = inject(Router);
   
 
   invoiceForm:FormGroup;
@@ -213,6 +215,10 @@ closeSuccessDialog() {
 
     this.selectedFile = null;
     this.revokePdfPreview();
+
+    if (this.currentInvoiceId) {
+    this.router.navigate(['/employee/invoice', this.currentInvoiceId]);
+  }
   }
 
   private stopPolling(): void {
