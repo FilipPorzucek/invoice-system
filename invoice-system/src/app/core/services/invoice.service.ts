@@ -11,6 +11,7 @@ export class InvoiceService {
   private http=inject(HttpClient);
 
   private apiUrl="http://localhost:8081/api/invoices";
+  private ocrPodApiUrl = 'http://localhost:8000/api/v1/pod';
 
   getEmployeeInvoices():Observable<Invoice[]>{
     return this.http.get<Invoice[]>(`${this.apiUrl}/new`)
@@ -55,5 +56,17 @@ getManagerInvoices(): Observable<any[]> {
 approveInvoiceByManager(id: number): Observable<any> {
   return this.http.put(`${this.apiUrl}/${id}/manager-approve`, {}, {responseType:'text'});
 }
+
+getOcrPodStatus(): Observable<any> {
+    return this.http.get<any>(`${this.ocrPodApiUrl}/status`);
+  }
+
+  startOcrPod(): Observable<any> {
+    return this.http.post<any>(`${this.ocrPodApiUrl}/start`, {});
+  }
+
+  stopOcrPod(): Observable<any> {
+    return this.http.post<any>(`${this.ocrPodApiUrl}/stop`, {});
+  }
   
 }

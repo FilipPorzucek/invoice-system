@@ -63,7 +63,8 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', loadComponent: () => import('./features/admin-dashboard/admin-dashboard.component').then(c => c.AdminDashboardComponent) },
-      { path: 'users/create', loadComponent: () => import('./features/admin-user-create/admin-user-create.component').then(c => c.AdminUserCreateComponent) }
+      { path: 'users/create', loadComponent: () => import('./features/admin-user-create/admin-user-create.component').then(c => c.AdminUserCreateComponent) },
+      { path: 'ocr', loadComponent: () => import('./features/admin-ocr-settings/admin-ocr-settings.component').then(c => c.AdminOcrSettingsComponent) }
     ]
   },
   

@@ -1,0 +1,81 @@
+<p-toast></p-toast>
+
+<div class="ocr-settings-container">
+  <div class="header-section">
+    <div class="title-group">
+      <h2>Zarządzanie instancją OCR w chmurze</h2>
+      <p class="subtitle">Sterowanie podami GPU RunPod odpowiedzialnymi za przetwarzanie dokumentów</p>
+    </div>
+    <button 
+      pButton 
+      icon="pi pi-refresh" 
+      severity="info"
+      label="Odśwież" 
+      class="p-button-outlined" 
+      [loading]="isLoading" 
+      (click)="refreshStatus()">
+    </button>
+  </div>
+
+  <div class="card-grid">
+    <div class="status-card">
+      <div class="status-header">
+        <span class="status-title">Aktualny stan kontenera GPU</span>
+        <p-tag [value]="podStatus" [severity]="getStatusSeverity()"></p-tag>
+      </div>
+
+      <p class="status-description">
+        Kiedy instancja jest zatrzymana, opłata za godzinę GPU nie jest naliczana.
+      </p>
+
+<div class="action-buttons">
+        <p-button 
+          label="Uruchom instancję (Start)" 
+          icon="pi pi-play" 
+          severity="info" 
+          [rounded]="true"
+          [loading]="isLoading" 
+          [disabled]="podStatus === 'RUNNING'" 
+          (onClick)="startPod()">
+        </p-button>
+
+        <p-button 
+          label="Zatrzymaj instancję (Stop)" 
+          icon="pi pi-power-off" 
+          severity="info" 
+          [rounded]="true"
+          [loading]="isLoading" 
+          [disabled]="podStatus === 'STOPPED'" 
+          (onClick)="stopPod()">
+        </p-button>
+      </div>
+    </div>
+
+    <div class="details-card" *ngIf="podDetails">
+      <h3>Parametry środowiska</h3>
+      
+      <div class="detail-row">
+        <span class="label">Pod ID:</span>
+        <span class="value">{{ podDetails.pod_id }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Karta graficzna:</span>
+        <span class="value">{{ podDetails.gpu }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Koszt pracy:</span>
+        <span class="value">{{ podDetails.cost_per_hr }} $/h</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Gotowość LLM:</span>
+        <span class="value">
+          <p-tag 
+            [value]="podDetails.health_ready ? 'GOTOWY' : 'INICJALIZACJA'" 
+            [severity]="podDetails.health_ready ? 'success' : 'warning'">
+          </p-tag>
+        </span>
+      </div>
+    </div>

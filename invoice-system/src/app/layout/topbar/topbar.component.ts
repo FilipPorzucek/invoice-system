@@ -75,4 +75,7 @@ export class TopbarComponent {
   goToCreateUser() {
     this.router.navigate(['/admin/users/create']);
   }
+  goToOcrSettings() {
+    this.router.navigate(['/admin/ocr']);
+  }
 }
