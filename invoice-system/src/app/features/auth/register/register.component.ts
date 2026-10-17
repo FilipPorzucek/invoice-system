@@ -7,6 +7,7 @@ import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { DatePickerModule } from 'primeng/datepicker';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +19,8 @@ import { DatePickerModule } from 'primeng/datepicker';
     PasswordModule,
     ButtonModule,
     DatePickerModule,
-    RouterLink
+    RouterLink,
+    TranslatePipe
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
