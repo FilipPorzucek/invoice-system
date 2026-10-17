@@ -158,3 +158,9 @@
         <p-button label="Potwierdź odrzucenie" icon="pi pi-times" severity="danger" [disabled]="!rejectReason.trim()" (onClick)="onReject()"></p-button>
     </div>
 </p-dialog>
+
+<app-success-dialog
+    [(visible)]="showApproveSuccessDialog"
+    message="Faktura została pomyślnie zatwierdzona."
+    (confirmed)="onApproveSuccessConfirmed()">
+</app-success-dialog>

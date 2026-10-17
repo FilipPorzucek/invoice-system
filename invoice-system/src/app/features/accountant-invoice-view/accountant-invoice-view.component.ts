@@ -12,6 +12,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { InputTextarea } from 'primeng/inputtextarea';
 import { FormsModule } from '@angular/forms';
 import { InvoiceService } from '../../core/services/invoice.service';
+import { SuccessDialogComponent } from '../dialogs/success-dialog/success-dialog.component';
 
 @Component({
   selector: 'app-accountant-invoice-view',
@@ -19,7 +20,7 @@ import { InvoiceService } from '../../core/services/invoice.service';
   imports: [
     CommonModule, ReactiveFormsModule, FormsModule, CardModule, 
     InputTextModule, ButtonModule, DividerModule, PdfViewerModule, 
-    DialogModule, CalendarModule, InputTextarea
+    DialogModule, CalendarModule, InputTextarea, SuccessDialogComponent
   ],
   templateUrl: './accountant-invoice-view.component.html',
   styleUrl: './accountant-invoice-view.component.scss'
@@ -36,6 +37,7 @@ export class AccountantInvoiceViewComponent implements OnInit {
   isSubmitting: boolean = false;
 
   showRejectDialog: boolean = false;
+  showApproveSuccessDialog: boolean = false;
   rejectReason: string = '';
 
   constructor() {
@@ -125,7 +127,7 @@ export class AccountantInvoiceViewComponent implements OnInit {
       this.invoiceService.approveInvoice(this.invoiceId, invoiceData).subscribe({
         next: () => {
           this.isSubmitting = false;
-          this.router.navigate(['/accountant/dashboard']);
+          this.showApproveSuccessDialog = true;
         },
         error: (err) => {
           console.error('Błąd zatwierdzania:', err);
@@ -156,6 +158,10 @@ export class AccountantInvoiceViewComponent implements OnInit {
       this.isSubmitting = false;
     }
   })
+  }
+
+  onApproveSuccessConfirmed() {
+    this.router.navigate(['/accountant/dashboard']);
   }
 
   goBack() {

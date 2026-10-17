@@ -128,3 +128,9 @@
         </p-card>
     </div>
 </div>
+
+<app-success-dialog
+    [(visible)]="showResubmitSuccessDialog"
+    message="Faktura została wysłana ponownie do księgowej."
+    (confirmed)="onResubmitSuccessConfirmed()">
+</app-success-dialog>
