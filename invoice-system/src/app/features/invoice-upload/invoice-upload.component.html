@@ -1,76 +1,76 @@
 <div class="split-screen-container">
     
    <div class="left-panel">
-        <p-card header="Dane z dokumentu">
+        <p-card [header]="'invoiceUpload.daneZDokumentu' | translate">
             <form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()" class="invoice-form">
                 
                 <div class="form-row">
                     <div class="form-field">
-                        <label>Numer faktury</label>
+                        <label>{{ 'common.numerFaktury' | translate }}</label>
                         <input pInputText formControlName="invoiceNumber" />
                     </div>
                    <div class="form-field">
-    <label>Data wyst.</label>
+    <label>{{ 'common.dataWyst' | translate }}</label>
     <p-calendar formControlName="issueDate" dateFormat="yy-mm-dd" dataType="string" [showIcon]="true"
-        placeholder="Wybierz datę">
+        [placeholder]="'invoiceUpload.wybierzDate' | translate">
     </p-calendar>
     </div>
                     <div class="form-field" style="flex: 0.5;">
-                        <label>Waluta</label>
+                        <label>{{ 'common.waluta' | translate }}</label>
                         <input pInputText formControlName="currency" />
                     </div>
                 </div>
 
-                <p-divider align="center"><b>Dostawca</b></p-divider>
+                <p-divider align="center"><b>{{ 'common.dostawca' | translate }}</b></p-divider>
 
                 <div formGroupName="supplier" class="invoice-form">
                     <div class="form-field">
-                        <label>Nazwa firmy</label>
+                        <label>{{ 'common.nazwaFirmy' | translate }}</label>
                         <input pInputText formControlName="name" />
                     </div>
                     <div class="form-row">
                         <div class="form-field">
-                            <label>NIP</label>
+                            <label>{{ 'common.nip' | translate }}</label>
                             <input pInputText formControlName="nip" />
                         </div>
                         <div class="form-field" style="flex: 2;">
-                            <label>Numer konta (IBAN)</label>
+                            <label>{{ 'common.numerKontaIban' | translate }}</label>
                             <input pInputText formControlName="bankAccountNumber" />
                         </div>
                     </div>
                     <div class="form-field">
-                        <label>Adres</label>
+                        <label>{{ 'common.adres' | translate }}</label>
                         <input pInputText formControlName="address" />
                     </div>
                 </div>
 
-<p-divider align="center"><b>Pozycje na fakturze</b></p-divider>
+<p-divider align="center"><b>{{ 'common.pozycjeNaFakturze' | translate }}</b></p-divider>
 
 <div formArrayName="items" class="items-container">
   <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="item-row">
     
     <div class="form-field col-name">
-      <label *ngIf="i === 0">Usługa/Towar</label>
+      <label *ngIf="i === 0">{{ 'common.uslugaTowar' | translate }}</label>
       <input pInputText formControlName="name" />
     </div>
 
     <div class="form-field col-qty">
-      <label *ngIf="i === 0">Ilość</label>
+      <label *ngIf="i === 0">{{ 'common.ilosc' | translate }}</label>
       <input pInputText formControlName="quantity" type="number" step="any" />
     </div>
 
     <div class="form-field col-price">
-      <label *ngIf="i === 0">Cena netto</label>
+      <label *ngIf="i === 0">{{ 'common.cenaNetto' | translate }}</label>
       <input pInputText formControlName="netPrice" type="number" step="0.01" />
     </div>
 
     <div class="form-field col-total">
-      <label *ngIf="i === 0">Wartość netto</label>
+      <label *ngIf="i === 0">{{ 'common.wartoscNetto' | translate }}</label>
       <input pInputText formControlName="netValue" type="number" step="0.01" />
     </div>
 
     <div class="form-field col-tax">
-      <label *ngIf="i === 0">VAT</label>
+      <label *ngIf="i === 0">{{ 'common.vat' | translate }}</label>
       <input pInputText formControlName="taxRate" type="number" step="0.01" />
     </div>
 
@@ -80,17 +80,17 @@
 
                 <div class="form-row mt-2">
                     <div class="form-field">
-                        <label>Razem Netto</label>
+                        <label>{{ 'common.razemNetto' | translate }}</label>
                         <input pInputText formControlName="netAmount" type="number" step="0.01" />
                     </div>
                     <div class="form-field">
-                        <label>Razem Brutto</label>
+                        <label>{{ 'common.razemBrutto' | translate }}</label>
                         <input pInputText formControlName="grossAmount" type="number" step="0.01" />
                     </div>
                 </div>
 
                 <p-button 
-                    label="Zapisz fakturę" 
+                    [label]="'invoiceUpload.zapiszFakture' | translate" 
                     icon="pi pi-check" 
                     type="submit" 
                     severity="info" 
@@ -109,7 +109,7 @@
             <div *ngIf="!selectedFile" class="upload-area">
                 <p-fileUpload 
     mode="advanced" 
-    chooseLabel="Wybierz plik PDF" 
+    [chooseLabel]="'invoiceUpload.wybierzPlikPdf' | translate" 
     chooseIcon="pi pi-plus"
     chooseStyleClass="p-button-info p-button-rounded"
     accept="application/pdf"
@@ -119,15 +119,15 @@
     [showUploadButton]="false"
     [showCancelButton]="false">
     <ng-template pTemplate="content">
-        <div class="drag-drop-text">Przeciągnij i upuść skan faktury tutaj</div>
+        <div class="drag-drop-text">{{ 'invoiceUpload.przeciagnijIUpuscSkanFaktury' | translate }}</div>
     </ng-template>
 </p-fileUpload>
             </div>
 
             <div *ngIf="isProcessing" class="processing-area">
                 <p-progressSpinner></p-progressSpinner>
-                <h3 style="color: #64748b;">Trwa analiza dokumentu (OCR)...</h3>
-                <p>Wyciąganie danych z pliku</p>
+                <h3 style="color: #64748b;">{{ 'invoiceUpload.trwaAnalizaDokumentuOcr' | translate }}</h3>
+                <p>{{ 'invoiceUpload.wyciaganieDanychZPliku' | translate }}</p>
             </div>
 
             <div *ngIf="pdfPreviewUrl && !isProcessing" class="pdf-viewer-area">
@@ -142,7 +142,7 @@
     <img 
     *ngIf="selectedFile?.type !== 'application/pdf'"
     [src]="pdfPreviewUrl"
-    alt="Podgląd faktury"
+    [alt]="'invoiceUpload.podgladFaktury' | translate"
     style="max-width: 100%; max-height: 600px; object-fit: contain; margin: 0 auto; display: block;" />
 </div>
             
@@ -152,7 +152,7 @@
 </div>
 
 <p-dialog 
-    header="Sukces" 
+    [header]="'invoiceUpload.sukces' | translate" 
     [(visible)]="showSuccessDialog" 
     [modal]="true" 
     [closable]="false" 
@@ -161,13 +161,13 @@
     
     <div class="flex align-items-center justify-content-center pt-4 pb-4" style="display: flex; align-items: center; gap: 1rem;">
         <i class="pi pi-check-circle" style="font-size: 2.5rem; color: #10b981;"></i>
-        <span style="font-size: 1.2rem; font-weight: 500; color: #334155;">Poprawnie zapisano fakturę.</span>
+        <span style="font-size: 1.2rem; font-weight: 500; color: #334155;">{{ 'invoiceUpload.poprawnieZapisanoFakture' | translate }}</span>
     </div>
     
     <ng-template pTemplate="footer">
         <div style="display: flex; justify-content: flex-end; width: 100%;">
             <p-button 
-                label="OK" 
+                [label]="'invoiceUpload.ok' | translate" 
                 icon="pi pi-check" 
                 (onClick)="closeSuccessDialog()" 
                 [autofocus]="true"
@@ -178,7 +178,7 @@
 </p-dialog>
 
 <p-dialog 
-    header="Błąd zapisu" 
+    [header]="'invoiceUpload.bladZapisu' | translate" 
     [(visible)]="showErrorDialog" 
     [modal]="true" 
     [closable]="false" 
@@ -188,14 +188,14 @@
     <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem 0;">
         <i class="pi pi-times-circle" style="font-size: 2.5rem; color: #ef4444;"></i>
         <span style="font-size: 1.1rem; font-weight: 500; color: #334155;">
-            Wystąpił problem podczas zapisywania faktury, sprawdź uzupełnione dane. 
+            {{ 'invoiceUpload.wystapilProblemPodczasZapisywaniaFaktury' | translate }} 
         </span>
     </div>
     
     <ng-template pTemplate="footer">
         <div style="display: flex; justify-content: flex-end; width: 100%;">
             <p-button 
-                label="Zamknij" 
+                [label]="'invoiceUpload.zamknij' | translate" 
                 icon="pi pi-times" 
                 (click)="closeErrorDialog()" 
                 type="button"
@@ -206,16 +206,16 @@
     </ng-template>
 </p-dialog>
 
-<p-dialog header="Czas oczekiwania minął" [(visible)]="showOcrTimeoutDialog" [modal]="true" [closable]="false">
-    <p>Błąd zczytywania danych. Prosze wypełnić pola ręcznie</p>
+<p-dialog [header]="'invoiceUpload.czasOczekiwaniaMinal' | translate" [(visible)]="showOcrTimeoutDialog" [modal]="true" [closable]="false">
+    <p>{{ 'invoiceUpload.bladZczytywaniaDanychProszeWypelnic' | translate }}</p>
     <div class="flex justify-content-end mt-3">
-        <p-button label="Rozumiem" icon="pi pi-check" (onClick)="showOcrTimeoutDialog = false"></p-button>
+        <p-button [label]="'invoiceUpload.rozumiem' | translate" icon="pi pi-check" (onClick)="showOcrTimeoutDialog = false"></p-button>
     </div>
 </p-dialog>
 
 
 <div style="margin-top: 20px; padding: 10px; background: #eee;">
-  <p><strong>Status formularza:</strong> {{ invoiceForm.status }}</p>
-  <p><strong>Brakujące lub błędne pola:</strong></p>
+  <p><strong>{{ 'invoiceUpload.statusFormularza' | translate }}</strong> {{ invoiceForm.status }}</p>
+  <p><strong>{{ 'invoiceUpload.brakujaceLubBlednePola' | translate }}</strong></p>
   <pre>{{ invoiceForm.value | json }}</pre>
 </div>
