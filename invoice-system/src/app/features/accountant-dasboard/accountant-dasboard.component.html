@@ -6,6 +6,7 @@
     </div>
     
     <p-table 
+        #dt
         [value]="invoices" 
         [paginator]="true" 
         [rows]="50" 
@@ -46,6 +47,17 @@
                 <th style="min-width: 150px" pSortableColumn="grossAmount">
                     Kwota Brutto <p-sortIcon field="grossAmount"></p-sortIcon>
                 </th>
+            </tr>
+            <tr class="filter-row">
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj status" (input)="dt.filter($any($event.target).value, 'statusName', 'startsWith')" /></th>
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj numer" (input)="dt.filter($any($event.target).value, 'invoiceNumber', 'startsWith')" /></th>
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj datę" (input)="dt.filter($any($event.target).value, 'issueDate', 'startsWith')" /></th>
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj firmę" (input)="dt.filter($any($event.target).value, 'supplier.name', 'startsWith')" /></th>
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj NIP" (input)="dt.filter($any($event.target).value, 'supplier.nip', 'startsWith')" /></th>
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj adres" (input)="dt.filter($any($event.target).value, 'supplier.address', 'startsWith')" /></th>
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj przedmioty" (input)="dt.filter($any($event.target).value, 'itemsText', 'contains')" /></th>
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj netto" (input)="dt.filter($any($event.target).value, 'netAmount', 'startsWith')" /></th>
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj brutto" (input)="dt.filter($any($event.target).value, 'grossAmount', 'startsWith')" /></th>
             </tr>
         </ng-template>
         
