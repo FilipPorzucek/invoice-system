@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -30,7 +30,8 @@ import { UserService } from '../../core/services/user.service';
     InputTextModule,
     DropdownModule,
     CalendarModule,
-    AdminUserEditDialogComponent
+    AdminUserEditDialogComponent,
+    RouterLink
   ],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss'
@@ -77,6 +78,26 @@ export class AdminDashboardComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  get employeeCount(): number {
+    return this.countByRole('EMPLOYEE');
+  }
+
+  get accountantCount(): number {
+    return this.countByRole('ACCOUNTANT');
+  }
+
+  get managerCount(): number {
+    return this.countByRole('MANAGER');
+  }
+
+  get adminCount(): number {
+    return this.countByRole('ADMIN');
+  }
+
+  private countByRole(role: string): number {
+    return this.users.filter(user => user.role === role).length;
   }
 
   goToCreateUser() {
