@@ -53,6 +53,24 @@ private router = inject(Router);
   }
 
 
+  get invoiceCount(): number {
+    return this.invoices.length;
+  }
+
+  get totalGrossAmount(): string {
+    const total = this.invoices.reduce((sum, invoice) => sum + (Number(invoice.grossAmount) || 0), 0);
+    return this.formatAmount(total);
+  }
+
+  get oldestIssueDate(): string {
+    const dates = this.invoices.map(invoice => invoice.issueDate).filter((date): date is string => !!date).sort();
+    return dates.length > 0 ? dates[0] : '---';
+  }
+
+  private formatAmount(value: number): string {
+    return value.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' zł';
+  }
+
   getStatusName(status?:string):string{
     if(!status){
       return "Brak statusu"
