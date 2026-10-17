@@ -1,5 +1,32 @@
+<div class="page-header">
+    <h1 class="page-title">Twoje faktury</h1>
+    <a class="upload-button" routerLink="/employee/invoice-upload">
+        <i class="pi pi-plus"></i>
+        Wgraj fakturę
+    </a>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <span class="stat-label">Wszystkie faktury</span>
+        <span class="stat-value">{{ totalCount }}</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-label">W weryfikacji</span>
+        <span class="stat-value stat-pending">{{ pendingCount }}</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-label">Odrzucone – do poprawy</span>
+        <span class="stat-value stat-rejected">{{ rejectedCount }}</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-label">Zaksięgowane</span>
+        <span class="stat-value stat-booked">{{ bookedCount }}</span>
+    </div>
+</div>
+
 <div style="background: white; padding: 2rem; border-radius: 12px; border: 1px solid #dee2e6;">
-    <h2 style="margin-top: 0; margin-bottom: 1.5rem; color: #334155;">Twoje faktury</h2>
+    <h2 style="margin-top: 0; margin-bottom: 1.5rem; color: #334155;">Lista faktur</h2>
 
     <div #fakeScroll style="overflow-x: auto; height: 16px; margin-bottom: 8px;" (scroll)="onTopScroll()">
         <div #fakeContent style="height: 1px;"></div>
