@@ -1,0 +1,25 @@
+<p-dialog 
+    [header]="header" 
+    [(visible)]="visible" 
+    [modal]="true" 
+    [closable]="false" 
+    [draggable]="false"
+    [style]="{ width: '28rem' }">
+
+    <div class="success-dialog-content">
+        <i class="pi pi-check-circle success-dialog-icon"></i>
+        <span class="success-dialog-message">{{ message }}</span>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <div class="success-dialog-actions">
+            <p-button 
+                label="OK" 
+                icon="pi pi-check" 
+                (onClick)="confirm()" 
+                [autofocus]="true"
+                severity="info">
+            </p-button>
+        </div>
+    </ng-template>
+</p-dialog>
