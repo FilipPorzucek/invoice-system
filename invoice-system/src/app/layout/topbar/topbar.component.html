@@ -1,36 +1,56 @@
-<p-toolbar styleClass="custom-topbar">
-    <div class="p-toolbar-group-start topbar-section">
-      <span class="logo-text">SOF</span>
-      <i class="pi pi-box logo-icon"></i>
-        
-<p-button icon="pi pi-home" label="Panel główny" severity="success" size="small" [rounded]="true"
-    [routerLink]="getDashboardRoute()">
-</p-button>
-       <p-button 
-          *ngIf="getUser()?.role === 'EMPLOYEE'" 
-          icon="pi pi-plus" 
-          label="Wgraj fakturę" 
-          severity="info" 
-          size="small" 
-          [rounded]="true" 
-          routerLink="/employee/invoice-upload">
-      </p-button>
-          <p-button *ngIf="getUser()?.role !== 'ADMIN'"  icon="pi pi-file-excel" label="Wygeneruj raport" severity="info" size="small" [rounded]="true"></p-button>
-           <p-button *ngIf="getUser()?.role === 'ADMIN'"   icon="pi pi-cog" label="Ustawienia OCR" severity="info" size="small" [rounded]="true" (onClick)="goToOcrSettings()"></p-button>
-            <p-button *ngIf="getUser()?.role === 'ADMIN'"   icon="pi pi-user-plus" label="Dodaj użytkownika" severity="info" size="small" [rounded]="true" (onClick)="goToCreateUser()"></p-button>
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <div class="brand-logo">
+            <i class="pi pi-file"></i>
+        </div>
+        <div class="brand-text">
+            <span class="brand-name">SOF</span>
+            <span class="brand-subtitle">System Obiegu Faktur</span>
+        </div>
     </div>
 
+    <nav class="sidebar-nav" aria-label="Menu główne">
+        <span class="nav-section">Menu</span>
 
-    <div class="p-toolbar-group-end topbar-section">
-      <span class="user-name">{{ getUserDisplayName() }}</span>
-        <p-avatar 
-            icon="pi pi-user" 
-            shape="circle" 
-            styleClass="user-avatar"
-            (click)="openDialog()">
-        </p-avatar>
+        <a class="nav-item" [routerLink]="getDashboardRoute()" routerLinkActive="active">
+            <i class="pi pi-home"></i>
+            Panel główny
+        </a>
+
+        <a *ngIf="getUser()?.role === 'EMPLOYEE'" class="nav-item" routerLink="/employee/invoice-upload" routerLinkActive="active">
+            <i class="pi pi-upload"></i>
+            Wgraj fakturę
+        </a>
+
+        <button *ngIf="getUser()?.role !== 'ADMIN'" type="button" class="nav-item">
+            <i class="pi pi-chart-bar"></i>
+            Wygeneruj raport
+        </button>
+
+        <a *ngIf="getUser()?.role === 'ADMIN'" class="nav-item" routerLink="/admin/ocr" routerLinkActive="active">
+            <i class="pi pi-cog"></i>
+            Ustawienia OCR
+        </a>
+
+        <a *ngIf="getUser()?.role === 'ADMIN'" class="nav-item" routerLink="/admin/users/create" routerLinkActive="active">
+            <i class="pi pi-user-plus"></i>
+            Dodaj użytkownika
+        </a>
+    </nav>
+
+    <div class="sidebar-user">
+        <button type="button" class="user-info" (click)="openDialog()" aria-label="Mój profil">
+            <span class="user-avatar">{{ getInitials() }}</span>
+            <span class="user-text">
+                <span class="user-name">{{ getUser()?.name || 'Użytkownik' }}</span>
+                <span class="user-role">{{ getRoleName() }}</span>
+            </span>
+        </button>
+        <button type="button" class="logout-icon" (click)="logout()" aria-label="Wyloguj się">
+            <i class="pi pi-sign-out"></i>
+        </button>
     </div>
-</p-toolbar>
+</aside>
 
 <p-dialog 
   [(visible)]="dialogVisible" 
@@ -39,16 +59,13 @@
   header="Mój Profil"
   [style]="{ width: '400px' }"
   styleClass="profile-dialog">
-  
+
   <ng-container *ngIf="isLoggedIn()">
     <div class="profile-content">
-      
       <div class="profile-header">
-          <div class="profile-avatar-large">
-              <i class="pi pi-user"></i>
-          </div>
+          <div class="profile-avatar-large">{{ getInitials() }}</div>
           <h3 class="profile-name">{{ getUser()?.name || 'Użytkownik' }}</h3>
-          <p class="profile-role">{{ getUser()?.role }}</p>
+          <p class="profile-role">{{ getRoleName() }}</p>
       </div>
 
       <div class="profile-details">
