@@ -4,17 +4,19 @@ import { InvoiceService } from '../../core/services/invoice.service';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { InputTextModule } from 'primeng/inputtext';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-employee-dashboard',
+  imports: [CommonModule, TableModule, TagModule, InputTextModule],
   imports: [CommonModule, TableModule, TagModule, TranslatePipe],
   templateUrl: './accountant-dasboard.component.html',
   styleUrl: './accountant-dasboard.component.scss'
 })
 export class AccountantDasboardComponent {
-invoices:Invoice[]=[];
+invoices: (Invoice & { statusName: string; itemsText: string })[] = [];
 private invoiceService = inject(InvoiceService);
 private router = inject(Router);
 
@@ -44,7 +46,11 @@ private router = inject(Router);
     this.invoiceService.getPendingInvoices().subscribe({
       next:(data)=>{
         console.log('Mamy to! Backend zwrócił:', data);
-        this.invoices = data;
+        this.invoices = data.map(invoice => ({
+          ...invoice,
+          statusName: this.getStatusName(invoice.status),
+          itemsText: (invoice.items || []).map(item => item.name).join(', ')
+        }));
       },
       error:(err)=>{
         console.error("Bład z pobranie faktur",err)
