@@ -6,10 +6,11 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admin-ocr-settings',
-  imports: [CommonModule, CardModule, ButtonModule, TagModule, TagModule,ToastModule],
+  imports: [CommonModule, CardModule, ButtonModule, TagModule, TagModule,ToastModule, TranslatePipe],
   providers: [MessageService],
   templateUrl: './admin-ocr-settings.component.html',
   styleUrl: './admin-ocr-settings.component.scss'

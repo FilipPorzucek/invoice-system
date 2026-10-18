@@ -10,13 +10,15 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { CalendarModule } from 'primeng/calendar';
 import { InvoiceService } from '../../core/services/invoice.service';
 import { DialogModule } from 'primeng/dialog';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-employee-invoice-view',
     imports: [
     CommonModule, ReactiveFormsModule, FormsModule, CardModule, 
     InputTextModule, ButtonModule, DividerModule, PdfViewerModule, 
-    DialogModule, CalendarModule
+    DialogModule, CalendarModule,
+    TranslatePipe
   ],
   templateUrl: './employee-invoice-view.component.html',
   styleUrl: './employee-invoice-view.component.scss'

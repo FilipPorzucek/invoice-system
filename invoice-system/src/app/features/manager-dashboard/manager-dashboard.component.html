@@ -1,5 +1,5 @@
 <div style="background: white; padding: 2rem; border-radius: 12px; border: 1px solid #dee2e6;">
-    <h2 style="margin-top: 0; margin-bottom: 1.5rem; color: #334155;">Faktury do akceptacji</h2>
+    <h2 style="margin-top: 0; margin-bottom: 1.5rem; color: #334155;">{{ 'managerDashboard.fakturyDoAkceptacji' | translate }}</h2>
     
     <p-table 
         [value]="invoices" 
@@ -15,15 +15,15 @@
         
         <ng-template pTemplate="header">
             <tr>
-                <th style="min-width: 180px" pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
-                <th style="min-width: 200px" pSortableColumn="invoiceNumber">Numer faktury <p-sortIcon field="invoiceNumber"></p-sortIcon></th>
-                <th style="min-width: 150px" pSortableColumn="issueDate">Data wystawienia <p-sortIcon field="issueDate"></p-sortIcon></th>
-                <th style="min-width: 250px" pSortableColumn="supplier.name">Firma <p-sortIcon field="supplier.name"></p-sortIcon></th>
-                <th style="min-width: 150px" pSortableColumn="supplier.nip">NIP <p-sortIcon field="supplier.nip"></p-sortIcon></th>
-                <th style="min-width: 250px" pSortableColumn="supplier.address">Adres firmy <p-sortIcon field="supplier.address"></p-sortIcon></th>
-                <th style="min-width: 300px">Kupione przedmioty</th>
-                <th style="min-width: 150px" pSortableColumn="netAmount">Kwota Netto <p-sortIcon field="netAmount"></p-sortIcon></th>
-                <th style="min-width: 150px" pSortableColumn="grossAmount">Kwota Brutto <p-sortIcon field="grossAmount"></p-sortIcon></th>
+                <th style="min-width: 180px" pSortableColumn="status">{{ 'common.status' | translate }} <p-sortIcon field="status"></p-sortIcon></th>
+                <th style="min-width: 200px" pSortableColumn="invoiceNumber">{{ 'common.numerFaktury' | translate }} <p-sortIcon field="invoiceNumber"></p-sortIcon></th>
+                <th style="min-width: 150px" pSortableColumn="issueDate">{{ 'common.dataWystawienia' | translate }} <p-sortIcon field="issueDate"></p-sortIcon></th>
+                <th style="min-width: 250px" pSortableColumn="supplier.name">{{ 'common.firma' | translate }} <p-sortIcon field="supplier.name"></p-sortIcon></th>
+                <th style="min-width: 150px" pSortableColumn="supplier.nip">{{ 'common.nip' | translate }} <p-sortIcon field="supplier.nip"></p-sortIcon></th>
+                <th style="min-width: 250px" pSortableColumn="supplier.address">{{ 'common.adresFirmy' | translate }} <p-sortIcon field="supplier.address"></p-sortIcon></th>
+                <th style="min-width: 300px">{{ 'common.kupionePrzedmioty' | translate }}</th>
+                <th style="min-width: 150px" pSortableColumn="netAmount">{{ 'common.kwotaNetto' | translate }} <p-sortIcon field="netAmount"></p-sortIcon></th>
+                <th style="min-width: 150px" pSortableColumn="grossAmount">{{ 'common.kwotaBrutto' | translate }} <p-sortIcon field="grossAmount"></p-sortIcon></th>
             </tr>
         </ng-template>
         
@@ -33,7 +33,7 @@
                     <p-tag [value]="getStatusName(invoice.status)" severity="warning"></p-tag>
                 </td>
                 <td style="font-weight: 500;">{{ invoice.invoiceNumber }}</td>
-                <td>{{ invoice.issueDate || 'Brak daty' }}</td>
+                <td>{{ invoice.issueDate || ('common.brakDaty' | translate) }}</td>
                 <td>{{ invoice.supplier?.name || '---' }}</td>
                 <td>{{ invoice.supplier?.nip || '---' }}</td>
                 <td>{{ invoice.supplier?.address || '---' }}</td>
@@ -45,7 +45,7 @@
                             </div>
                         </div>
                     </ng-container>
-                    <ng-template #noItems><span style="color: gray;">Brak pozycji</span></ng-template>
+                    <ng-template #noItems><span style="color: gray;">{{ 'common.brakPozycji' | translate }}</span></ng-template>
                 </td>
                 <td>{{ invoice.netAmount }} {{ invoice.currency || 'PLN' }}</td>
                 <td>{{ invoice.grossAmount }} {{ invoice.currency || 'PLN' }}</td>
@@ -55,7 +55,7 @@
         <ng-template pTemplate="emptymessage">
             <tr>
                 <td colspan="9" style="text-align: center; padding: 2rem; color: #64748b;">
-                    Brak faktur oczekujących na Twoją akceptację.
+                    {{ 'managerDashboard.brakFakturOczekujacychNaTwoja' | translate }}
                 </td>
             </tr>
         </ng-template>

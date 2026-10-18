@@ -1,23 +1,23 @@
 <p-toolbar styleClass="custom-topbar">
     <div class="p-toolbar-group-start topbar-section">
-      <span class="logo-text">SOF</span>
+      <span class="logo-text">{{ 'topbar.sof' | translate }}</span>
       <i class="pi pi-box logo-icon"></i>
         
-<p-button icon="pi pi-home" label="Panel główny" severity="success" size="small" [rounded]="true"
+<p-button icon="pi pi-home" [label]="'topbar.panelGlowny' | translate" severity="success" size="small" [rounded]="true"
     [routerLink]="getDashboardRoute()">
 </p-button>
        <p-button 
           *ngIf="getUser()?.role === 'EMPLOYEE'" 
           icon="pi pi-plus" 
-          label="Wgraj fakturę" 
+          [label]="'topbar.wgrajFakture' | translate" 
           severity="info" 
           size="small" 
           [rounded]="true" 
           routerLink="/employee/invoice-upload">
       </p-button>
-          <p-button *ngIf="getUser()?.role !== 'ADMIN'"  icon="pi pi-file-excel" label="Wygeneruj raport" severity="info" size="small" [rounded]="true"></p-button>
-           <p-button *ngIf="getUser()?.role === 'ADMIN'"   icon="pi pi-cog" label="Ustawienia OCR" severity="info" size="small" [rounded]="true" (onClick)="goToOcrSettings()"></p-button>
-            <p-button *ngIf="getUser()?.role === 'ADMIN'"   icon="pi pi-user-plus" label="Dodaj użytkownika" severity="info" size="small" [rounded]="true" (onClick)="goToCreateUser()"></p-button>
+          <p-button *ngIf="getUser()?.role !== 'ADMIN'"  icon="pi pi-file-excel" [label]="'topbar.wygenerujRaport' | translate" severity="info" size="small" [rounded]="true"></p-button>
+           <p-button *ngIf="getUser()?.role === 'ADMIN'"   icon="pi pi-cog" [label]="'topbar.ustawieniaOcr' | translate" severity="info" size="small" [rounded]="true" (onClick)="goToOcrSettings()"></p-button>
+            <p-button *ngIf="getUser()?.role === 'ADMIN'"   icon="pi pi-user-plus" [label]="'topbar.dodajUzytkownika' | translate" severity="info" size="small" [rounded]="true" (onClick)="goToCreateUser()"></p-button>
     </div>
 
 
@@ -36,7 +36,7 @@
   [(visible)]="dialogVisible" 
   [modal]="true" 
   [dismissableMask]="true" 
-  header="Mój Profil"
+  [header]="'topbar.mojProfil' | translate"
   [style]="{ width: '400px' }"
   styleClass="profile-dialog">
   
@@ -47,29 +47,29 @@
           <div class="profile-avatar-large">
               <i class="pi pi-user"></i>
           </div>
-          <h3 class="profile-name">{{ getUser()?.name || 'Użytkownik' }}</h3>
+          <h3 class="profile-name">{{ getUser()?.name || ('topbar.uzytkownik' | translate) }}</h3>
           <p class="profile-role">{{ getUser()?.role }}</p>
       </div>
 
       <div class="profile-details">
           <div class="detail-row">
-              <span class="detail-label">Imię</span>
+              <span class="detail-label">{{ 'common.imie' | translate }}</span>
               <span class="detail-value">{{ getUser()?.firstName || '---' }}</span>
           </div>
           <div class="detail-row">
-              <span class="detail-label">Nazwisko</span>
+              <span class="detail-label">{{ 'common.nazwisko' | translate }}</span>
               <span class="detail-value">{{ getUser()?.lastName || '---' }}</span>
           </div>
           <div class="detail-row">
-              <span class="detail-label">Email</span>
+              <span class="detail-label">{{ 'common.email' | translate }}</span>
               <span class="detail-value">{{ getUser()?.email }}</span>
           </div>
           <div class="detail-row">
-              <span class="detail-label">Hasło</span>
+              <span class="detail-label">{{ 'common.haslo' | translate }}</span>
               <span class="detail-value">••••••••</span>
           </div>
           <div class="detail-row" *ngIf="getUser()?.dateOfBirth">
-              <span class="detail-label">Data urodzenia</span>
+              <span class="detail-label">{{ 'common.dataUrodzenia' | translate }}</span>
               <span class="detail-value">{{ getUser()?.dateOfBirth }}</span>
           </div>
       </div>
@@ -77,7 +77,7 @@
       <div class="profile-actions">
           <button type="button" class="btn-logout" (click)="logout()">
               <i class="pi pi-sign-out"></i>
-              Wyloguj się
+              {{ 'topbar.wylogujSie' | translate }}
           </button>
       </div>
     </div>
