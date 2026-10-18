@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,8 @@ import { PasswordModule } from 'primeng/password';
     ReactiveFormsModule,    
     InputTextModule,       
     PasswordModule,
-    RouterLink],
+    RouterLink,
+    TranslatePipe],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })

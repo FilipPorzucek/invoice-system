@@ -11,6 +11,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { InvoiceService } from '../../core/services/invoice.service';
 import { DialogModule } from 'primeng/dialog';
 import { SuccessDialogComponent } from '../dialogs/success-dialog/success-dialog.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-employee-invoice-view',
@@ -18,6 +19,8 @@ import { SuccessDialogComponent } from '../dialogs/success-dialog/success-dialog
     CommonModule, ReactiveFormsModule, FormsModule, CardModule, 
     InputTextModule, ButtonModule, DividerModule, PdfViewerModule, 
     DialogModule, CalendarModule, SuccessDialogComponent
+    DialogModule, CalendarModule,
+    TranslatePipe
   ],
   templateUrl: './employee-invoice-view.component.html',
   styleUrl: './employee-invoice-view.component.scss'

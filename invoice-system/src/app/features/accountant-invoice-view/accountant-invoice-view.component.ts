@@ -13,6 +13,7 @@ import { InputTextarea } from 'primeng/inputtextarea';
 import { FormsModule } from '@angular/forms';
 import { InvoiceService } from '../../core/services/invoice.service';
 import { SuccessDialogComponent } from '../dialogs/success-dialog/success-dialog.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-accountant-invoice-view',
@@ -21,6 +22,8 @@ import { SuccessDialogComponent } from '../dialogs/success-dialog/success-dialog
     CommonModule, ReactiveFormsModule, FormsModule, CardModule, 
     InputTextModule, ButtonModule, DividerModule, PdfViewerModule, 
     DialogModule, CalendarModule, InputTextarea, SuccessDialogComponent
+    DialogModule, CalendarModule, InputTextarea,
+    TranslatePipe
   ],
   templateUrl: './accountant-invoice-view.component.html',
   styleUrl: './accountant-invoice-view.component.scss'

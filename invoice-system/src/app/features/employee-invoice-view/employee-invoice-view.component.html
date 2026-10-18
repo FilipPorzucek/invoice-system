@@ -4,16 +4,16 @@
         <p-card>
             <ng-template pTemplate="header">
                 <div class="invoice-view-header">
-                    <h2 class="invoice-view-title">Podgląd dokumentu</h2>
-                    <p-button icon="pi pi-arrow-left" label="Wróć" styleClass="p-button-text p-button-secondary" (onClick)="goBack()"></p-button>
+                    <h2 class="invoice-view-title">{{ 'employeeInvoiceView.podgladDokumentu' | translate }}</h2>
+                    <p-button icon="pi pi-arrow-left" [label]="'common.wroc' | translate" styleClass="p-button-text p-button-secondary" (onClick)="goBack()"></p-button>
                 </div>
             </ng-template>
 
             <div *ngIf="invoiceStatus === 'REJECTED'" style="background-color: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
                 <i class="pi pi-exclamation-triangle" style="font-size: 2rem;"></i>
                 <div>
-                    <h3 style="margin: 0 0 0.5rem 0;">Faktura została odrzucona przez księgowość</h3>
-                    <p style="margin: 0;"><strong>Powód:</strong> {{ rejectionReason || 'Nie podano powodu.' }}</p>
+                    <h3 style="margin: 0 0 0.5rem 0;">{{ 'employeeInvoiceView.fakturaZostalaOdrzuconaPrzezKsiegowosc' | translate }}</h3>
+                    <p style="margin: 0;"><strong>{{ 'employeeInvoiceView.powod' | translate }}</strong> {{ rejectionReason || ('employeeInvoiceView.niePodanoPowodu' | translate) }}</p>
                 </div>
             </div>
 
@@ -21,69 +21,69 @@
                 
                 <div class="form-row">
                     <div class="form-field">
-                        <label>Numer faktury</label>
+                        <label>{{ 'common.numerFaktury' | translate }}</label>
                         <input pInputText formControlName="invoiceNumber" />
                     </div>
                     <div class="form-field">
-                        <label>Data wyst.</label>
+                        <label>{{ 'common.dataWyst' | translate }}</label>
                         <p-calendar formControlName="issueDate" dateFormat="yy-mm-dd" dataType="string" [showIcon]="true"></p-calendar>
                     </div>
                     <div class="form-field" style="flex: 0.5;">
-                        <label>Waluta</label>
+                        <label>{{ 'common.waluta' | translate }}</label>
                         <input pInputText formControlName="currency" />
                     </div>
                 </div>
 
-                <p-divider align="center"><b>Dostawca</b></p-divider>
+                <p-divider align="center"><b>{{ 'common.dostawca' | translate }}</b></p-divider>
 
                 <div formGroupName="supplier" class="invoice-form">
                     <div class="form-field">
-                        <label>Nazwa firmy</label>
+                        <label>{{ 'common.nazwaFirmy' | translate }}</label>
                         <input pInputText formControlName="name" />
                     </div>
                     <div class="form-row">
                         <div class="form-field">
-                            <label>NIP</label>
+                            <label>{{ 'common.nip' | translate }}</label>
                             <input pInputText formControlName="nip" />
                         </div>
                         <div class="form-field" style="flex: 2;">
-                            <label>Numer konta (IBAN)</label>
+                            <label>{{ 'common.numerKontaIban' | translate }}</label>
                             <input pInputText formControlName="bankAccountNumber" />
                         </div>
                     </div>
                     <div class="form-field">
-                        <label>Adres</label>
+                        <label>{{ 'common.adres' | translate }}</label>
                         <input pInputText formControlName="address" />
                     </div>
                 </div>
 
-            <p-divider align="center"><b>Pozycje na fakturze</b></p-divider>
+            <p-divider align="center"><b>{{ 'common.pozycjeNaFakturze' | translate }}</b></p-divider>
 
 <div formArrayName="items" class="items-container">
     <div *ngFor="let item of items.controls; let i=index" [formGroupName]="i" class="item-row">
         
         <div class="form-field col-name">
-            <label *ngIf="i===0">Usługa/Towar</label>
+            <label *ngIf="i===0">{{ 'common.uslugaTowar' | translate }}</label>
             <input pInputText formControlName="name" />
         </div>
 
         <div class="form-field col-qty">
-            <label *ngIf="i===0">Ilość</label>
+            <label *ngIf="i===0">{{ 'common.ilosc' | translate }}</label>
             <input pInputText formControlName="quantity" type="number" step="any" />
         </div>
 
         <div class="form-field col-price">
-            <label *ngIf="i===0">Cena netto</label>
+            <label *ngIf="i===0">{{ 'common.cenaNetto' | translate }}</label>
             <input pInputText formControlName="netPrice" type="number" step="0.01" />
         </div>
 
         <div class="form-field col-total">
-            <label *ngIf="i===0">Wartość netto</label>
+            <label *ngIf="i===0">{{ 'common.wartoscNetto' | translate }}</label>
             <input pInputText formControlName="netValue" type="number" step="0.01" />
         </div>
 
         <div class="form-field col-tax">
-            <label *ngIf="i===0">VAT</label>
+            <label *ngIf="i===0">{{ 'common.vat' | translate }}</label>
             <input pInputText formControlName="taxRate" type="number" step="0.01" />
         </div>
 
@@ -94,16 +94,16 @@
 
                 <div class="form-row mt-2">
                     <div class="form-field">
-                        <label>Razem Netto</label>
+                        <label>{{ 'common.razemNetto' | translate }}</label>
                         <input pInputText formControlName="netAmount" type="number" step="0.01" />
                     </div>
                     <div class="form-field">
-                        <label>Razem Brutto</label>
+                        <label>{{ 'common.razemBrutto' | translate }}</label>
                         <input pInputText formControlName="grossAmount" type="number" step="0.01" />
                     </div>
                 </div>
 <div *ngIf="invoiceStatus === 'REJECTED'" class="flex gap-3 mt-4">
-    <p-button label="Zapisz poprawki i wyślij ponownie" icon="pi pi-send" severity="success" styleClass="w-full"
+    <p-button [label]="'employeeInvoiceView.zapiszPoprawkiIWyslijPonownie' | translate" icon="pi pi-send" severity="success" styleClass="w-full"
         [disabled]="invoiceForm.invalid" [loading]="isSubmitting" (onClick)="onResubmit()">
     </p-button>
 </div>
@@ -123,7 +123,7 @@
                 </pdf-viewer>
             </div>
             <div *ngIf="!pdfPreviewUrl" class="flex align-items-center justify-content-center h-full text-500">
-                Ładowanie podglądu dokumentu...
+                {{ 'common.ladowaniePodgladuDokumentu' | translate }}
             </div>
         </p-card>
     </div>

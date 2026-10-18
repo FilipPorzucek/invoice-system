@@ -12,6 +12,7 @@ import { InvoiceService } from '../../core/services/invoice.service';
 import { DialogModule } from 'primeng/dialog';
 import { CalendarModule } from 'primeng/calendar';
 import { Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 @Component({
   selector: 'app-invoice-upload',
   imports: [CommonModule,
@@ -24,7 +25,8 @@ import { Router } from '@angular/router';
     DividerModule,
     PdfViewerModule,
     DialogModule,
-  CalendarModule],
+  CalendarModule,
+    TranslatePipe],
   templateUrl: './invoice-upload.component.html',
   styleUrl: './invoice-upload.component.scss'
 })

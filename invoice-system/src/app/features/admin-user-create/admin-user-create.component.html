@@ -1,5 +1,5 @@
 <div class="user-create-container">
-  <p-card header="Dodaj nowego użytkownika" styleClass="shadow-2 border-round-xl">
+  <p-card [header]="'adminUserCreate.dodajNowegoUzytkownika' | translate" styleClass="shadow-2 border-round-xl">
     
     <div *ngIf="errorMessage" class="p-3 mb-3 border-round bg-red-100 text-red-700 font-medium">
       {{ errorMessage }}
@@ -8,31 +8,31 @@
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-3">
       <div class="grid">
         <div class="col-12 md:col-6 flex flex-column gap-1">
-          <label class="font-medium text-700">Imię</label>
-          <input pInputText formControlName="firstName" placeholder="np. Jan" />
-          <small class="field-error" *ngIf="isInvalid('firstName')">Imię jest wymagane.</small>
+          <label class="font-medium text-700">{{ 'common.imie' | translate }}</label>
+          <input pInputText formControlName="firstName" [placeholder]="'adminUserCreate.npJan' | translate" />
+          <small class="field-error" *ngIf="isInvalid('firstName')">{{ 'common.imieJestWymagane' | translate }}</small>
         </div>
 
         <div class="col-12 md:col-6 flex flex-column gap-1">
-          <label class="font-medium text-700">Nazwisko</label>
-          <input pInputText formControlName="lastName" placeholder="np. Kowalski" />
-          <small class="field-error" *ngIf="isInvalid('lastName')">Nazwisko jest wymagane.</small>
+          <label class="font-medium text-700">{{ 'common.nazwisko' | translate }}</label>
+          <input pInputText formControlName="lastName" [placeholder]="'adminUserCreate.npKowalski' | translate" />
+          <small class="field-error" *ngIf="isInvalid('lastName')">{{ 'common.nazwiskoJestWymagane' | translate }}</small>
         </div>
       </div>
 
       <div class="grid">
         <div class="col-12 md:col-6 flex flex-column gap-1">
-          <label class="font-medium text-700">Adres Email</label>
-          <input pInputText type="email" formControlName="email" placeholder="jan.kowalski@firma.pl" />
-          <small class="email-taken-error" *ngIf="userForm.get('email')?.errors?.['emailTaken']">Konto z tym adresem email już istnieje.</small>
+          <label class="font-medium text-700">{{ 'common.adresEmail' | translate }}</label>
+          <input pInputText type="email" formControlName="email" [placeholder]="'adminUserCreate.janKowalskiFirmaPl' | translate" />
+          <small class="email-taken-error" *ngIf="userForm.get('email')?.errors?.['emailTaken']">{{ 'adminUserCreate.kontoZTymAdresemEmail' | translate }}</small>
           <ng-container *ngIf="isInvalid('email')">
-            <small class="field-error" *ngIf="userForm.get('email')?.errors?.['required']">Email jest wymagany.</small>
-            <small class="field-error" *ngIf="userForm.get('email')?.errors?.['email'] || userForm.get('email')?.errors?.['pattern']">Nieprawidłowy format adresu email.</small>
+            <small class="field-error" *ngIf="userForm.get('email')?.errors?.['required']">{{ 'common.emailJestWymagany' | translate }}</small>
+            <small class="field-error" *ngIf="userForm.get('email')?.errors?.['email'] || userForm.get('email')?.errors?.['pattern']">{{ 'common.nieprawidlowyFormatAdresuEmail' | translate }}</small>
           </ng-container>
         </div>
 
         <div class="col-12 md:col-6 flex flex-column gap-1">
-          <label class="font-medium text-700">Rola</label>
+          <label class="font-medium text-700">{{ 'common.rola' | translate }}</label>
           <p-dropdown 
             [options]="roles" 
             formControlName="role" 
@@ -40,74 +40,74 @@
             optionValue="value" 
             styleClass="w-full">
           </p-dropdown>
-          <small class="field-error" *ngIf="isInvalid('role')">Rola jest wymagana.</small>
+          <small class="field-error" *ngIf="isInvalid('role')">{{ 'adminUserCreate.rolaJestWymagana' | translate }}</small>
         </div>
       </div>
 
       <div class="grid">
         <div class="col-12 md:col-6 flex flex-column gap-1">
-          <label class="font-medium text-700">Hasło</label>
+          <label class="font-medium text-700">{{ 'common.haslo' | translate }}</label>
           <p-password 
             formControlName="password" 
             [feedback]="true" 
             [toggleMask]="true" 
             autocomplete="new-password"
-            placeholder="Wpisz hasło" 
-            promptLabel="Wpisz hasło"
-            weakLabel="Słabe"
-            mediumLabel="Średnie"
-            strongLabel="Silne"
+            [placeholder]="'common.wpiszHaslo' | translate" 
+            [promptLabel]="'common.wpiszHaslo' | translate"
+            [weakLabel]="'common.slabe' | translate"
+            [mediumLabel]="'common.srednie' | translate"
+            [strongLabel]="'common.silne' | translate"
             styleClass="w-full" 
             inputStyleClass="w-full">
           </p-password>
           <ng-container *ngIf="isInvalid('password')">
-            <small class="field-error" *ngIf="userForm.get('password')?.errors?.['required']">Hasło jest wymagane.</small>
-            <small class="field-error" *ngIf="userForm.get('password')?.errors?.['minlength']">Hasło musi mieć co najmniej 8 znaków, zawierać wielką literę i cyfrę.</small>
+            <small class="field-error" *ngIf="userForm.get('password')?.errors?.['required']">{{ 'common.hasloJestWymagane' | translate }}</small>
+            <small class="field-error" *ngIf="userForm.get('password')?.errors?.['minlength']">{{ 'common.hasloMusiMiecCoNajmniej' | translate }}</small>
           </ng-container>
         </div>
 
         <div class="col-12 md:col-6 flex flex-column gap-1">
-          <label class="font-medium text-700">Powtórz hasło</label>
+          <label class="font-medium text-700">{{ 'common.powtorzHaslo' | translate }}</label>
           <p-password 
             formControlName="repeatPassword" 
             [feedback]="false" 
             [toggleMask]="true" 
             autocomplete="new-password"
-            placeholder="Powtórz hasło" 
+            [placeholder]="'common.powtorzHaslo' | translate" 
             styleClass="w-full" 
             inputStyleClass="w-full">
           </p-password>
-          <small class="field-error" *ngIf="isInvalid('repeatPassword') && userForm.get('repeatPassword')?.errors?.['required']">Powtórzenie hasła jest wymagane.</small>
-          <small class="field-error" *ngIf="userForm.errors?.['passwordsMismatch'] && userForm.get('repeatPassword')?.touched && userForm.get('repeatPassword')?.value">Hasła nie są identyczne.</small>
+          <small class="field-error" *ngIf="isInvalid('repeatPassword') && userForm.get('repeatPassword')?.errors?.['required']">{{ 'adminUserCreate.powtorzenieHaslaJestWymagane' | translate }}</small>
+          <small class="field-error" *ngIf="userForm.errors?.['passwordsMismatch'] && userForm.get('repeatPassword')?.touched && userForm.get('repeatPassword')?.value">{{ 'common.haslaNieSaIdentyczne' | translate }}</small>
         </div>
       </div>
 
       <div class="grid">
 
         <div class="col-12 md:col-6 flex flex-column gap-1">
-          <label class="font-medium text-700">Data urodzenia</label>
+          <label class="font-medium text-700">{{ 'common.dataUrodzenia' | translate }}</label>
     <p-datepicker 
       name="dateOfBirth" 
       formControlName="dateOfBirth" 
-      placeholder="Data urodzenia" 
+      [placeholder]="'common.dataUrodzenia' | translate" 
       showIcon="true" 
       [maxDate]="today"
       dateFormat="dd.mm.yy">
     </p-datepicker>
-          <small class="field-error" *ngIf="isInvalid('dateOfBirth') && userForm.get('dateOfBirth')?.errors?.['futureDate']">Data urodzenia nie może być z przyszłości.</small>
+          <small class="field-error" *ngIf="isInvalid('dateOfBirth') && userForm.get('dateOfBirth')?.errors?.['futureDate']">{{ 'common.dataUrodzeniaNieMozeByc' | translate }}</small>
         </div>
       </div>
 
       <div class="flex justify-content-end gap-2 mt-4">
         <p-button 
-          label="Anuluj" 
+          [label]="'common.anuluj' | translate" 
           icon="pi pi-times" 
           severity="secondary" 
           [outlined]="true" 
           routerLink="/admin/dashboard">
         </p-button>
         <p-button 
-          label="Utwórz konto" 
+          [label]="'adminUserCreate.utworzKonto' | translate" 
           icon="pi pi-check" 
           type="submit" 
           severity="info" 
