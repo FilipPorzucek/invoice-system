@@ -12,6 +12,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { InputTextarea } from 'primeng/inputtextarea';
 import { FormsModule } from '@angular/forms';
 import { InvoiceService } from '../../core/services/invoice.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-accountant-invoice-view',
@@ -19,7 +20,8 @@ import { InvoiceService } from '../../core/services/invoice.service';
   imports: [
     CommonModule, ReactiveFormsModule, FormsModule, CardModule, 
     InputTextModule, ButtonModule, DividerModule, PdfViewerModule, 
-    DialogModule, CalendarModule, InputTextarea
+    DialogModule, CalendarModule, InputTextarea,
+    TranslatePipe
   ],
   templateUrl: './accountant-invoice-view.component.html',
   styleUrl: './accountant-invoice-view.component.scss'

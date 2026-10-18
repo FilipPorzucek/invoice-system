@@ -6,10 +6,12 @@ import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { InputTextModule } from 'primeng/inputtext';
 import { Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-employee-dashboard',
   imports: [CommonModule, TableModule, TagModule, InputTextModule],
+  imports: [CommonModule, TableModule, TagModule, TranslatePipe],
   templateUrl: './accountant-dasboard.component.html',
   styleUrl: './accountant-dasboard.component.scss'
 })
