@@ -18,8 +18,7 @@ import { TranslatePipe } from '@ngx-translate/core';
     imports: [
     CommonModule, ReactiveFormsModule, FormsModule, CardModule, 
     InputTextModule, ButtonModule, DividerModule, PdfViewerModule, 
-    DialogModule, CalendarModule, SuccessDialogComponent
-    DialogModule, CalendarModule,
+    DialogModule, CalendarModule, SuccessDialogComponent,
     TranslatePipe
   ],
   templateUrl: './employee-invoice-view.component.html',

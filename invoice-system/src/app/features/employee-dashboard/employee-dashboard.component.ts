@@ -11,8 +11,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-employee-dashboard',
-  imports: [CommonModule, TableModule, TagModule, InputTextModule],
-  imports: [CommonModule, TableModule, TagModule, TranslatePipe],
+  imports: [CommonModule, TableModule, TagModule, InputTextModule,TranslatePipe],
   templateUrl: './employee-dashboard.component.html',
   styleUrl: './employee-dashboard.component.scss'
 })

@@ -21,8 +21,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     CommonModule, ReactiveFormsModule, FormsModule, CardModule, 
     InputTextModule, ButtonModule, DividerModule, PdfViewerModule, 
-    DialogModule, CalendarModule, InputTextarea, SuccessDialogComponent
-    DialogModule, CalendarModule, InputTextarea,
+    DialogModule, CalendarModule, InputTextarea, SuccessDialogComponent,
     TranslatePipe
   ],
   templateUrl: './accountant-invoice-view.component.html',

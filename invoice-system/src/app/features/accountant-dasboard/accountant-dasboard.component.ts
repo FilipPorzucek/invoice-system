@@ -10,8 +10,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-employee-dashboard',
-  imports: [CommonModule, TableModule, TagModule, InputTextModule],
-  imports: [CommonModule, TableModule, TagModule, TranslatePipe],
+  imports: [CommonModule, TableModule, TagModule, InputTextModule,TranslatePipe],
   templateUrl: './accountant-dasboard.component.html',
   styleUrl: './accountant-dasboard.component.scss'
 })
