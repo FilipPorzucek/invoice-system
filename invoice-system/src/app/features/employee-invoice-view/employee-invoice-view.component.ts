@@ -10,6 +10,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { CalendarModule } from 'primeng/calendar';
 import { InvoiceService } from '../../core/services/invoice.service';
 import { DialogModule } from 'primeng/dialog';
+import { SuccessDialogComponent } from '../dialogs/success-dialog/success-dialog.component';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
@@ -17,6 +18,7 @@ import { TranslatePipe } from '@ngx-translate/core';
     imports: [
     CommonModule, ReactiveFormsModule, FormsModule, CardModule, 
     InputTextModule, ButtonModule, DividerModule, PdfViewerModule, 
+    DialogModule, CalendarModule, SuccessDialogComponent
     DialogModule, CalendarModule,
     TranslatePipe
   ],
@@ -35,6 +37,7 @@ private fb = inject(FormBuilder);
   rejectionReason: string | null = null;
   invoiceStatus: string = '';
   isSubmitting: boolean=false;
+  showResubmitSuccessDialog: boolean = false;
 
   constructor() {
     this.invoiceForm = this.fb.group({
@@ -134,7 +137,7 @@ private fb = inject(FormBuilder);
     this.invoiceService.submitInvoiceByEmployee(this.invoiceId, invoiceData).subscribe({
       next: () => {
         this.isSubmitting = false;
-        this.router.navigate(['/employee/dashboard']);
+        this.showResubmitSuccessDialog = true;
       },
       error: (err) => {
         console.error('Błąd ponownego wysyłania:', err);
@@ -143,4 +146,8 @@ private fb = inject(FormBuilder);
     });
   }
 }
+
+  onResubmitSuccessConfirmed() {
+    this.router.navigate(['/employee/dashboard']);
+  }
 }
