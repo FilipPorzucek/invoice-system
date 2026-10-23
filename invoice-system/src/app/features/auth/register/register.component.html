@@ -10,12 +10,12 @@
       type="text" 
       name="firstName" 
       formControlName="firstName"
-      placeholder="Imię" 
+      [placeholder]="'common.imie' | translate" 
       class="input-field" 
       required 
     />
     <div *ngIf="registerForm.get('firstName')?.touched && registerForm.get('firstName')?.invalid">
-      <small>Imię jest wymagane.</small>
+      <small>{{ 'common.imieJestWymagane' | translate }}</small>
     </div>
 
     <input 
@@ -23,12 +23,12 @@
       type="text" 
       name="lastName" 
       formControlName="lastName"
-      placeholder="Nazwisko" 
+      [placeholder]="'common.nazwisko' | translate" 
       class="input-field" 
       required 
     />
     <div *ngIf="registerForm.get('lastName')?.touched && registerForm.get('lastName')?.invalid">
-      <small>Nazwisko jest wymagane.</small>
+      <small>{{ 'common.nazwiskoJestWymagane' | translate }}</small>
     </div>
 
     <input 
@@ -36,39 +36,39 @@
       type="email" 
       name="email" 
       autocomplete="email"
-      placeholder="Email" 
+      [placeholder]="'common.email' | translate" 
       formControlName="email"
       class="input-field" 
       required 
     />
     <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid">
-      <small *ngIf="registerForm.get('email')?.errors?.['required']">Email jest wymagany.</small>
-      <small *ngIf="registerForm.get('email')?.errors?.['email']">Nieprawidłowy format adresu email.</small>
+      <small *ngIf="registerForm.get('email')?.errors?.['required']">{{ 'common.emailJestWymagany' | translate }}</small>
+      <small *ngIf="registerForm.get('email')?.errors?.['email']">{{ 'common.nieprawidlowyFormatAdresuEmail' | translate }}</small>
     </div>
 
     <p-password 
       name="password"
       formControlName="password" 
-      placeholder="Hasło" 
+      [placeholder]="'common.haslo' | translate" 
       [feedback]="true" 
       toggleMask="true"
       autocomplete="new-password"
-      promptLabel="Wpisz hasło"
-      weakLabel="Słabe"
-      mediumLabel="Średnie"
-      strongLabel="Silne"
+      [promptLabel]="'common.wpiszHaslo' | translate"
+      [weakLabel]="'common.slabe' | translate"
+      [mediumLabel]="'common.srednie' | translate"
+      [strongLabel]="'common.silne' | translate"
       required
     >
     </p-password>
     <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">
-      <small *ngIf="registerForm.get('password')?.errors?.['required']">Hasło jest wymagane.</small>
-      <small *ngIf="registerForm.get('password')?.errors?.['minlength']">Hasło musi mieć co najmniej 8 znaków, zawierać wielką literę i cyfrę.</small>
+      <small *ngIf="registerForm.get('password')?.errors?.['required']">{{ 'common.hasloJestWymagane' | translate }}</small>
+      <small *ngIf="registerForm.get('password')?.errors?.['minlength']">{{ 'common.hasloMusiMiecCoNajmniej' | translate }}</small>
     </div>
 
     <p-password 
       name="repeatPassword"
       formControlName="repeatPassword"
-      placeholder="Powtórz hasło" 
+      [placeholder]="'common.powtorzHaslo' | translate" 
       [feedback]="false" 
       toggleMask="true"
       autocomplete="new-password"
@@ -76,26 +76,26 @@
     >
     </p-password>
     <div *ngIf="registerForm.errors?.['passwordsMismatch'] && registerForm.get('repeatPassword')?.touched">
-      <small>Hasła nie są identyczne.</small>
+      <small>{{ 'common.haslaNieSaIdentyczne' | translate }}</small>
     </div>
 
     <p-datepicker 
       name="dateOfBirth" 
       formControlName="dateOfBirth" 
-      placeholder="Data urodzenia" 
+      [placeholder]="'common.dataUrodzenia' | translate" 
       showIcon="true" 
       dateFormat="dd.mm.yy">
     </p-datepicker>
     <div *ngIf="registerForm.get('dateOfBirth')?.touched && registerForm.get('dateOfBirth')?.invalid">
-      <small *ngIf="registerForm.get('dateOfBirth')?.errors?.['required']">Data urodzenia jest wymagana.</small>
-      <small *ngIf="registerForm.get('dateOfBirth')?.errors?.['futureDate']">Data urodzenia nie może być z przyszłości.</small>
+      <small *ngIf="registerForm.get('dateOfBirth')?.errors?.['required']">{{ 'register.dataUrodzeniaJestWymagana' | translate }}</small>
+      <small *ngIf="registerForm.get('dateOfBirth')?.errors?.['futureDate']">{{ 'common.dataUrodzeniaNieMozeByc' | translate }}</small>
     </div>
 
-    <button type="submit" class="confirm-button">Zarejestruj się</button>
+    <button type="submit" class="confirm-button">{{ 'common.zarejestrujSie' | translate }}</button>
 
     <p class="auth-switch">
-      Masz już konto?
-      <a routerLink="/login" class="auth-switch-link">Zaloguj się</a>
+      {{ 'register.maszJuzKonto' | translate }}
+      <a routerLink="/login" class="auth-switch-link">{{ 'common.zalogujSie' | translate }}</a>
     </p>
   </form>
 </div>

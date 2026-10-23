@@ -1,5 +1,5 @@
 <p-dialog 
-  header="Edycja użytkownika" 
+  [header]="'adminUserEditDialog.edycjaUzytkownika' | translate" 
   [(visible)]="visible" 
   (onHide)="close()"
   [modal]="true" 
@@ -14,28 +14,28 @@
 
   <form [formGroup]="editForm" (ngSubmit)="save()" class="edit-form">
     <div class="form-group">
-      <label>Imię</label>
+      <label>{{ 'common.imie' | translate }}</label>
       <input pInputText formControlName="firstName" />
-      <small class="field-error" *ngIf="isInvalid('firstName')">Pole wymagane.</small>
+      <small class="field-error" *ngIf="isInvalid('firstName')">{{ 'adminUserEditDialog.poleWymagane' | translate }}</small>
     </div>
 
     <div class="form-group">
-      <label>Nazwisko</label>
+      <label>{{ 'common.nazwisko' | translate }}</label>
       <input pInputText formControlName="lastName" />
-      <small class="field-error" *ngIf="isInvalid('lastName')">Pole wymagane.</small>
+      <small class="field-error" *ngIf="isInvalid('lastName')">{{ 'adminUserEditDialog.poleWymagane' | translate }}</small>
     </div>
 
     <div class="form-group">
-      <label>Adres Email</label>
+      <label>{{ 'common.adresEmail' | translate }}</label>
       <input pInputText type="email" formControlName="email" />
       <ng-container *ngIf="isInvalid('email')">
-        <small class="field-error" *ngIf="editForm.get('email')?.errors?.['required']">Pole wymagane.</small>
-        <small class="field-error" *ngIf="editForm.get('email')?.errors?.['email'] || editForm.get('email')?.errors?.['pattern']">Nieprawidłowy format adresu email.</small>
+        <small class="field-error" *ngIf="editForm.get('email')?.errors?.['required']">{{ 'adminUserEditDialog.poleWymagane' | translate }}</small>
+        <small class="field-error" *ngIf="editForm.get('email')?.errors?.['email'] || editForm.get('email')?.errors?.['pattern']">{{ 'common.nieprawidlowyFormatAdresuEmail' | translate }}</small>
       </ng-container>
     </div>
 
     <div class="form-group">
-      <label>Rola w systemie</label>
+      <label>{{ 'adminUserEditDialog.rolaWSystemie' | translate }}</label>
       <p-dropdown 
         panelStyleClass="role-select-panel"
         [options]="roles" 
@@ -44,11 +44,11 @@
         optionValue="value" 
         appendTo="body">
       </p-dropdown>
-      <small class="field-error" *ngIf="isInvalid('role')">Pole wymagane.</small>
+      <small class="field-error" *ngIf="isInvalid('role')">{{ 'adminUserEditDialog.poleWymagane' | translate }}</small>
     </div>
 
     <div class="form-group">
-      <label>Data urodzenia</label>
+      <label>{{ 'common.dataUrodzenia' | translate }}</label>
       <p-calendar 
         formControlName="dateOfBirth" 
         dateFormat="yy-mm-dd" 
@@ -56,19 +56,19 @@
         [maxDate]="today"
         appendTo="body">
       </p-calendar>
-      <small class="field-error" *ngIf="isInvalid('dateOfBirth') && editForm.get('dateOfBirth')?.errors?.['futureDate']">Data urodzenia nie może być z przyszłości.</small>
+      <small class="field-error" *ngIf="isInvalid('dateOfBirth') && editForm.get('dateOfBirth')?.errors?.['futureDate']">{{ 'common.dataUrodzeniaNieMozeByc' | translate }}</small>
     </div>
 
     <div class="dialog-actions">
       <p-button 
-        label="Anuluj" 
+        [label]="'common.anuluj' | translate" 
         icon="pi pi-times" 
         severity="secondary" 
         [outlined]="true" 
         (onClick)="close()">
       </p-button>
       <p-button 
-        label="Zapisz zmiany" 
+        [label]="'adminUserEditDialog.zapiszZmiany' | translate" 
         icon="pi pi-check" 
         type="submit" 
         severity="info" 

@@ -14,7 +14,7 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './employee-dashboard.component.scss'
 })
 export class EmployeeDashboardComponent implements OnInit{
-invoices:Invoice[]=[];
+invoices: (Invoice & { statusName: string; itemsText: string })[] = [];
 private invoiceService = inject(InvoiceService);
   private router = inject(Router);
 
@@ -45,7 +45,11 @@ private invoiceService = inject(InvoiceService);
     this.invoiceService.getEmployeeInvoices().subscribe({
       next: (data) => {
         console.log('2. Mamy to! Backend zwrócił:', data);
-        this.invoices = data;
+        this.invoices = data.map(invoice => ({
+          ...invoice,
+          statusName: this.getStatusName(invoice.status),
+          itemsText: (invoice.items || []).map(item => item.name).join(', ')
+        }));
       },
       error: (err) => {
         console.error("Błąd z pobraniem faktur", err);
