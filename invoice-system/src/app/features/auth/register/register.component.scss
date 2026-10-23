@@ -8,16 +8,16 @@
 .input-field {
   width: 100%;
   padding: 0.8rem 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid #d5dce7;
   border-radius: 8px;
   font-size: 1rem;
-  background-color: #f0f0f0;
+  background-color: #ffffff;
   transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
   box-sizing: border-box;
 
   &:focus {
     border-color: #3b82f6 !important;
-    background-color: #e8f0fe !important;
+    background-color: #ffffff !important;
     outline: none !important;
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
   }
@@ -28,7 +28,7 @@
   padding: 0.85rem;
   border: none;
   border-radius: 8px;
-  background-color: #3b82f6;
+  background-color: #2563eb;
   color: #ffffff;
   font-size: 1rem;
   font-weight: 600;
@@ -37,7 +37,7 @@
   margin-top: 0.5rem;
 
   &:hover {
-    background-color: #2563eb;
+    background-color: #1d4ed8;
   }
 }
 
@@ -55,16 +55,16 @@ small {
     .p-inputtext {
       width: 100%;
       padding: 0.8rem 1rem;
-      border: 1px solid #ccc;
+      border: 1px solid #d5dce7;
       border-radius: 8px;
       font-size: 1rem;
-      background-color: #f0f0f0;
+      background-color: #ffffff;
       transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
       box-sizing: border-box;
 
       &:focus {
         border-color: #3b82f6 !important;
-        background-color: #e8f0fe !important;
+        background-color: #ffffff !important;
         outline: none !important;
         box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
       }
@@ -80,17 +80,17 @@ small {
     .p-datepicker-input {
       width: 100%;
       padding: 0.8rem 1rem;
-      border: 1px solid #ccc;
+      border: 1px solid #d5dce7;
       border-right: none;
       border-radius: 8px 0 0 8px;
       font-size: 1rem;
-      background-color: #f0f0f0;
+      background-color: #ffffff;
       transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
       box-sizing: border-box;
 
       &:focus {
         border-color: #3b82f6 !important;
-        background-color: #e8f0fe !important;
+        background-color: #ffffff !important;
         outline: none !important;
         box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
       }
@@ -98,8 +98,8 @@ small {
 
     .p-datepicker-dropdown,
     .p-button {
-      background-color: #f0f0f0;
-      border: 1px solid #ccc;
+      background-color: #ffffff;
+      border: 1px solid #d5dce7;
       border-left: none;
       border-radius: 0 8px 8px 0;
       color: #666;
@@ -126,5 +126,25 @@ small {
   &:hover {
     color: #2563eb;
     text-decoration: underline;
+  }
+}
+
+.form-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #0f1d3a;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #5b6b85;
   }
 }

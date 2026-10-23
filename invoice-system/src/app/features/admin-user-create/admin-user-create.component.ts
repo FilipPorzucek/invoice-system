@@ -10,6 +10,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
 import { UserService } from '../../core/services/user.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admin-user-create',
@@ -24,7 +25,8 @@ import { UserService } from '../../core/services/user.service';
     DropdownModule,
     CalendarModule,
     ButtonModule,
-    DatePickerModule
+    DatePickerModule,
+    TranslatePipe
   ],
   templateUrl: './admin-user-create.component.html',
   styleUrl: './admin-user-create.component.scss'

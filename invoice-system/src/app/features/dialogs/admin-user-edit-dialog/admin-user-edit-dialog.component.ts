@@ -8,6 +8,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { ButtonModule } from 'primeng/button';
 import { UserService } from '../../../core/services/user.service';
 import { UpdateUserRequest } from '../../../core/model/UpdateUserRequest.model';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admin-user-edit-dialog',
@@ -19,7 +20,8 @@ import { UpdateUserRequest } from '../../../core/model/UpdateUserRequest.model';
     InputTextModule,
     DropdownModule,
     CalendarModule,
-    ButtonModule
+    ButtonModule,
+    TranslatePipe
   ],
   templateUrl: './admin-user-edit-dialog.component.html',
   styleUrl: './admin-user-edit-dialog.component.scss'

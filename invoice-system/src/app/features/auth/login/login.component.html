@@ -1,39 +1,44 @@
 <div class="container">
   <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="form-header">
+      <h2>Zaloguj się</h2>
+      <p>Podaj dane swojego konta.</p>
+    </div>
+
     <input 
       pInputText 
       type="email" 
       name="email" 
       formControlName="email"
-      placeholder="Email" 
+      [placeholder]="'common.email' | translate" 
       class="input-field" 
       required 
     />
     <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
-      <small *ngIf="loginForm.get('email')?.errors?.['required']">Email jest wymagany.</small>
+      <small *ngIf="loginForm.get('email')?.errors?.['required']">{{ 'common.emailJestWymagany' | translate }}</small>
     </div>
 
     <p-password 
       name="password"
       formControlName="password" 
-      placeholder="Hasło" 
+      [placeholder]="'common.haslo' | translate" 
       [feedback]="false" 
       toggleMask="true"
       required>
     </p-password>
     <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
-      <small *ngIf="loginForm.get('password')?.errors?.['required']">Hasło jest wymagane.</small>
+      <small *ngIf="loginForm.get('password')?.errors?.['required']">{{ 'common.hasloJestWymagane' | translate }}</small>
     </div>
 
     <div *ngIf="errorMessage" class="error">
       {{ errorMessage }}
     </div>
 
-    <button type="submit" class="confirm-button">Zaloguj się</button>
+    <button type="submit" class="confirm-button">{{ 'common.zalogujSie' | translate }}</button>
 
     <p class="auth-switch">
-      Nie masz konta?
-      <a routerLink="/register" class="auth-switch-link">Zarejestruj się</a>
+      {{ 'login.nieMaszKonta' | translate }}
+      <a routerLink="/register" class="auth-switch-link">{{ 'common.zarejestrujSie' | translate }}</a>
     </p>
   </form>
 </div>

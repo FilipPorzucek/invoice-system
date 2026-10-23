@@ -1,11 +1,102 @@
-/* You can add global styles to this file, and also import other style files */
-/* 1. Odpalamy ikony PrimeNG w całej aplikacji */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap');
 @import "primeicons/primeicons.css";
+
+:root {
+    --app-navy: #0f1d3a;
+    --app-navy-light: #1c2f57;
+    --app-primary: #2563eb;
+    --app-primary-dark: #1d4ed8;
+    --app-bg: #f4f6fa;
+    --app-surface: #ffffff;
+    --app-border: #e2e7ef;
+    --app-text: #1b2433;
+    --app-text-muted: #5b6b85;
+    --app-heading: #0f1d3a;
+}
 
 body {
     margin: 0;
     padding: 0;
-    font-family: var(--font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif);
-    background-color: #f4f6f9; 
-    color: #334155;
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background-color: var(--app-bg);
+    color: var(--app-text);
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+    color: var(--app-heading);
+    font-weight: 600;
+}
+
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.app-content {
+    flex: 1;
+    min-width: 0;
+    padding: 2rem 2.5rem;
+    box-sizing: border-box;
+}
+
+.p-card {
+    border: 1px solid var(--app-border);
+    border-radius: 10px;
+    box-shadow: none;
+}
+
+.p-card .p-card-title {
+    color: var(--app-heading);
+    font-weight: 600;
+}
+
+.p-datatable {
+    border: 1px solid var(--app-border);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+    background: #f8fafc;
+    color: #44536b;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-color: var(--app-border);
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+    border-color: #eef1f6;
+    color: var(--app-text);
+}
+
+.p-datatable .p-datatable-tbody > tr.p-datatable-selectable-row:hover,
+.p-datatable .p-datatable-tbody > tr:hover {
+    background: #f5f8ff;
+}
+
+.p-button {
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.p-tag {
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.p-dialog {
+    border-radius: 12px;
+}
+
+@media (max-width: 900px) {
+    .app-shell {
+        flex-direction: column;
+    }
+
+    .app-content {
+        padding: 1.25rem 1rem;
+    }
 }

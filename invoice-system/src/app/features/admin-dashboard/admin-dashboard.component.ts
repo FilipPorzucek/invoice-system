@@ -14,6 +14,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { AdminUserEditDialogComponent } from '../dialogs/admin-user-edit-dialog/admin-user-edit-dialog.component';
 import { UserService } from '../../core/services/user.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admin-dashboard',

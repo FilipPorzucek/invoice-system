@@ -5,16 +5,16 @@ import { InvoiceService } from '../../core/services/invoice.service';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-employee-dashboard',
-  imports: [CommonModule, TableModule, TagModule],
+  imports: [CommonModule, TableModule, TagModule, RouterLink],
   templateUrl: './employee-dashboard.component.html',
   styleUrl: './employee-dashboard.component.scss'
 })
 export class EmployeeDashboardComponent implements OnInit{
-invoices:Invoice[]=[];
+invoices: (Invoice & { statusName: string; itemsText: string })[] = [];
 private invoiceService = inject(InvoiceService);
   private router = inject(Router);
 
@@ -45,12 +45,32 @@ private invoiceService = inject(InvoiceService);
     this.invoiceService.getEmployeeInvoices().subscribe({
       next: (data) => {
         console.log('2. Mamy to! Backend zwrócił:', data);
-        this.invoices = data;
+        this.invoices = data.map(invoice => ({
+          ...invoice,
+          statusName: this.getStatusName(invoice.status),
+          itemsText: (invoice.items || []).map(item => item.name).join(', ')
+        }));
       },
       error: (err) => {
         console.error("Błąd z pobraniem faktur", err);
       }
     });
+  }
+
+  get totalCount(): number {
+    return this.invoices.length;
+  }
+
+  get pendingCount(): number {
+    return this.invoices.filter(invoice => invoice.status === 'PENDING_ACCOUNTANT' || invoice.status === 'PENDING_MANAGER').length;
+  }
+
+  get rejectedCount(): number {
+    return this.invoices.filter(invoice => invoice.status === 'REJECTED').length;
+  }
+
+  get bookedCount(): number {
+    return this.invoices.filter(invoice => invoice.status === 'BOOKED').length;
   }
 
   getStatusName(status?: string): string {

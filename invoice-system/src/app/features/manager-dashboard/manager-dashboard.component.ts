@@ -4,11 +4,12 @@ import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { Router } from '@angular/router';
 import { InvoiceService } from '../../core/services/invoice.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-manager-dashboard',
   standalone: true,
-  imports: [CommonModule, TableModule, TagModule],
+  imports: [CommonModule, TableModule, TagModule, TranslatePipe],
   templateUrl: './manager-dashboard.component.html',
   styleUrl: './manager-dashboard.component.scss'
 })
