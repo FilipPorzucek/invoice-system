@@ -5,13 +5,11 @@ import { InvoiceService } from '../../core/services/invoice.service';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { InputTextModule } from 'primeng/inputtext';
-import { Router } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-employee-dashboard',
-  imports: [CommonModule, TableModule, TagModule, InputTextModule,TranslatePipe],
+  imports: [CommonModule, TableModule, TagModule, RouterLink],
   templateUrl: './employee-dashboard.component.html',
   styleUrl: './employee-dashboard.component.scss'
 })
@@ -57,6 +55,22 @@ private invoiceService = inject(InvoiceService);
         console.error("Błąd z pobraniem faktur", err);
       }
     });
+  }
+
+  get totalCount(): number {
+    return this.invoices.length;
+  }
+
+  get pendingCount(): number {
+    return this.invoices.filter(invoice => invoice.status === 'PENDING_ACCOUNTANT' || invoice.status === 'PENDING_MANAGER').length;
+  }
+
+  get rejectedCount(): number {
+    return this.invoices.filter(invoice => invoice.status === 'REJECTED').length;
+  }
+
+  get bookedCount(): number {
+    return this.invoices.filter(invoice => invoice.status === 'BOOKED').length;
   }
 
   getStatusName(status?: string): string {

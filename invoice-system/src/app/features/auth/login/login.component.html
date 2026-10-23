@@ -1,5 +1,10 @@
 <div class="container">
   <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="form-header">
+      <h2>Zaloguj się</h2>
+      <p>Podaj dane swojego konta.</p>
+    </div>
+
     <input 
       pInputText 
       type="email" 
