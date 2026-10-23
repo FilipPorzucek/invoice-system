@@ -4,6 +4,7 @@ package pl.cdv.api.services;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,12 @@ public class InvoiceService {
     private final UserRepository userRepository;
     private final InvoiceStatusRepository invoiceStatusRepository;
     private final MinioClient minioClient;
+
+    @Value("${ocr.api.url}")
+    private String ocrApiUrl;
+
+    @Value("${webhook.base.url}")
+    private String webhookBaseUrl;
 
     @Transactional
     public void updateInvoiceFromOcrWebhook(Long invoiceId,OcrWebhookResponse payload){
@@ -284,10 +291,10 @@ public class InvoiceService {
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("task_id", invoiceId.toString());
         requestBody.put("file_path", minioPath);
-        requestBody.put("webhook_url", "http://host.docker.internal:8081/api/internal/invoices/" + invoiceId);
+        requestBody.put("webhook_url", stripTrailingSlash(webhookBaseUrl) + "/api/internal/invoices/" + invoiceId);
 
         try {
-            String pythonApiUrl = "http://localhost:8000/api/v1/process_invoice";
+            String pythonApiUrl = stripTrailingSlash(ocrApiUrl) + "/api/v1/process_invoice";
 
             ResponseEntity<String> response = restTemplate.postForEntity(pythonApiUrl, requestBody, String.class);
             System.out.println("Python przyjął zadanie. Status: " + response.getStatusCode());
@@ -439,4 +446,9 @@ public class InvoiceService {
 
         invoiceRepository.save(invoice);
     }
+
+    private static String stripTrailingSlash(String url) {
+        return url != null && url.endsWith("/") ? url.substring(0, url.length() - 1) : url;
+    }
+
 }
