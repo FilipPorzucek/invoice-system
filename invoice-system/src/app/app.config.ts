@@ -6,6 +6,7 @@ import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common
 import { provideTranslateService, TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import Aura from '@primeng/themes/aura';
+import { definePreset } from '@primeng/themes';
 
 import { routes } from './app.routes';
 import { authInterceptor } from './features/auth/auth.interceptor';
@@ -17,7 +18,10 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes),provideAnimationsAsync(), providePrimeNG({
             theme: {
-                preset: Aura
+                preset: SofPreset,
+                options: {
+                    darkModeSelector: '.app-dark-mode'
+                }
             }
         }),
        provideHttpClient(withInterceptors([authInterceptor])),

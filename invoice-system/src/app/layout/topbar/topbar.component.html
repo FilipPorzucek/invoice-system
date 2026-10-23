@@ -20,17 +20,48 @@
             <p-button *ngIf="getUser()?.role === 'ADMIN'"   icon="pi pi-user-plus" [label]="'topbar.dodajUzytkownika' | translate" severity="info" size="small" [rounded]="true" (onClick)="goToCreateUser()"></p-button>
     </div>
 
+    <nav class="sidebar-nav" aria-label="Menu główne">
+        <span class="nav-section">Menu</span>
 
-    <div class="p-toolbar-group-end topbar-section">
-      <span class="user-name">{{ getUserDisplayName() }}</span>
-        <p-avatar 
-            icon="pi pi-user" 
-            shape="circle" 
-            styleClass="user-avatar"
-            (click)="openDialog()">
-        </p-avatar>
+        <a class="nav-item" [routerLink]="getDashboardRoute()" routerLinkActive="active">
+            <i class="pi pi-home"></i>
+            Panel główny
+        </a>
+
+        <a *ngIf="getUser()?.role === 'EMPLOYEE'" class="nav-item" routerLink="/employee/invoice-upload" routerLinkActive="active">
+            <i class="pi pi-upload"></i>
+            Wgraj fakturę
+        </a>
+
+        <button *ngIf="getUser()?.role !== 'ADMIN'" type="button" class="nav-item">
+            <i class="pi pi-chart-bar"></i>
+            Wygeneruj raport
+        </button>
+
+        <a *ngIf="getUser()?.role === 'ADMIN'" class="nav-item" routerLink="/admin/ocr" routerLinkActive="active">
+            <i class="pi pi-cog"></i>
+            Ustawienia OCR
+        </a>
+
+        <a *ngIf="getUser()?.role === 'ADMIN'" class="nav-item" routerLink="/admin/users/create" routerLinkActive="active">
+            <i class="pi pi-user-plus"></i>
+            Dodaj użytkownika
+        </a>
+    </nav>
+
+    <div class="sidebar-user">
+        <button type="button" class="user-info" (click)="openDialog()" aria-label="Mój profil">
+            <span class="user-avatar">{{ getInitials() }}</span>
+            <span class="user-text">
+                <span class="user-name">{{ getUser()?.name || 'Użytkownik' }}</span>
+                <span class="user-role">{{ getRoleName() }}</span>
+            </span>
+        </button>
+        <button type="button" class="logout-icon" (click)="logout()" aria-label="Wyloguj się">
+            <i class="pi pi-sign-out"></i>
+        </button>
     </div>
-</p-toolbar>
+</aside>
 
 <p-dialog 
   [(visible)]="dialogVisible" 
@@ -39,10 +70,9 @@
   [header]="'topbar.mojProfil' | translate"
   [style]="{ width: '400px' }"
   styleClass="profile-dialog">
-  
+
   <ng-container *ngIf="isLoggedIn()">
     <div class="profile-content">
-      
       <div class="profile-header">
           <div class="profile-avatar-large">
               <i class="pi pi-user"></i>

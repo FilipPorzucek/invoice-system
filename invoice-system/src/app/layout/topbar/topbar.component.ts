@@ -1,7 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { ToolbarModule } from 'primeng/toolbar';
-import { ButtonModule } from 'primeng/button';
-import { AvatarModule } from 'primeng/avatar';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { DialogModule } from 'primeng/dialog';
@@ -64,6 +61,24 @@ export class TopbarComponent {
   navigateToRegister() {
     this.dialogVisible = false;
     this.router.navigate(['/register']);
+  }
+
+  getInitials(): string {
+    const user = this.getUser();
+    const first = user?.firstName?.charAt(0) ?? user?.name?.charAt(0) ?? '';
+    const last = user?.lastName?.charAt(0) ?? '';
+    return (first + last).toUpperCase() || '?';
+  }
+
+  getRoleName(): string {
+    const roles: Record<string, string> = {
+      'EMPLOYEE': 'Pracownik',
+      'ACCOUNTANT': 'Księgowa',
+      'MANAGER': 'Menadżer',
+      'ADMIN': 'Administrator'
+    };
+    const role = this.getUser()?.role;
+    return role ? roles[role] || role : '';
   }
 
   getDashboardRoute(): string {
