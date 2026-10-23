@@ -3,7 +3,6 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { DialogModule } from 'primeng/dialog';
 import { CommonModule } from '@angular/common';
-import { TranslatePipe } from '@ngx-translate/core';
 
 
 @Component({
@@ -12,11 +11,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     CommonModule,
     RouterModule,
-    ToolbarModule, 
-    ButtonModule, 
-    AvatarModule, 
-    DialogModule,
-    TranslatePipe 
+    DialogModule
   ],
   templateUrl: './topbar.component.html',
   styleUrl: './topbar.component.scss'
