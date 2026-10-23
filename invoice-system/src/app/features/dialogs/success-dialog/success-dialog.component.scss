@@ -1,0 +1,24 @@
+.success-dialog-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.5rem 0;
+}
+
+.success-dialog-icon {
+    font-size: 2.5rem;
+    color: #10b981;
+}
+
+.success-dialog-message {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #334155;
+}
+
+.success-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}

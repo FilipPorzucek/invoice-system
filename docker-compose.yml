@@ -25,6 +25,11 @@ services:
    - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/invoice-system
    - SPRING_DATASOURCE_USERNAME=postgres
    - SPRING_DATASOURCE_PASSWORD=1234
+   - MINIO_URL=http://host.docker.internal:9000
+   - OCR_API_URL=http://host.docker.internal:8000
+   - WEBHOOK_BASE_URL=http://host.docker.internal:8081
+  extra_hosts:
+   - "host.docker.internal:host-gateway"
   depends_on:
    - db
   networks:

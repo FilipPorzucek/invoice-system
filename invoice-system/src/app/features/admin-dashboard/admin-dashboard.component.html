@@ -1,4 +1,4 @@
-<p-card header="Użytkownicy">
+<p-card [header]="'adminDashboard.uzytkownicy' | translate">
     <p-table 
         [value]="users" 
         [loading]="isLoading"
@@ -7,12 +7,12 @@
         
         <ng-template pTemplate="header">
             <tr>
-                <th>ID</th>
-                <th>Imię i nazwisko</th>
-                <th>Email</th>
-                <th>Status</th>
-                <th>Rola</th>
-                <th class="text-center">Akcje</th>
+                <th>{{ 'adminDashboard.id' | translate }}</th>
+                <th>{{ 'adminDashboard.imieINazwisko' | translate }}</th>
+                <th>{{ 'common.email' | translate }}</th>
+                <th>{{ 'common.status' | translate }}</th>
+                <th>{{ 'common.rola' | translate }}</th>
+                <th class="text-center">{{ 'adminDashboard.akcje' | translate }}</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-user>
@@ -22,7 +22,7 @@
                 <td>{{ user.email }}</td>
                 <td>
                     <p-tag 
-                        [value]="user.isActive ? 'Aktywny' : 'Nieaktywny'" 
+                        [value]="(user.isActive ? 'adminDashboard.aktywny' : 'adminDashboard.nieaktywny') | translate" 
                         [severity]="user.isActive ? 'success' : 'danger'">
                     </p-tag>
                 </td>
@@ -33,15 +33,15 @@
                     </p-tag>
                 </td>
                 <td class="text-center flex justify-content-center gap-2">
-                    <p-button icon="pi pi-pencil" styleClass="p-button-rounded p-button-text p-button-info" pTooltip="Edytuj dane" tooltipPosition="bottom" (onClick)="openEditDialog(user)"></p-button>
-                    <p-button icon="pi pi-key" styleClass="p-button-rounded p-button-text p-button-warning" pTooltip="Zmień hasło" tooltipPosition="bottom"></p-button>
-                    <p-button icon="pi pi-trash" styleClass="p-button-rounded p-button-text p-button-danger" pTooltip="Usuń konto" tooltipPosition="bottom"></p-button>
+                    <p-button icon="pi pi-pencil" styleClass="p-button-rounded p-button-text p-button-info" [pTooltip]="'adminDashboard.edytujDane' | translate" tooltipPosition="bottom" (onClick)="openEditDialog(user)"></p-button>
+                    <p-button icon="pi pi-key" styleClass="p-button-rounded p-button-text p-button-warning" [pTooltip]="'adminDashboard.zmienHaslo' | translate" tooltipPosition="bottom"></p-button>
+                    <p-button icon="pi pi-trash" styleClass="p-button-rounded p-button-text p-button-danger" [pTooltip]="'adminDashboard.usunKonto' | translate" tooltipPosition="bottom"></p-button>
                 </td>
             </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
             <tr>
-                <td colspan="6" class="text-center p-4">Brak użytkowników do wyświetlenia.</td>
+                <td colspan="6" class="text-center p-4">{{ 'adminDashboard.brakUzytkownikowDoWyswietlenia' | translate }}</td>
             </tr>
         </ng-template>
     </p-table>

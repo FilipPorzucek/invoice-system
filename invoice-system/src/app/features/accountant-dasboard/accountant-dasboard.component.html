@@ -1,11 +1,12 @@
 <div style="background: white; padding: 2rem; border-radius: 12px; border: 1px solid #dee2e6;">
-    <h2 style="margin-top: 0; margin-bottom: 1.5rem; color: #334155;">Twoje faktury</h2>
+    <h2 style="margin-top: 0; margin-bottom: 1.5rem; color: #334155;">{{ 'common.twojeFaktury' | translate }}</h2>
 
     <div #fakeScroll style="overflow-x: auto; height: 16px; margin-bottom: 8px;" (scroll)="onTopScroll()">
         <div #fakeContent style="height: 1px;"></div>
     </div>
     
     <p-table 
+        #dt
         [value]="invoices" 
         [paginator]="true" 
         [rows]="50" 
@@ -20,32 +21,43 @@
        <ng-template pTemplate="header">
             <tr>
                 <th style="min-width: 180px" pSortableColumn="status">
-                    Status <p-sortIcon field="status"></p-sortIcon>
+                    {{ 'common.status' | translate }} <p-sortIcon field="status"></p-sortIcon>
                 </th>
                 <th style="min-width: 200px" pSortableColumn="invoiceNumber">
-                    Numer faktury <p-sortIcon field="invoiceNumber"></p-sortIcon>
+                    {{ 'common.numerFaktury' | translate }} <p-sortIcon field="invoiceNumber"></p-sortIcon>
                 </th>
                 <th style="min-width: 150px" pSortableColumn="issueDate">
-                    Data wystawienia <p-sortIcon field="issueDate"></p-sortIcon>
+                    {{ 'common.dataWystawienia' | translate }} <p-sortIcon field="issueDate"></p-sortIcon>
                 </th>
                 <th style="min-width: 250px" pSortableColumn="supplier.name">
-                    Firma<p-sortIcon field="supplier.name"></p-sortIcon>
+                    {{ 'common.firma' | translate }}<p-sortIcon field="supplier.name"></p-sortIcon>
                 </th>
                 <th style="min-width: 150px" pSortableColumn="supplier.nip">
-                    NIP <p-sortIcon field="supplier.nip"></p-sortIcon>
+                    {{ 'common.nip' | translate }} <p-sortIcon field="supplier.nip"></p-sortIcon>
                 </th>
                 <th style="min-width: 250px" pSortableColumn="supplier.address">
-                    Adres firmy <p-sortIcon field="supplier.address"></p-sortIcon>
+                    {{ 'common.adresFirmy' | translate }} <p-sortIcon field="supplier.address"></p-sortIcon>
                 </th>
                 <th style="min-width: 300px">
-                    Kupione przedmioty
+                    {{ 'common.kupionePrzedmioty' | translate }}
                 </th>
                 <th style="min-width: 150px" pSortableColumn="netAmount">
-                    Kwota Netto <p-sortIcon field="netAmount"></p-sortIcon>
+                    {{ 'common.kwotaNetto' | translate }} <p-sortIcon field="netAmount"></p-sortIcon>
                 </th>
                 <th style="min-width: 150px" pSortableColumn="grossAmount">
-                    Kwota Brutto <p-sortIcon field="grossAmount"></p-sortIcon>
+                    {{ 'common.kwotaBrutto' | translate }} <p-sortIcon field="grossAmount"></p-sortIcon>
                 </th>
+            </tr>
+            <tr class="filter-row">
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj status" (input)="dt.filter($any($event.target).value, 'statusName', 'startsWith')" /></th>
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj numer" (input)="dt.filter($any($event.target).value, 'invoiceNumber', 'startsWith')" /></th>
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj datę" (input)="dt.filter($any($event.target).value, 'issueDate', 'startsWith')" /></th>
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj firmę" (input)="dt.filter($any($event.target).value, 'supplier.name', 'startsWith')" /></th>
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj NIP" (input)="dt.filter($any($event.target).value, 'supplier.nip', 'startsWith')" /></th>
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj adres" (input)="dt.filter($any($event.target).value, 'supplier.address', 'startsWith')" /></th>
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj przedmioty" (input)="dt.filter($any($event.target).value, 'itemsText', 'contains')" /></th>
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj netto" (input)="dt.filter($any($event.target).value, 'netAmount', 'startsWith')" /></th>
+                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj brutto" (input)="dt.filter($any($event.target).value, 'grossAmount', 'startsWith')" /></th>
             </tr>
         </ng-template>
         
@@ -60,7 +72,7 @@
                     </p-tag>
                 </td>
                 <td style="font-weight: 500;">{{ invoice.invoiceNumber }}</td>
-                <td>{{ invoice.issueDate || 'Brak daty' }}</td>
+                <td>{{ invoice.issueDate || ('common.brakDaty' | translate) }}</td>
                 <td >{{ invoice.supplier?.name || '---' }}</td>
                 <td>{{ invoice.supplier?.nip || '---' }}</td>
                 <td>{{ invoice.supplier?.address || '---' }}</td>
@@ -74,7 +86,7 @@
                         </div>
                     </ng-container>
                     <ng-template #noItems>
-                        <span style="color: gray;">Brak pozycji</span>
+                        <span style="color: gray;">{{ 'common.brakPozycji' | translate }}</span>
                     </ng-template>
                 </td>
                 
@@ -86,7 +98,7 @@
         <ng-template pTemplate="emptymessage">
             <tr>
                 <td colspan="7" style="text-align: center; padding: 2rem; color: #64748b;">
-                    Brak wgranych faktur. Użyj przycisku u góry, aby dodać pierwszą.
+                    {{ 'common.brakWgranychFakturUzyjPrzycisku' | translate }}
                 </td>
             </tr>
         </ng-template>
