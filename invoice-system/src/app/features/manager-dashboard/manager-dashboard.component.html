@@ -1,5 +1,27 @@
+<div class="page-header">
+    <div class="page-heading">
+        <h1 class="page-title">Faktury do akceptacji</h1>
+        <p class="page-subtitle">Faktury przekraczające limit kwotowy, zweryfikowane przez księgowość.</p>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <span class="stat-label">Do akceptacji</span>
+        <span class="stat-value stat-orange">{{ invoiceCount }}</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-label">Łączna kwota brutto</span>
+        <span class="stat-value">{{ totalGrossAmount }}</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-label">Najwyższa kwota</span>
+        <span class="stat-value stat-blue">{{ highestGrossAmount }}</span>
+    </div>
+</div>
+
 <div style="background: white; padding: 2rem; border-radius: 12px; border: 1px solid #dee2e6;">
-    <h2 style="margin-top: 0; margin-bottom: 1.5rem; color: #334155;">{{ 'managerDashboard.fakturyDoAkceptacji' | translate }}</h2>
+    <h2 style="margin-top: 0; margin-bottom: 1.5rem; color: #334155;">Lista faktur</h2>
     
     <p-table 
         [value]="invoices" 
