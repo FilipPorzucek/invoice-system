@@ -90,7 +90,7 @@ getOcrPodStatus(): Observable<any> {
   }
 
   getSuppliers(): Observable<any[]> {
-  return this.http.get<any[]>('http://localhost:8081/api/invoices/suppliers');
+  return this.http.get<any[]>(`${this.apiUrl}/suppliers`);
 }
   
 }
