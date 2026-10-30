@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -57,11 +58,12 @@ public class Invoice {
     @Column(name = "issue_date")
     private LocalDate issueDate;
 
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
-
     @Column(name = "rejection_reason")
     private String rejectionReason;
+
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
 
 }
