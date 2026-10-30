@@ -38,13 +38,17 @@
       </div>
       <div class="form-row">
         <div class="form-field">
-          <label>Status (ID)</label>
-          <input pInputText type="number" formControlName="status_id" placeholder="np. 1" />
+          <label>Status faktury</label>
+          <p-dropdown [options]="statuses" formControlName="status_id" placeholder="Wybierz status" optionLabel="label"
+            optionValue="value" [showClear]="true" styleClass="w-full">
+          </p-dropdown>
         </div>
         <div class="form-field">
-          <label>Dostawca (ID)</label>
-          <input pInputText type="number" formControlName="supplier_id" placeholder="np. 3" />
-        </div>
+  <label>Dostawca</label>
+  <p-dropdown [options]="suppliers" formControlName="supplier_id" placeholder="Wszyscy dostawcy" optionLabel="name"
+    optionValue="supplierId" [filter]="true" filterBy="name" [showClear]="true" styleClass="w-full">
+  </p-dropdown>
+  </div>
       </div>
 
       <div class="form-row">

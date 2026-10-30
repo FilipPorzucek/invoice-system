@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.cdv.api.dto.InvoiceDto;
+import pl.cdv.api.entity.Suppliers;
+import pl.cdv.api.repository.SupplierRepository;
 import pl.cdv.api.services.InvoiceService;
 
 import java.security.Principal;
@@ -19,6 +21,7 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:4200")
 public class FrontendInvoiceController {
     private final InvoiceService invoiceService;
+    private final SupplierRepository supplierRepository;
 
     @GetMapping("/new")
     public List<InvoiceDto> getNewInvoices(Principal principal){
@@ -83,5 +86,10 @@ public class FrontendInvoiceController {
     public ResponseEntity<String> approveInvoiceByManager(@PathVariable Long id) {
         invoiceService.approveByManager(id);
         return ResponseEntity.ok("Faktura została zaksiegowana przez menadżera");
+    }
+
+    @GetMapping("/suppliers")
+    public ResponseEntity<List<Suppliers>> getAllSuppliers() {
+        return ResponseEntity.ok(supplierRepository.findAll());
     }
 }

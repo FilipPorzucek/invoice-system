@@ -8,6 +8,7 @@ import { CardModule } from 'primeng/card';
 import { InvoiceService } from '../../core/services/invoice.service';
 import { InvoiceReportFilters } from '../../core/model/InvoiceReportFilters.model';
 import { AuthService } from '../../core/services/auth.service';
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
   selector: 'app-report-generate',
@@ -17,7 +18,8 @@ import { AuthService } from '../../core/services/auth.service';
     CalendarModule,
     InputTextModule,
     ButtonModule,
-    CardModule
+    CardModule,
+    DropdownModule
   ],
   templateUrl: './report-generate.component.html',
   styleUrls: ['./report-generate.component.scss'],
@@ -31,6 +33,15 @@ export class ReportGenerateComponent {
 
   reportForm: FormGroup;
   isLoading = false;
+  suppliers: any[] = [];
+
+  readonly statuses = [
+    { label: 'Nowa', value: 5 },
+    { label: 'Oczekuje na menadżera', value: 2 },
+    { label: 'Oczekuje na księgową', value: 1 },
+    { label: 'Odrzucona', value: 3 },
+    { label: 'Zaksięgowana', value: 4 }
+  ];
 
   constructor(
     private invoiceService:InvoiceService,
@@ -54,13 +65,9 @@ ngOnInit(): void {
 
     if (user) {
       this.userRole = user.role || '';
-      // Sprawdzamy pole id oraz ewentualne alternatywne nazwy z tokena (userId)
       this.currentUserId = user.id ?? (user as any).userId ?? null;
-      console.log('2. [ODCZYTANA ROLA]:', this.userRole);
-      console.log('3. [ODCZYTANE ID]:', this.currentUserId);
-    } else {
-      console.warn('⚠️ [AUTH]: Obiekt user jest pusty (null/undefined) w ngOnInit!');
-    }
+    } 
+    this.loadSuppliers();
   }
 
 generateReport(): void {
@@ -94,6 +101,15 @@ generateReport(): void {
         this.isLoading = false;
         console.error('Błąd generowania raportu:', err);
       }
+    });
+  }
+
+  private loadSuppliers(): void {
+    this.invoiceService.getSuppliers().subscribe({
+      next: (data) => {
+        this.suppliers = data;
+      },
+      error: (err) => console.error('Błąd pobierania dostawców:', err)
     });
   }
 
