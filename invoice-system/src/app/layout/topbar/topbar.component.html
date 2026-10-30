@@ -23,7 +23,7 @@
             Wgraj fakturę
         </a>
 
-        <button *ngIf="getUser()?.role !== 'ADMIN'" type="button" class="nav-item">
+        <button *ngIf="getUser()?.role !== 'ADMIN'" type="button" class="nav-item" [routerLink]="['/' + getUser()?.role?.toLowerCase(), 'reports']">
             <i class="pi pi-chart-bar"></i>
             Wygeneruj raport
         </button>

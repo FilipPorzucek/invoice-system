@@ -11,6 +11,7 @@ import { EmployeeInvoiceViewComponent } from './features/employee-invoice-view/e
 import { ManagerLayoutComponent } from './layout/manager-layout/manager-layout.component';
 import { ManagerInvoiceViewComponent } from './features/manager-invoice-view/manager-invoice-view.component';
 import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
+import { ReportGenerateComponent } from './features/report-generate/report-generate.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -31,7 +32,8 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', loadComponent: () => import('./features/employee-dashboard/employee-dashboard.component').then(c => c.EmployeeDashboardComponent) },
       { path: 'invoice-upload', component: InvoiceUploadComponent },
-      { path: 'invoice/:id', component: EmployeeInvoiceViewComponent }
+      { path: 'invoice/:id', component: EmployeeInvoiceViewComponent },
+      { path: 'reports', component: ReportGenerateComponent }
     ]
   },
 
@@ -42,7 +44,8 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, 
       { path: 'dashboard', loadComponent: () => import('./features/accountant-dasboard/accountant-dasboard.component').then(c => c.AccountantDasboardComponent) },
-      { path: 'invoice/:id', component: AccountantInvoiceViewComponent }
+      { path: 'invoice/:id', component: AccountantInvoiceViewComponent },
+      { path: 'reports', component: ReportGenerateComponent }
     ]
   },
 
@@ -53,7 +56,8 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', loadComponent: () => import('./features/manager-dashboard/manager-dashboard.component').then(c => c.ManagerDashboardComponent) },
-      { path: 'invoice/:id', component: ManagerInvoiceViewComponent }
+      { path: 'invoice/:id', component: ManagerInvoiceViewComponent },
+      { path: 'reports', component: ReportGenerateComponent }
     ]
   },
   {

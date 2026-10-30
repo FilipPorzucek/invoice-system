@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Invoice } from '../model/invoice.model';
+import { InvoiceReportFilters, InvoiceReportResponse } from '../model/InvoiceReportFilters.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,8 @@ export class InvoiceService {
 
   private apiUrl="http://localhost:8081/api/invoices";
   private ocrPodApiUrl = 'http://localhost:8000/api/v1/pod';
+  private readonly reportsApiUrl = 'http://localhost:8000/api/v1/reports/invoices';
+  private readonly minioBaseUrl = 'http://localhost:9000';
 
   getEmployeeInvoices():Observable<Invoice[]>{
     return this.http.get<Invoice[]>(`${this.apiUrl}/new`)
@@ -67,6 +70,23 @@ getOcrPodStatus(): Observable<any> {
 
   stopOcrPod(): Observable<any> {
     return this.http.post<any>(`${this.ocrPodApiUrl}/stop`, {});
+  }
+
+  generateInvoicesReport(filters: InvoiceReportFilters): Observable<InvoiceReportResponse> {
+    return this.http.post<InvoiceReportResponse>(this.reportsApiUrl, filters);
+  }
+
+  downloadReport(filePath: string): void {
+    const downloadUrl = `${this.minioBaseUrl}/reports/${filePath}`;
+    const fileName = filePath.split('/').pop() || 'raport_faktur.xlsx';
+
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = fileName;
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
   
 }

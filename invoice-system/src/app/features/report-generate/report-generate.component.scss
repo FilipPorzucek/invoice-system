@@ -1,0 +1,98 @@
+.report-container {
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 1rem 0;
+}
+
+.report-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--app-heading);
+  border-bottom: 1px solid var(--app-border);
+  padding-bottom: 0.5rem;
+  margin-top: 0.5rem;
+
+  i {
+    color: var(--app-primary);
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+
+  .form-field {
+    flex: 1;
+  }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-weight: 500;
+    color: #475569;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--app-border);
+}
+
+:host ::ng-deep {
+  .p-calendar {
+    width: 100%;
+    
+    input {
+      width: 100%;
+    }
+  }
+
+  .p-inputtext:enabled:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+    outline: none !important;
+  }
+
+  .p-datepicker:focus-within .p-datepicker-dropdown {
+    border-color: #3b82f6 !important;
+  }
+
+  .p-datepicker-day-selected {
+    background: #3b82f6 !important;
+    color: #ffffff !important;
+  }
+
+  .p-datepicker-prev-button,
+  .p-datepicker-next-button {
+    color: #3b82f6 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+  }
+}

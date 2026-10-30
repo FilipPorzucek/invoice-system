@@ -1,0 +1,77 @@
+<div class="report-container">
+  <p-card header="Generowanie raportu faktur">
+    <form [formGroup]="reportForm" (ngSubmit)="generateReport()" class="report-form">
+      
+      <div class="section-header">
+        <i class="pi pi-calendar"></i>
+        <span>Data wystawienia faktury</span>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Data od</label>
+          <p-calendar formControlName="issue_date_from" dateFormat="yy-mm-dd" placeholder="RRRR-MM-DD" [showIcon]="true"></p-calendar>
+        </div>
+        <div class="form-field">
+          <label>Data do</label>
+          <p-calendar formControlName="issue_date_to" dateFormat="yy-mm-dd" placeholder="RRRR-MM-DD" [showIcon]="true"></p-calendar>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <i class="pi pi-clock"></i>
+        <span>Data dodania do systemu</span>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Dodano od</label>
+          <p-calendar formControlName="created_at_from" dateFormat="yy-mm-dd" placeholder="RRRR-MM-DD" [showIcon]="true"></p-calendar>
+        </div>
+        <div class="form-field">
+          <label>Dodano do</label>
+          <p-calendar formControlName="created_at_to" dateFormat="yy-mm-dd" placeholder="RRRR-MM-DD" [showIcon]="true"></p-calendar>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <i class="pi pi-filter"></i>
+        <span>Kryteria dodatkowe</span>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Status (ID)</label>
+          <input pInputText type="number" formControlName="status_id" placeholder="np. 1" />
+        </div>
+        <div class="form-field">
+          <label>Dostawca (ID)</label>
+          <input pInputText type="number" formControlName="supplier_id" placeholder="np. 3" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label>Użytkownik wgrywający (ID)</label>
+          <input pInputText type="number" formControlName="uploaded_by" placeholder="np. 5" />
+        </div>
+        <div class="form-field">
+          <label>Waluta</label>
+          <input pInputText type="text" formControlName="currency" maxlength="3" placeholder="PLN / EUR" />
+        </div>
+        <div class="form-field">
+          <label>Limit rekordów</label>
+          <input pInputText type="number" formControlName="limit" placeholder="50000" />
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <p-button 
+          type="submit" 
+          label="Generuj raport" 
+          icon="pi pi-download" 
+          [loading]="isLoading"
+          [disabled]="reportForm.invalid || isLoading">
+        </p-button>
+      </div>
+
+    </form>
+  </p-card>
+</div>
