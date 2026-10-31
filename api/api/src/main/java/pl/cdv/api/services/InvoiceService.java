@@ -21,6 +21,7 @@ import pl.cdv.api.repository.*;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -202,6 +203,8 @@ public class InvoiceService {
                 .orElseThrow(() -> new RuntimeException("Brak statusu " + targetStatusName + " w bazie!"));
 
         invoice.setStatus(status);
+        invoice.setLockedBy(null);
+        invoice.setLockedAt(null);
         invoiceRepository.save(invoice);
     }
 
@@ -303,10 +306,40 @@ public class InvoiceService {
         }
     }
 
-    @Transactional(readOnly = true)
-    public InvoiceDto getInvoiceById(Long id) {
+    @Transactional
+    public InvoiceDto getInvoiceById(Long id,String userEmail) {
         Invoice invoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Nie znaleziono faktury o ID: " + id));
+
+        User currentUser = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono użytkownika: " + userEmail));
+
+        String userRole = currentUser.getRole() != null ? currentUser.getRole().getName() : "";
+        String statusName = invoice.getStatus() != null ? invoice.getStatus().getName() : "";
+
+        boolean isVerifyingAccountant = "ACCOUNTANT".equals(userRole) && "PENDING_ACCOUNTANT".equals(statusName);
+        boolean isVerifyingManager = "MANAGER".equals(userRole) && "PENDING_MANAGER".equals(statusName);
+        if (isVerifyingAccountant || isVerifyingManager) {
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime expirationThreshold = now.minusMinutes(10);
+
+            boolean isLockedByOther = invoice.getLockedBy() != null
+                    && !invoice.getLockedBy().getUserId().equals(currentUser.getUserId())
+                    && invoice.getLockedAt() != null
+                    && invoice.getLockedAt().isAfter(expirationThreshold);
+
+            if (isLockedByOther) {
+                String lockedByName = invoice.getLockedBy().getFirstName() + " " + invoice.getLockedBy().getLastName();
+                throw new org.springframework.web.server.ResponseStatusException(
+                        org.springframework.http.HttpStatus.LOCKED,
+                        "Faktura jest obecnie weryfikowana przez: " + lockedByName
+                );
+            }
+
+            invoice.setLockedBy(currentUser);
+            invoice.setLockedAt(now);
+            invoiceRepository.save(invoice);
+        }
 
         InvoiceDto dto = new InvoiceDto();
         dto.setId(invoice.getInvoiceId());
@@ -429,6 +462,8 @@ public class InvoiceService {
 
         invoice.setStatus(rejectedStatus);
         invoice.setRejectionReason(reason);
+        invoice.setLockedBy(null);
+        invoice.setLockedAt(null);
 
         invoiceRepository.save(invoice);
     }
@@ -443,6 +478,8 @@ public class InvoiceService {
 
         invoice.setStatus(bookedStatus);
         invoice.setRejectionReason(null);
+        invoice.setLockedBy(null);
+        invoice.setLockedAt(null);
 
         invoiceRepository.save(invoice);
     }

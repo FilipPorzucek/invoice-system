@@ -117,7 +117,15 @@ export class AccountantInvoiceViewComponent implements OnInit {
         error: (err) => console.error('Błąd pobierania pliku PDF z backendu:', err)
       });
       },
-      error: (err) => console.error('Błąd pobierania faktury:', err)
+      error: (err) => {
+      if (err.status === 423) {
+        const errorMsg = err.error?.message || 'Faktura jest obecnie weryfikowana przez innego użytkownika.';
+        alert(errorMsg); 
+        this.router.navigate(['/accountant/dashboard']); 
+      } else {
+        console.error('Błąd pobierania faktury:', err);
+      }
+    }
     });
   }
 

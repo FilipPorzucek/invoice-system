@@ -49,8 +49,8 @@ public class FrontendInvoiceController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InvoiceDto> getInvoiceById(@PathVariable Long id) {
-        InvoiceDto dto = invoiceService.getInvoiceById(id);
+    public ResponseEntity<InvoiceDto> getInvoiceById(@PathVariable Long id,Principal principal) {
+        InvoiceDto dto = invoiceService.getInvoiceById(id,principal.getName());
         return ResponseEntity.ok(dto);
     }
 

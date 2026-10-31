@@ -65,5 +65,12 @@ public class Invoice {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "locked_by")
+    private User lockedBy;
+
+    @Column(name = "locked_at")
+    private LocalDateTime lockedAt;
+
 
 }
