@@ -132,7 +132,21 @@
     "wyciaganieDanychZPliku": "Wyciąganie danych z pliku",
     "wystapilProblemPodczasZapisywaniaFaktury": "Wystąpił problem podczas zapisywania faktury, sprawdź uzupełnione dane.",
     "zamknij": "Zamknij",
-    "zapiszFakture": "Zapisz fakturę"
+    "zapiszFakture": "Zapisz fakturę",
+    "walidacja": {
+      "bruttoMniejszeOdNetto": "Kwota brutto nie może być mniejsza niż netto.",
+      "dataZPrzyszlosci": "Data wystawienia nie może być z przyszłości.",
+      "nieMozeBycUjemne": "Wartość nie może być ujemna.",
+      "nieprawidlowaData": "Nieprawidłowa data. Wymagany format RRRR-MM-DD.",
+      "nieprawidlowaWartosc": "Nieprawidłowa wartość.",
+      "nipFormat": "NIP musi składać się z 10 cyfr.",
+      "numerFakturyFormat": "Nieprawidłowy numer faktury (cyfry, litery oraz / - _ .).",
+      "numerKontaFormat": "Numer konta musi mieć 26 cyfr (lub poprawny IBAN).",
+      "poleWymagane": "Pole wymagane.",
+      "vatZakres": "Stawka VAT musi być w zakresie 0–100.",
+      "walutaFormat": "Waluta musi mieć 3 litery, np. PLN.",
+      "wiekszeOdZera": "Wartość musi być większa od zera."
+    }
   },
   "login": {
     "nieMaszKonta": "Nie masz konta?"
