@@ -118,12 +118,18 @@
         <p-card styleClass="h-full preview-card">
             <div *ngIf="pdfPreviewUrl" class="pdf-viewer-area">
                 <pdf-viewer
+                    *ngIf="isPdfPreview"
                     [src]="pdfPreviewUrl"
                     [render-text]="true"
                     [original-size]="false"
                     [fit-to-page]="true"
                     style="display: block; width: 100%;">
                 </pdf-viewer>
+                <img
+                    *ngIf="!isPdfPreview"
+                    [src]="pdfPreviewUrl"
+                    [alt]="'invoiceUpload.podgladFaktury' | translate"
+                    style="max-width: 100%; max-height: 600px; object-fit: contain; margin: 0 auto; display: block;" />
             </div>
             <div *ngIf="!pdfPreviewUrl" class="flex align-items-center justify-content-center h-full text-500">
                 {{ 'common.ladowaniePodgladuDokumentu' | translate }}

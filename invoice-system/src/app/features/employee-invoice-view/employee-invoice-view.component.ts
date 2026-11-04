@@ -12,6 +12,7 @@ import { InvoiceService } from '../../core/services/invoice.service';
 import { DialogModule } from 'primeng/dialog';
 import { SuccessDialogComponent } from '../dialogs/success-dialog/success-dialog.component';
 import { TranslatePipe } from '@ngx-translate/core';
+import { isPdfBlob } from '../../core/utils/file-preview.utils';
 
 @Component({
   selector: 'app-employee-invoice-view',
@@ -33,6 +34,7 @@ private fb = inject(FormBuilder);
   invoiceForm: FormGroup;
   invoiceId!: number;
   pdfPreviewUrl: string | null = null;
+  isPdfPreview = true;
   rejectionReason: string | null = null;
   invoiceStatus: string = '';
   isSubmitting: boolean=false;
@@ -115,7 +117,10 @@ private fb = inject(FormBuilder);
 
         this.invoiceService.downloadInvoiceFile(this.invoiceId).subscribe({
         next: (blob: Blob) => {
-          this.pdfPreviewUrl = URL.createObjectURL(blob);
+          isPdfBlob(blob).then(isPdf => {
+            this.isPdfPreview = isPdf;
+            this.pdfPreviewUrl = URL.createObjectURL(blob);
+          });
         },
         error: (err) => console.error('Błąd pobierania pliku PDF:', err)
       });

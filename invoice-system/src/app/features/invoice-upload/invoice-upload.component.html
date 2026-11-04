@@ -109,10 +109,10 @@
             <div *ngIf="!selectedFile" class="upload-area">
                 <p-fileUpload 
     mode="advanced" 
-    [chooseLabel]="'invoiceUpload.wybierzPlikPdf' | translate" 
+    [chooseLabel]="'invoiceUpload.wybierzPlik' | translate" 
     chooseIcon="pi pi-plus"
     chooseStyleClass="p-button-info p-button-rounded"
-    accept="application/pdf"
+    [accept]="acceptedFileTypes"
     maxFileSize="5000000"
     [customUpload]="true"
     (onSelect)="onFileSelect($event)"
@@ -132,6 +132,7 @@
 
             <div *ngIf="pdfPreviewUrl && !isProcessing" class="pdf-viewer-area">
    <pdf-viewer 
+        *ngIf="isPdfFile"
         [src]="pdfPreviewUrl" 
         [render-text]="true"
         [original-size]="false" 
@@ -140,7 +141,7 @@
     </pdf-viewer>
 
     <img 
-    *ngIf="selectedFile?.type !== 'application/pdf'"
+    *ngIf="!isPdfFile"
     [src]="pdfPreviewUrl"
     [alt]="'invoiceUpload.podgladFaktury' | translate"
     style="max-width: 100%; max-height: 600px; object-fit: contain; margin: 0 auto; display: block;" />
