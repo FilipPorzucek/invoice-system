@@ -53,7 +53,7 @@
                 <th style="min-width: 200px" pSortableColumn="invoiceNumber">
                     {{ 'common.numerFaktury' | translate }} <p-sortIcon field="invoiceNumber"></p-sortIcon>
                 </th>
-                <th style="min-width: 150px" pSortableColumn="issueDate">
+                <th style="min-width: 200px" pSortableColumn="issueDate">
                     {{ 'common.dataWystawienia' | translate }} <p-sortIcon field="issueDate"></p-sortIcon>
                 </th>
                 <th style="min-width: 250px" pSortableColumn="supplier.name">
@@ -78,7 +78,32 @@
             <tr class="filter-row">
                 <th><input pInputText type="text" class="column-filter" placeholder="Filtruj status" (input)="dt.filter($any($event.target).value, 'statusName', 'startsWith')" /></th>
                 <th><input pInputText type="text" class="column-filter" placeholder="Filtruj numer" (input)="dt.filter($any($event.target).value, 'invoiceNumber', 'startsWith')" /></th>
-                <th><input pInputText type="text" class="column-filter" placeholder="Filtruj datę" (input)="dt.filter($any($event.target).value, 'issueDate', 'startsWith')" /></th>
+                <th>
+                    <div class="date-range-filter">
+                        <p-datepicker
+                            [(ngModel)]="dateRange.from"
+                            (ngModelChange)="applyDateFilter(dt)"
+                            [maxDate]="dateRange.to"
+                            dateFormat="yy-mm-dd"
+                            placeholder="Data od"
+                            [showIcon]="true"
+                            [showButtonBar]="true"
+                            appendTo="body"
+                            styleClass="date-filter">
+                        </p-datepicker>
+                        <p-datepicker
+                            [(ngModel)]="dateRange.to"
+                            (ngModelChange)="applyDateFilter(dt)"
+                            [minDate]="dateRange.from"
+                            dateFormat="yy-mm-dd"
+                            placeholder="Data do"
+                            [showIcon]="true"
+                            [showButtonBar]="true"
+                            appendTo="body"
+                            styleClass="date-filter">
+                        </p-datepicker>
+                    </div>
+                </th>
                 <th><input pInputText type="text" class="column-filter" placeholder="Filtruj firmę" (input)="dt.filter($any($event.target).value, 'supplier.name', 'startsWith')" /></th>
                 <th><input pInputText type="text" class="column-filter" placeholder="Filtruj NIP" (input)="dt.filter($any($event.target).value, 'supplier.nip', 'startsWith')" /></th>
                 <th><input pInputText type="text" class="column-filter" placeholder="Filtruj adres" (input)="dt.filter($any($event.target).value, 'supplier.address', 'startsWith')" /></th>

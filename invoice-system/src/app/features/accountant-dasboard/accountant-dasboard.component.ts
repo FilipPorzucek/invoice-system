@@ -7,10 +7,15 @@ import { TagModule } from 'primeng/tag';
 import { InputTextModule } from 'primeng/inputtext';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { FormsModule } from '@angular/forms';
+import { DatePickerModule } from 'primeng/datepicker';
+import { Table } from 'primeng/table';
+import { FilterService } from 'primeng/api';
+import { DATE_RANGE_FILTER, DateRange, registerDateRangeFilter } from '../../core/utils/date-range-filter.utils';
 
 @Component({
   selector: 'app-employee-dashboard',
-  imports: [CommonModule, TableModule, TagModule, InputTextModule,TranslatePipe],
+  imports: [CommonModule, TableModule, TagModule, InputTextModule, TranslatePipe, FormsModule, DatePickerModule],
   templateUrl: './accountant-dasboard.component.html',
   styleUrl: './accountant-dasboard.component.scss'
 })
@@ -18,13 +23,21 @@ export class AccountantDasboardComponent {
 invoices: (Invoice & { statusName: string; itemsText: string })[] = [];
 private invoiceService = inject(InvoiceService);
 private router = inject(Router);
+private filterService = inject(FilterService);
+
+dateRange: DateRange = { from: null, to: null };
 
 @ViewChild('fakeScroll') fakeScroll!: ElementRef;
   @ViewChild('fakeContent') fakeContent!: ElementRef;
   private realWrapper!: HTMLElement | null;
 
   ngOnInit(): void {
+    registerDateRangeFilter(this.filterService);
     this.loadInvoices();
+  }
+
+  applyDateFilter(table: Table): void {
+    table.filter({ ...this.dateRange }, 'issueDate', DATE_RANGE_FILTER);
   }
 
   ngAfterViewInit() {
