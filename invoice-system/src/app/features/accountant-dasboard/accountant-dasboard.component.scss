@@ -12,6 +12,7 @@
 
 .filter-row th {
     padding: 0.5rem 0.75rem;
+    vertical-align: top;
 }
 
 :host ::ng-deep .filter-row {
@@ -20,10 +21,52 @@
         padding: 0.4rem 0.6rem;
         font-size: 0.85rem;
         font-weight: 400;
+        text-transform: none;
+        letter-spacing: normal;
     }
 
     .column-filter:enabled:focus {
         border-color: #3b82f6 !important;
         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+    }
+
+    .date-range-filter {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .date-filter {
+        width: 100%;
+
+        .p-inputtext {
+            width: 100%;
+            padding: 0.4rem 0.6rem;
+            font-size: 0.85rem;
+            font-weight: 400;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .p-inputtext:enabled:focus {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+        }
+
+        .p-datepicker-dropdown {
+            padding: 0.4rem;
+        }
+    }
+}
+
+::ng-deep .p-datepicker-panel {
+    .p-datepicker-day-selected {
+        background: #3b82f6 !important;
+        color: #ffffff !important;
+    }
+
+    .p-datepicker-prev-button,
+    .p-datepicker-next-button {
+        color: #3b82f6 !important;
     }
 }
