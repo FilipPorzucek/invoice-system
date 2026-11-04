@@ -13,6 +13,15 @@ import { DialogModule } from 'primeng/dialog';
 import { CalendarModule } from 'primeng/calendar';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import {
+  bankAccountValidator,
+  currencyValidator,
+  grossNotLowerThanNetValidator,
+  invoiceNumberValidator,
+  issueDateValidator,
+  nipValidator,
+  positiveNumberValidator
+} from '../../core/validators/invoice.validators';
 @Component({
   selector: 'app-invoice-upload',
   imports: [CommonModule,
@@ -51,22 +60,22 @@ export class InvoiceUploadComponent {
 
   constructor(){
     this.invoiceForm = this.fb.group({
-      invoiceNumber: [{ value: '', disabled: true }, Validators.required],
-      issueDate: [{ value: '', disabled: true }, Validators.required],
-      currency: [{ value: 'PLN', disabled: true }, Validators.required],
-      netAmount: [{ value: '', disabled: true }, Validators.required],
-      grossAmount: [{ value: '', disabled: true }, Validators.required],
+      invoiceNumber: [{ value: '', disabled: true }, [Validators.required, invoiceNumberValidator]],
+      issueDate: [{ value: '', disabled: true }, [Validators.required, issueDateValidator]],
+      currency: [{ value: 'PLN', disabled: true }, [Validators.required, currencyValidator]],
+      netAmount: [{ value: '', disabled: true }, [Validators.required, Validators.min(0)]],
+      grossAmount: [{ value: '', disabled: true }, [Validators.required, Validators.min(0)]],
       minioFilePath:[''],
 
       supplier: this.fb.group({
-        nip: [{ value: '', disabled: true }, Validators.required],
+        nip: [{ value: '', disabled: true }, [Validators.required, nipValidator]],
         name: [{ value: '', disabled: true }, Validators.required],
         address: [{ value: '', disabled: true }, Validators.required],
-        bankAccountNumber: [{ value: '', disabled: true }, Validators.required]
+        bankAccountNumber: [{ value: '', disabled: true }, [Validators.required, bankAccountValidator]]
       }),
 
       items: this.fb.array([])
-    });
+    }, { validators: grossNotLowerThanNetValidator });
     this.items.push(this.createItemFormGroup('',0,0,0,0))
   }
 
@@ -78,11 +87,46 @@ export class InvoiceUploadComponent {
     const isDisabled=!this.isOcrDone;
     return this.fb.group({
       name: [{ value: name, disabled: isDisabled }, Validators.required],
-      quantity: [{ value: quantity, disabled: isDisabled }, Validators.required],
-      netPrice: [{ value: netPrice, disabled: isDisabled }, Validators.required],
-      netValue: [{ value: netValue, disabled: isDisabled }, Validators.required],
-      taxRate: [{ value: taxRate, disabled: isDisabled }, Validators.required]
+      quantity: [{ value: quantity, disabled: isDisabled }, [Validators.required, positiveNumberValidator]],
+      netPrice: [{ value: netPrice, disabled: isDisabled }, [Validators.required, Validators.min(0)]],
+      netValue: [{ value: netValue, disabled: isDisabled }, [Validators.required, Validators.min(0)]],
+      taxRate: [{ value: taxRate, disabled: isDisabled }, [Validators.required, Validators.min(0), Validators.max(100)]]
     });
+  }
+
+  hasError(path: string): boolean {
+    const control = this.invoiceForm.get(path);
+    return !!control && control.enabled && control.invalid && (control.touched || control.dirty);
+  }
+
+  hasItemError(index: number, field: string): boolean {
+    return this.hasError(`items.${index}.${field}`);
+  }
+
+  errorKey(path: string): string {
+    const errors = this.invoiceForm.get(path)?.errors;
+    if (!errors) {
+      return '';
+    }
+    const messages: Record<string, string> = {
+      required: 'invoiceUpload.walidacja.poleWymagane',
+      invoiceNumberFormat: 'invoiceUpload.walidacja.numerFakturyFormat',
+      invalidDate: 'invoiceUpload.walidacja.nieprawidlowaData',
+      futureDate: 'invoiceUpload.walidacja.dataZPrzyszlosci',
+      currencyFormat: 'invoiceUpload.walidacja.walutaFormat',
+      nipFormat: 'invoiceUpload.walidacja.nipFormat',
+      bankAccountFormat: 'invoiceUpload.walidacja.numerKontaFormat',
+      positiveNumber: 'invoiceUpload.walidacja.wiekszeOdZera',
+      min: 'invoiceUpload.walidacja.nieMozeBycUjemne',
+      max: 'invoiceUpload.walidacja.vatZakres'
+    };
+    const firstError = Object.keys(errors)[0];
+    return messages[firstError] ?? 'invoiceUpload.walidacja.nieprawidlowaWartosc';
+  }
+
+  get showGrossError(): boolean {
+    return !!this.invoiceForm.errors?.['grossLowerThanNet']
+      && !!(this.invoiceForm.get('grossAmount')?.touched || this.invoiceForm.get('grossAmount')?.dirty);
   }
 
   addItem(): void {
@@ -168,6 +212,7 @@ onFileSelect(event: any) {
               this.items.push(this.createItemFormGroup('', 0, 0, 0,0));
             }
             this.invoiceForm.enable();
+            this.invoiceForm.markAllAsTouched();
           }
         },
         error: (error) => {
