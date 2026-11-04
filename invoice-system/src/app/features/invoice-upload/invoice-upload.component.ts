@@ -13,6 +13,7 @@ import { DialogModule } from 'primeng/dialog';
 import { CalendarModule } from 'primeng/calendar';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ACCEPTED_INVOICE_FILE_TYPES } from '../../core/utils/file-preview.utils';
 @Component({
   selector: 'app-invoice-upload',
   imports: [CommonModule,
@@ -40,6 +41,7 @@ export class InvoiceUploadComponent {
 
   selectedFile: File | null = null;
   pdfPreviewUrl: string | null = null;
+  readonly acceptedFileTypes = ACCEPTED_INVOICE_FILE_TYPES;
   isProcessing: boolean = false;
   isOcrDone: boolean = false;
   showSuccessDialog: boolean=false;
@@ -68,6 +70,13 @@ export class InvoiceUploadComponent {
       items: this.fb.array([])
     });
     this.items.push(this.createItemFormGroup('',0,0,0,0))
+  }
+
+  get isPdfFile(): boolean {
+    if (!this.selectedFile) {
+      return false;
+    }
+    return this.selectedFile.type === 'application/pdf' || this.selectedFile.name.toLowerCase().endsWith('.pdf');
   }
 
   get items(){

@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { InvoiceService } from '../../core/services/invoice.service';
 import { SuccessDialogComponent } from '../dialogs/success-dialog/success-dialog.component';
 import { TranslatePipe } from '@ngx-translate/core';
+import { isPdfBlob } from '../../core/utils/file-preview.utils';
 
 @Component({
   selector: 'app-accountant-invoice-view',
@@ -36,6 +37,7 @@ export class AccountantInvoiceViewComponent implements OnInit {
   invoiceForm: FormGroup;
   invoiceId!: number;
   pdfPreviewUrl: string | null = null;
+  isPdfPreview = true;
   isSubmitting: boolean = false;
 
   showRejectDialog: boolean = false;
@@ -112,7 +114,10 @@ export class AccountantInvoiceViewComponent implements OnInit {
 
         this.invoiceService.downloadInvoiceFile(this.invoiceId).subscribe({
         next: (blob: Blob) => {
-          this.pdfPreviewUrl = URL.createObjectURL(blob);
+          isPdfBlob(blob).then(isPdf => {
+            this.isPdfPreview = isPdf;
+            this.pdfPreviewUrl = URL.createObjectURL(blob);
+          });
         },
         error: (err) => console.error('Błąd pobierania pliku PDF z backendu:', err)
       });
