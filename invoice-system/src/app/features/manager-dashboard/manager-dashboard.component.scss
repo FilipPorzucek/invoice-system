@@ -1,3 +1,5 @@
+@use '../../shared/page-layout';
+
 ::ng-deep .p-datatable {
     --p-datatable-header-cell-selected-background: transparent;
     --p-datatable-header-cell-selected-color: #334155;

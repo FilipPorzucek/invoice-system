@@ -1,5 +1,27 @@
+<div class="page-header">
+    <div class="page-heading">
+        <h1 class="page-title">Faktury do weryfikacji</h1>
+        <p class="page-subtitle">Sprawdź dane odczytane przez OCR i zatwierdź lub odrzuć fakturę.</p>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <span class="stat-label">Do weryfikacji</span>
+        <span class="stat-value stat-blue">{{ invoiceCount }}</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-label">Łączna kwota brutto</span>
+        <span class="stat-value">{{ totalGrossAmount }}</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-label">Najstarsza faktura</span>
+        <span class="stat-value stat-orange">{{ oldestIssueDate }}</span>
+    </div>
+</div>
+
 <div style="background: white; padding: 2rem; border-radius: 12px; border: 1px solid #dee2e6;">
-    <h2 style="margin-top: 0; margin-bottom: 1.5rem; color: #334155;">{{ 'common.twojeFaktury' | translate }}</h2>
+    <h2 style="margin-top: 0; margin-bottom: 1.5rem; color: #334155;">Lista faktur</h2>
 
     <div #fakeScroll style="overflow-x: auto; height: 16px; margin-bottom: 8px;" (scroll)="onTopScroll()">
         <div #fakeContent style="height: 1px;"></div>

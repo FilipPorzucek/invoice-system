@@ -1,4 +1,34 @@
-<p-card [header]="'adminDashboard.uzytkownicy' | translate">
+<div class="page-header">
+    <div class="page-heading">
+        <h1 class="page-title">Użytkownicy</h1>
+        <p class="page-subtitle">Zarządzaj kontami i rolami w systemie.</p>
+    </div>
+    <a class="page-action" routerLink="/admin/users/create">
+        <i class="pi pi-user-plus"></i>
+        Dodaj użytkownika
+    </a>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <span class="stat-label">Pracownicy</span>
+        <span class="stat-value">{{ employeeCount }}</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-label">Księgowe</span>
+        <span class="stat-value stat-blue">{{ accountantCount }}</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-label">Managerowie</span>
+        <span class="stat-value stat-orange">{{ managerCount }}</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-label">Administratorzy</span>
+        <span class="stat-value stat-red">{{ adminCount }}</span>
+    </div>
+</div>
+
+<p-card>
     <p-table 
         [value]="users" 
         [loading]="isLoading"

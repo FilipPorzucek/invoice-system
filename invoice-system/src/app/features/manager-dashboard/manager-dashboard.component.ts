@@ -43,6 +43,24 @@ export class ManagerDashboardComponent implements OnInit {
     this.router.navigate(['/manager/invoice', targetId]);
   }
 
+  get invoiceCount(): number {
+    return this.invoices.length;
+  }
+
+  get totalGrossAmount(): string {
+    const total = this.invoices.reduce((sum, invoice) => sum + (Number(invoice.grossAmount) || 0), 0);
+    return this.formatAmount(total);
+  }
+
+  get highestGrossAmount(): string {
+    const highest = this.invoices.reduce((max, invoice) => Math.max(max, Number(invoice.grossAmount) || 0), 0);
+    return this.formatAmount(highest);
+  }
+
+  private formatAmount(value: number): string {
+    return value.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' zł';
+  }
+
   getStatusName(status: string): string {
     if (status === 'PENDING_MANAGER') return 'Oczekuje na akceptację';
     return status;
