@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
  db:
   image: postgres:17-alpine
@@ -51,7 +49,14 @@ services:
   extra_hosts:
    - "host.docker.internal:host-gateway"
   depends_on:
-   - db
+   db:
+    condition: service_healthy
+  healthcheck:
+   test: ["CMD", "wget", "--spider", "-q", "http://localhost:8081/actuator/health"]
+   interval: 5s
+   timeout: 3s
+   retries: 20
+   start_period: 20s
   networks:
    - invoice_network
 
