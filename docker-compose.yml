@@ -12,7 +12,27 @@ services:
    - "5432:5432"
   volumes:
    - pgdata:/var/lib/postgresql/data
-   - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+  healthcheck:
+   test: ["CMD-SHELL", "pg_isready -U postgres"]
+   interval: 5s
+   timeout: 3s
+   retries: 10
+  networks:
+   - invoice_network
+
+ db-seed:
+  image: postgres:17-alpine
+  container_name: invoice_db_seed
+  profiles:
+   - demo
+  depends_on:
+   backend:
+    condition: service_healthy
+  environment:
+   - PGPASSWORD=1234
+  volumes:
+   - ./demo-seed.sql:/seed.sql:ro
+  entrypoint: ["psql", "-h", "db", "-U", "postgres", "-d", "invoice-system", "-f", "/seed.sql"]
   networks:
    - invoice_network
 
